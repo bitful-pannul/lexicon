@@ -64,18 +64,18 @@
       :: check for if it's ours to distribute or not
       ?:  =(-.space.act our.bowl)
         ::  (distribute-local def space)
-        =/  defs  (~(get by lex) space.act)
-        ?~  defs
+        
+        ?~  defs=(~(get by lex) space.act)
           =/  new-defs  (malt ~[[word.act ~[def]]])
           :_  state(lex (~(put by lex) space.act new-defs))
           :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%def-added word.act def])]
           ==
         ::
         =/  updated-list
-        ?~  (~(get by (need defs)) word.act)
+        ?~  (~(get by u.defs) word.act)
             ~[def]
-        (weld (need (~(get by (need defs)) word.act)) ~[def])
-        :_  state(lex (~(gas by lex) ~[[space.act (~(gas by (need defs)) ~[[word.act updated-list]])]]))
+        (weld (~(got by u.defs) word.act) ~[def])
+        :_  state(lex (~(put by lex) space.act (~(put by u.defs) word.act updated-list)))
         :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%def-added word.act def])]
         ==
       ::
@@ -98,18 +98,18 @@
       ::
          %vote
       =/  slex  (~(got by lex) space.act)
-      =/  sdefs  (fall (~(get by slex) word.act) ~)
-      =/  index  (need (find ~[id.act] (turn sdefs |=(a=definition id.a))))
-      =/  def  (snag index sdefs)
+      =/  def-list  (~(gut by slex) word.act ~)
+      =/  index  (need (find ~[id.act] (turn def-list |=(a=definition id.a))))
+      =/  def  (snag index def-list)
         :: switch on action up/down and remote/local
       ?:  =(-.space.act our.bowl)
           =/  new-def
           ?:  =(vote.act %upvotes)
               def(upvotes (~(put in upvotes.def) src.bowl))
             def(downvotes (~(put in downvotes.def) src.bowl))
-          =/  new-defs  (snap sdefs index new-def)
-            ::
-          :_  state(lex (~(gas by lex) ~[[space.act (malt ~[[word.act new-defs]])]]))
+          =/  new-defs  (snap def-list index new-def)
+            ::(malt ~[[word.act new-defs]])
+          :_  state(lex (~(put by lex) space.act (~(put by slex) word.act new-defs)))
           :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%voted space.act word.act id.act vote.act src.bowl])]
           ==
       :: same thing but give poke
@@ -121,6 +121,11 @@
         %join-space
       :_  state  
       :~  [%pass /[(scot %p -.space.act)]/[+.space.act] %agent [-.space.act %lexicon] %watch /[(scot %p -.space.act)]/[+.space.act]]        
+      ==
+        %leave-space
+        :: might be useful calling on frontend to refresh state properly
+      :_  state
+      :~  [%pass /[(scot %p -.space.act)]/[+.space.act] %agent [-.space.act %lexicon] %leave ~]
       ==
     ==
   --
@@ -149,7 +154,9 @@
       ((slog '%lexicon-client: joining [insert space here] failed!' u.p.sign) `this)
     ::
         %kick
-      !!
+      :_  this
+      :~  [%pass /[i.wire]/[i.t.wire] %agent [src.bowl dap.bowl] %watch /[i.wire]/[i.t.wire]]
+      ==
     ::
         %fact
         :: update local lex.
@@ -169,27 +176,32 @@
           =/  sp  [(slav %p i.wire) i.t.wire]
           ::  
           ::  make sure a space is created before you got by it
-          =/  slex  (~(got by lex) sp)
-          =/  sdefs  (fall (~(get by slex) word.incoming) ~)
-          =/  updated-defs
-          ?~  sdefs  ~[def.incoming]
-            (snoc sdefs def.incoming)
           ::
-          `this(lex (~(gas by lex) ~[[sp (malt ~[[word.incoming updated-defs]])]]))
+          ?~  sdefs=(~(get by lex) sp)   :: creating new word here. permissioned?
+            =/  new-defs  (malt ~[[word.incoming ~[def.incoming]]])
+            `this(lex (~(put by lex) sp new-defs))
+          ::
+          ::  here we know there's a space with some words & defs defined.
+          =/  def-list  (~(gut by u.sdefs) word.incoming ~)
+          =/  updated-list 
+            ?~  def-list  
+              ~[def.incoming]
+            (weld def-list ~[def.incoming])
+          `this(lex (~(put by lex) sp (~(put by u.sdefs) word.incoming updated-list)))
           ::
             %voted
             :: note space.incoming and space in wire both available...
           =/  slex  (~(got by lex) space.incoming)
-          =/  sdefs  (fall (~(get by slex) word.incoming) ~)
-          =/  index  (need (find ~[id.incoming] (turn sdefs |=(a=definition id.a))))
-          =/  def  (snag index sdefs)
+          =/  def-list  (fall (~(get by slex) word.incoming) ~)
+          =/  index  (need (find ~[id.incoming] (turn def-list |=(a=definition id.a))))
+          =/  def  (snag index def-list)
           ::
           =/  new-def
             ?:  =(vote.incoming %upvotes)
                 def(upvotes (~(put in upvotes.def) voter.incoming))
                 def(downvotes (~(put in downvotes.def) voter.incoming))
-          =/  new-defs  (snap sdefs index new-def)
-          `this(lex (~(gas by lex) ~[[space.incoming (malt ~[[word.incoming new-defs]])]]))
+          =/  new-defs  (snap def-list index new-def)
+          `this(lex (~(put by lex) space.incoming (~(put by slex) word.incoming new-defs)))
               ::
             %def-deleted
             ::  todo: deletion permissions/effects
@@ -202,6 +214,7 @@
 ::
 ++  on-peek
   :: TODO: add searching by word functions
+  :: also sorting by upvotes/downvotes
   |=  =path
   ^-  (unit (unit cage))
   ?+  path  (on-peek:def path)
@@ -210,7 +223,6 @@
     ::
     [%x %definitions @t @t ~]
       =/  sp  [[(slav %p i.t.t.path) i.t.t.t.path]]
-      ~&  'in here'^sp
       =/  sdefs  (~(got by lex) sp)
       ``definitions+!>(sdefs)
   ==

@@ -19,6 +19,7 @@
       [%delete space=space =word id=@]
       [%vote space=space =word id=@ vote=?(%upvotes %downvotes)]
       [%join-space =space]
+      [%leave-space =space]
   ==
 ::
 +$  reaction
