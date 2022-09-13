@@ -28,7 +28,6 @@
   ^-  (quip card _this)
   :_  this
   :: perhaps join holium space first
-  ::  :~  [%pass %watch]
   ~
 ::
 ++  on-save  !>(state)
@@ -55,36 +54,41 @@
   ++  handle-poke  
     :: 
     |=  act=action
-    ^-  (quip card _state) 
-    ?-    -.act
-      ::
+    ^-  (quip card _state)
+    =/  space-thing  (~(gut by lex) p.act [*perm *definitions)
+    =^  cards  space-thing
+      (handle-space-action space-thing act)
+    [cards this]
+    
+    tedting thid
+    ?-  -.act
         %add
       =/  def  [id=`@`eny.bowl def.act src.bowl sentence=sentence.act related=related.act upvotes=*(set @p) downvotes=*(set @p)]
       ::
       :: check for if it's ours to distribute or not
       ?:  =(-.space.act our.bowl)
-        ::  (distribute-local def space)
-        =/  defs  (~(get by lex) space.act)
-        ?~  defs
-          =/  new-defs  (malt ~[[word.act ~[def]]])
-          :_  state(lex (~(put by lex) space.act new-defs))
-          :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%def-added word.act def])]
-          ==
-        ::
+          ::  (distribute-local def space)
+          ?~  sap=(~(get by lex) space.act)
+            =/  new-defs  (malt ~[[word.act ~[def]]])
+            :_  state(lex (~(put by lex) space.act new-defs))
+            :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%def-added word.act def])]
+            ==
+          ::
+        =/  [=perm defs=definitions]  u.sap
         =/  updated-list
         ?~  (~(get by (need defs)) word.act)
             ~[def]
-        (weld (need (~(get by (need defs)) word.act)) ~[def])
-        :_  state(lex (~(gas by lex) ~[[space.act (~(gas by (need defs)) ~[[word.act updated-list]])]]))
-        :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%def-added word.act def])]
-        ==
+         (weld (need (~(get by (need defs)) word.act)) ~[def])
+          :_  state(lex (~(gas by lex) ~[[space.act (~(gas by (need defs)) ~[[word.act updated-list]])]]))
+          :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%def-added word.act def])]
+          ==
       ::
       :: (distribute-remote def space)
       :_  state
       :~  [%pass [/[(scot %p -.space.act)]/[+.space.act]] %agent [-.space.act %lexicon] %poke %lexicon-action !>(`action`[%add space.act word.act def.act sentence.act related.act])]
       ==
     ::
-        %delete
+       %delete
       :: add word to action, fetch list, find specific def by id, add
       :: sender to (set @p)
       =/  defs  (~(get by lex) space.act)
@@ -94,34 +98,35 @@
       =/  new-list  (oust [index 1] def-list)
       :_  state(lex (~(gas by lex) ~[[space.act (~(gas by (need defs)) ~[[word.act new-list]])]]))
       ~
+      ::
       ::  =/  def-list  (get-list:lexlib [lex path.act word.act])
       ::
-         %vote
-      =/  slex  (~(got by lex) space.act)
-      =/  sdefs  (fall (~(get by slex) word.act) ~)
-      =/  index  (need (find ~[id.act] (turn sdefs |=(a=definition id.a))))
-      =/  def  (snag index sdefs)
+          %vote
+        =/  slex  (~(got by lex) space.act)
+        =/  sdefs  (fall (~(get by slex) word.act) ~)
+        =/  index  (need (find ~[id.act] (turn sdefs |=(a=definition id.a))))
+        =/  def  (snag index sdefs)
         :: switch on action up/down and remote/local
-      ?:  =(-.space.act our.bowl)
+        ?:  =(-.space.act our.bowl)
           =/  new-def
-          ?:  =(vote.act %upvotes)
+            ?:  =(vote.act %upvotes)
               def(upvotes (~(put in upvotes.def) src.bowl))
             def(downvotes (~(put in downvotes.def) src.bowl))
           =/  new-defs  (snap sdefs index new-def)
             ::
-          :_  state(lex (~(gas by lex) ~[[space.act (malt ~[[word.act new-defs]])]]))
-          :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%voted space.act word.act id.act vote.act src.bowl])]
-          ==
+            :_  state(lex (~(gas by lex) ~[[space.act (malt ~[[word.act new-defs]])]]))
+            :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%voted space.act word.act id.act vote.act src.bowl])]
+            ==
       :: same thing but give poke
-      :_  state
-      :~  [%pass [/[(scot %p -.space.act)]/[+.space.act]] %agent [-.space.act %lexicon] %poke %lexicon-action !>(`action`[%vote space.act word.act id.act vote.act])]
-      ==
+        :_  state
+        :~  [%pass [/[(scot %p -.space.act)]/[+.space.act]] %agent [-.space.act %lexicon] %poke %lexicon-action !>(`action`[%vote space.act word.act id.act vote.act])]
+        ==
         ::
         :: this needs to be called before interacting with a spaces' lexicon. 
-        %join-space
-      :_  state  
-      :~  [%pass /[(scot %p -.space.act)]/[+.space.act] %agent [-.space.act %lexicon] %watch /[(scot %p -.space.act)]/[+.space.act]]        
-      ==
+          %join-space
+         :_  state  
+         :~  [%pass /[(scot %p -.space.act)]/[+.space.act] %agent [-.space.act %lexicon] %watch /[(scot %p -.space.act)]/[+.space.act]]        
+         ==
     ==
   --
 ::
@@ -228,4 +233,8 @@
 ++  on-leave  on-leave:def
 ++  on-fail   on-fail:def
 --
-
+|_  =bowl:gall
+++  handle-space-action
+  |=  [=perms defs=definitions act=space-action]
+  ^-  (quip card _[perms defs])
+  !!
