@@ -104,17 +104,17 @@
         :: switch on action up/down and remote/local
       ?:  =(-.space.act our.bowl)
           =/  new-def
-          ?:  =(vote.act %upvotes)
+          ?:  =(vote-type.act %upvotes)
               def(upvotes (~(put in upvotes.def) src.bowl))
             def(downvotes (~(put in downvotes.def) src.bowl))
           =/  new-defs  (snap def-list index new-def)
             ::(malt ~[[word.act new-defs]])
           :_  state(lex (~(put by lex) space.act (~(put by slex) word.act new-defs)))
-          :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%voted space.act word.act id.act vote.act src.bowl])]
+          :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%voted space.act word.act id.act vote-type.act src.bowl])]
           ==
       :: same thing but give poke
       :_  state
-      :~  [%pass [/[(scot %p -.space.act)]/[+.space.act]] %agent [-.space.act %lexicon] %poke %lexicon-action !>(`action`[%vote space.act word.act id.act vote.act])]
+      :~  [%pass [/[(scot %p -.space.act)]/[+.space.act]] %agent [-.space.act %lexicon] %poke %lexicon-action !>(`action`[%vote space.act word.act id.act vote-type.act])]
       ==
         ::
         :: this needs to be called before interacting with a spaces' lexicon. 
@@ -197,7 +197,7 @@
           =/  def  (snag index def-list)
           ::
           =/  new-def
-            ?:  =(vote.incoming %upvotes)
+            ?:  =(vote-type.incoming %upvotes)
                 def(upvotes (~(put in upvotes.def) voter.incoming))
                 def(downvotes (~(put in downvotes.def) voter.incoming))
           =/  new-defs  (snap def-list index new-def)

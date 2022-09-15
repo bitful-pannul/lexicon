@@ -8,6 +8,7 @@
 ++  grab
   |%
   ++  noun  action
+  ++  json  action:dejs:lexlib
   --
 ++  grad  %noun
 --
