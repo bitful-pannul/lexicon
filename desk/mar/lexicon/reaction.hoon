@@ -4,7 +4,7 @@
 ++  grow
   |%
   ++  noun  react
-  ++  json  (reaction:enjs:lexlib)
+  ++  json  (reaction:enjs:lexlib react)
   --
 ++  grab
   |%

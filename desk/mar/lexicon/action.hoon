@@ -1,5 +1,5 @@
 /-  *lexicon
-:: import /lib for json conversions too
+/+  lexlib
 |_  act=action
 ++  grow
   |%

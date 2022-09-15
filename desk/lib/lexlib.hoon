@@ -42,13 +42,6 @@
     (ar def)
     ::
     ++  lex  (op space-rule defs)
-    :: ^-  $-(json lexicon)
-    :: %+  op
-    :: ;~  plug  
-    ::   ;~(pfix sig fed:ag)
-    ::     ;~(pfix (jest '/') sym)
-    :: ==
-    :: defs
     ::
     ++  action
       ^-  $-(json ^action)
@@ -65,15 +58,17 @@
         ==
         ::
         :-  %join-space
+        %-  ot
         :~
           [%space (su space-rule)]
         ==
         ::
         :-  %leave-space
-        :~
+        %-  ot
+        :~  
           [%space (su space-rule)]
         ==
-        
+        ::
         :-  %vote
         %-  ot
         :~
@@ -107,7 +102,7 @@
     %-  pairs
     :~
       [%id %s (scot %ud id.def)]
-      [%word %s word.def]
+      [%def %s def.def]
       [%poster (ship poster.def)]
       [%sentence %a (turn sentence.def (lead %s))]
       [%related %a (turn related.def (lead %s))]
@@ -148,32 +143,9 @@
         [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
         [%word %s word.rec]
         [%id %s (scot %ud id.rec)]
-        [%vote %s (scot %tas vote-type.rec)]     
+        [%vote-type %s (scot %tas vote-type.rec)]     
       ==
     ==
   -- 
-:: ++  defs-to-json
-::   =,  enjs:format
-::   |=  defs=definitions
-::   ^-  json
-::   %-  pairs
-::   %+  turn  ~(tap by defs)
-::   |=  [=word =(list definition)]
-::   ^-  [@t json]
-::   :-  word
-::   :-  %a
-::   %+  turn  list
-::   |=  def=definition
-::   ^-  json
-::   %-  pairs
-::   :~
-::     [%id %s (scot %ud id.def)]
-::     [%word %s word.act]
-::     [%poster (ship poster.def)]
-::     [%sentence %a (turn sentence.def (lead %s))]
-::     [%related %a (turn related.def (lead %s))]
-::     [%upvotes %a (turn ~(tap in upvotes.def) ship)]
-::     [%downvotes %a (turn ~(tap in downvotes.def) ship)]
-::   ==
 --
 
