@@ -1,9 +1,10 @@
 /-  *lexicon
-:: import /lib for json conversions too
+/+  lexlib
 |_  react=reaction
 ++  grow
   |%
   ++  noun  react
+  ++  json  (reaction:enjs:lexlib)
   --
 ++  grab
   |%

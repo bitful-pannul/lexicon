@@ -14,7 +14,12 @@
 ::    ?=(vote %up)  :: switch on these.
 ::      =/  set  (need (find ~[index] def-list))
 ::      :: add msg.sender..? src.bowl to this too
-::      
+::
+++  space-rule
+  ;~  plug  
+    ;~(pfix sig fed:ag)
+      ;~(pfix (jest '/') sym)
+  ==
 ::
 ++  dejs  =,  dejs:format
   |%
@@ -36,14 +41,48 @@
     %-  om
     (ar def)
     ::
-    ++  lex
-    ^-  $-(json lexicon)
-    %+  op
-    ;~  plug  
-      ;~(pfix sig fed:ag)
-        ;~(pfix (jest '/') sym)
-    ==
-    defs
+    ++  lex  (op space-rule defs)
+    :: ^-  $-(json lexicon)
+    :: %+  op
+    :: ;~  plug  
+    ::   ;~(pfix sig fed:ag)
+    ::     ;~(pfix (jest '/') sym)
+    :: ==
+    :: defs
+    ::
+    ++  action
+      ^-  $-(json ^action)
+      %-  of
+      :~
+        :-  %add 
+        %-  ot
+        :~
+          [%space (su space-rule)]
+          [%word so]
+          [%def so]
+          [%sentence (ar so)]
+          [%related (ar so)]
+        ==
+        ::
+        :-  %join-space
+        :~
+          [%space (su space-rule)]
+        ==
+        ::
+        :-  %leave-space
+        :~
+          [%space (su space-rule)]
+        ==
+        
+        :-  %vote
+        %-  ot
+        :~
+          [%space (su space-rule)]
+          [%word so]
+          [%id (se %ud)]
+          [%vote-type (su (perk %upvotes %downvotes ~))]
+        ==
+      ==
   --
 ::
 ++  enjs  =,  enjs:format
@@ -75,6 +114,7 @@
       [%upvotes %a (turn ~(tap in upvotes.def) ship)]
       [%downvotes %a (turn ~(tap in downvotes.def) ship)]
     ==
+    ::
   ++  lex
     |=  lex=lexicon
     ^-  json
@@ -84,7 +124,34 @@
     ^-  [@t json]
     :-  `@t`(rap 3 (scot %p -.space) '/' +.space ~)  
     (defs definitions)
-  --
+    ::
+  ++  reaction
+    |=  rec=^reaction
+    ^-  json
+    %+  frond  -.rec
+    ?+  -.rec  ~
+      %def-added  ::  can I read which subscription the added def is coming from?
+    ::  this needs to only be reactive for local adds, so we'll know the specific space we're in
+    ::  deletions might need a proper refresh&refetch on browser side
+    %-  pairs
+      :~
+        [%word %s word.rec]
+        [%def (def def.rec)]
+      ==
+    ::
+      %defs
+    (defs definitions.rec)
+    ::
+      %voted
+    %-  pairs
+      :~
+        [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
+        [%word %s word.rec]
+        [%id %s (scot %ud id.rec)]
+        [%vote %s (scot %tas vote-type.rec)]     
+      ==
+    ==
+  -- 
 :: ++  defs-to-json
 ::   =,  enjs:format
 ::   |=  defs=definitions

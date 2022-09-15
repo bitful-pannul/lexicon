@@ -17,7 +17,7 @@
 +$  action
   $%  [%add =space =word def=@t sentence=(list @t) related=(list word)]
       [%delete space=space =word id=@]
-      [%vote space=space =word id=@ vote=?(%upvotes %downvotes)]
+      [%vote space=space =word id=@ vote-type=?(%upvotes %downvotes)]
       [%join-space =space]
       [%leave-space =space]
   ==
@@ -25,9 +25,9 @@
 +$  reaction
   $%  [%def-added =word def=definition]
       [%def-deleted space word definition @]
-      [%voted =space =word id=@ vote=?(%upvotes %downvotes) voter=@p]
+      [%voted =space =word id=@ vote-type=?(%upvotes %downvotes) voter=@p]
       [%test space word]
-      [%defs definitions]
+      [%defs =definitions]
   ==
 ::
 +$  view
