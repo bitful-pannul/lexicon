@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Urbit from '@urbit/http-api'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Home, Space } from './components'
 import './App.css'
 
 const App = () => {
+  // typescript state types + poke returns might be useful
   const [status, setStatus] = useState("")
-  const [potentialPlace, setPotentialPlace] = useState({})
-  const [places, setPlaces] = useState([])
-
-  const [description, setDescription] = useState("")
-  const [error, setError] = useState("")
-  const [isHovering, setIsHovering] = useState(false);
-
-
+  const [lex, setLex] = useState({})
 
   // if served directly by ship, unnecessary. for dev purposes 
   const connect = async () => {
@@ -23,24 +19,6 @@ const App = () => {
     })
   }
   
-  const getLexicon = async () => {
-    const path = '/definitions/all'
-    const res = await window.urbit.scry({
-      app: "lexicon",
-      path: path,
-    })
-    console.log(res)
-  }
-  
-  const getDefinitions = async (ship, group) => {
-    const path = `/definitions/${ship}/${group}`
-    const res = await window.urbit.scry({
-      app: "lexicon",
-      path: path,
-    })
-    
-    console.log(res)
-  }
 	
   useEffect(() => {
     window.urbit = new Urbit("")
@@ -54,52 +32,15 @@ const App = () => {
      connect()
   }, [])
 
-  const About = () => {
-    return (
-      <div style={{ marginTop: '1rem' }}>
-        <span>%places is inspired by %rumors from ~paldev </span><br />
-        <span>it uses its gossip.hoon library to pass along places from pals</span><br />
-        <span>&nbsp;</span><br />
-        <span style={{fontStyle: 'italic'}}>"Look for [redacted] among frens and among foes, above the earth and below it!"</span><br />
-        <span>&nbsp;</span><br />
-        <span style={{fontWeight: 'bold'}}>~bitful-pannul/urbit-explorers-club</span><br />
-      </div>
-    )
-  }
-
 
   return (
     <>
-      <div className="info-part">
-        <div className='top-bar'>
-          <span>&nbsp;％ｐｌａｃｅｓ</span>
-          {isHovering && <About />}
-          <span>
-            <div> 
-              ａｂｏｕｔ
-            </div>
-	  {/* <img />*/}
-          </span>
-        </div>
-        <div>
-          <span>
-            <label>𝚕𝚊𝚝𝚒𝚝𝚞𝚍𝚎&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-          </span>
-        </div>
-        <div>
-          <span>
-            <label>𝚕𝚘𝚗𝚐𝚒𝚝𝚞𝚍𝚎&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-          </span>
-        </div>
-        <div>
-          <label style={{ verticalAlign: 'top' }}>𝚍𝚎𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗&nbsp;&nbsp;</label>
-        </div>
-        <div className='buttonz'>
-          <span>
-          </span>
-        </div>
-      </div>
-
+      <Router>
+        <Routes>
+          <Route path='/apps/lexicon/:ship/:group' element={<Space />} />
+          <Route exact path='/apps/lexicon' element={<Home />} />
+        </Routes>
+      </Router>
     </>
   );
 }
