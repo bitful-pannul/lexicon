@@ -27,8 +27,9 @@ const App = () => {
     window.urbit.onRetry = () => setStatus("try");
     window.urbit.onError = (err) => setStatus("err");
 
+    console.log('window :', window.urbit)
+    console.log('ubrit: ', Urbit)
     // commented out connect() for production build, if using locally, call connect() here
-
      connect()
   }, [])
 

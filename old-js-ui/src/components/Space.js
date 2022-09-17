@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Dropdown, Word } from './index'
 
 const Space = () => {
   // check if space exist, joined or not. 
@@ -7,6 +8,7 @@ const Space = () => {
   const [lex, setLex] = useState({})
   const [defs, setDefs] = useState([])
   const { ship, group } = useParams()
+  const [currentword, setCurrentword] = useState('')
   
   
   const getLexicon = async () => {
@@ -26,17 +28,18 @@ const Space = () => {
       path: path,
     })
     
-    console.log(res)
-    setDefs(Object.values(res))
+    setDefs(res)
   }
 
   useEffect(() => {
-    getDefinitions(ship, group)
-
-  }, [])
+    // setTimeout()
+    setTimeout(() => getDefinitions(ship, group), 300)
+    console.log('in effect: ', defs)
+  }, [ship, group])
 
   return (
     <>
+    <Dropdown />
       <div className='buttonz'>
         <div>
           <button onClick={getLexicon}>
@@ -46,22 +49,37 @@ const Space = () => {
             get defs
           </button>
         </div>
-        {`hey there, we're in: ${ship}/${group}`}
+        {`space: ${ship}/${group}`}
+
+        { currentword && <div onClick={() => setCurrentword('')}>back to wordlist</div> }
 
         <div>
-          { defs ? 
+          { (defs.length !== 0 && currentword === '') ? 
           (
-            defs.map((space, i) => {
+            Object.keys(defs).map((word, i) => {
               
              return (
               <>
-              <span>word: {}</span>
-              <span>definitions: </span>
+              <div key={i} onClick={() => setCurrentword(word)}>{word}</div>
+              {/* <div>definitions: {defs[word].map((d, i) => {
+                return (
+                  <>
+                  <span>{d.def}</span>
+                    <span>{d.poster}</span>
+                      <div>upvotes: {d.upvotes.length}</div>
+                      <div>downvotes: {d.downvotes.length}</div>
+                  </>
+                )
+                })}
+                </div> */}
               </>
               ) 
             })
-          )  
-          : (<div>no definitions for this space yet?</div>)
+          ) 
+          : (currentword !== '') ?
+          <Word word={currentword} definitions={defs[currentword]}/>  //  some real weirdness with setting object to state instead of word
+          :
+          (<div>no definitions for this space yet?</div>)
           }
         </div>
       </div>
