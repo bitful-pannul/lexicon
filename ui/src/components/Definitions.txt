@@ -1,0 +1,47 @@
+
+
+draft for component that takes a list of definitions [typed and everything],
+and renders them neatly. Would be nice if had upvote/downvote pokes inside of it.
+
+There should probably be a word component too... 
+
+--
+How should a space even look? 
+
+[~nut/florida] <- choose/change space.
+
+    [word (should also have stars?)] most-upvoted-def]
+    [word (should also have stars?)] most-upvoted-def]
+    [word (should also have stars?)] most-upvoted-def]
+    [word (should also have stars?)] most-upvoted-def]
+
+    [add-word]
+
+    --
+then if we click a specific word, route based on that ~nut/florida/florida-man
+    (can also be conditionally rendered thing?)
+
+
+    [*title WORD title*]
+    ~poster         @da posted??            ((/sur needs a few changes still...))
+
+    [>definitions/sentences] 
+
+    [definition      ~poster]
+        up          downvote   
+
+    [definition      ~poster]
+        up          downvote  
+
+    [definition      ~poster]
+        up          downvote  
+    
+
+    [add definition (fetch word space from somewhere, and poke)
+    --
+
+    [definitions/>sentences]   (loop through each definition??? shit)
+
+    [sentence     ~posterw] 
+
+    [add-sentence]
