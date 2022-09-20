@@ -9,6 +9,11 @@ const Home = () => {
   const [dropdown, setDropdown] = useState('~')
   const history = useNavigate()
 
+  const handleJoinSpace = (e) => {
+    e.preventDefault()
+    console.log('joined!')
+  }
+
   // const getLexicon = async () => {
   //   const path = '/definitions/all'
   //   const res = await window.urbit.scry({
@@ -45,11 +50,18 @@ const Home = () => {
   return (
     <>
         <Dropdown /> 
+        <div>
+          <input placeholder='search' />
+        </div>
 
         <div>
         receperint ad dictionary
         </div>
 
+        <div>
+          <input placeholder='join space' />
+          <button onClick={handleJoinSpace}>join</button> 
+        </div>
     </>
   )
 }

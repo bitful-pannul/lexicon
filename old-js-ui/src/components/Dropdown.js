@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 // import { Context, ContextType } from '@holium/design-system'
+// import { useParams } from 'react-router-dom'
 
 const Dropdown = (grouplist) => {
     const [group, setGroup] = useState('~')
     const [lex, setLex] = useState({})
     const history = useNavigate()
+    // const { ship, groupname } = useParams()
 
 
     const handleChange = (e) => {  
     //   e.preventDefault()
-      setGroup(e.target.value)
       history('/apps/lexicon/' + e.target.value, { replace: true })
+      setGroup(e.target.value)
     }
 
     const testContexts = [{
@@ -21,7 +23,6 @@ const Dropdown = (grouplist) => {
     }]
 
     
-
     const getLexicon = async () => {
         const path = '/definitions/all'
         const res = await window.urbit.scry({
@@ -33,6 +34,7 @@ const Dropdown = (grouplist) => {
       }
     
       useEffect(() => {
+        // setGroup(`${ship}/${groupname}`)
         setTimeout(() => getLexicon(), 300)
         // getLexicon()
     }, [])
@@ -40,7 +42,7 @@ const Dropdown = (grouplist) => {
     return lex ? (
       <>
       <select onChange={handleChange}>
-        { !group ? <option key={0} value={group}>{group}</option> : <option key={0} value="">~</option> }
+        { group ? <option key={0} value={group}>{group}</option> : <option key={0} value="">~</option> }
       { Object.keys(lex).map((item , i) => {
         return <option key={i} value={item}>{item}</option>
       }) }
