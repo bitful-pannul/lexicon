@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Dropdown, Word } from './index'
+import { Dropdown, Word, AddModal } from './index'
 
 const Space = () => {
   // check if space exist, joined or not. 
@@ -9,8 +9,12 @@ const Space = () => {
   const [defs, setDefs] = useState([])
   const { ship, group } = useParams()
   const [currentword, setCurrentword] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
   
-  
+  const setModal = (val) => {
+    setModalOpen(val)
+  }
+
   const getLexicon = async () => {
     const path = '/definitions/all'
     const res = await window.urbit.scry({
@@ -37,21 +41,15 @@ const Space = () => {
     console.log('in effect: ', defs)
   }, [ship, group])
 
-  return (
+  return !modalOpen ? (
     <>
     <Dropdown />
-      <div className='buttonz'>
-        <div>
-          <button onClick={getLexicon}>
-            get lex
-          </button>
-          <button onClick={() => getDefinitions(ship, group)}>
-            get defs
-          </button>
-        </div>
-        {`space: ${ship}/${group}`}
+    <div>
+      <input placeholder='search' />
+      <button onClick={() => setModalOpen(true)}>add word</button>
+    </div> 
 
-        { currentword && <div onClick={() => setCurrentword('')}>back to wordlist</div> }
+        { currentword && <div onClick={() => setCurrentword('')}>{'<-'}</div> }
 
         <div>
           { (defs.length !== 0 && currentword === '') ? 
@@ -82,9 +80,8 @@ const Space = () => {
           (<div>no definitions for this space yet?</div>)
           }
         </div>
-      </div>
     </>
-  )
+  ) : <AddModal modalOpen={modalOpen} setModalOpen={setModal} />
 }
 
 export default Space
