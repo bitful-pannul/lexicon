@@ -3,11 +3,13 @@ import Urbit from '@urbit/http-api'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home, Space } from './components'
 import './App.css'
+import TestWord from './components/TestWord';
+import { LexContextProvider } from './context';
+import { theme } from '@holium/design-system'
 
 const App = () => {
   // typescript state types + poke returns might be useful
   const [status, setStatus] = useState("")
-  const [lex, setLex] = useState({})
 
   // if served directly by ship, unnecessary. for dev purposes 
   const connect = async () => {
@@ -18,8 +20,8 @@ const App = () => {
       verbose: true
     })
   }
-  
-	
+
+
   useEffect(() => {
     window.urbit = new Urbit("")
     window.urbit.ship = window.ship;
@@ -30,18 +32,21 @@ const App = () => {
     console.log('window :', window.urbit)
     console.log('ubrit: ', Urbit)
     // commented out connect() for production build, if using locally, call connect() here
-     connect()
+    connect()
   }, [])
 
 
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path='/apps/lexicon/:ship/:group' element={<Space />} />
-          <Route exact path='/apps/lexicon' element={<Home />} />
-        </Routes>
-      </Router>
+      <LexContextProvider>
+        <Router>
+          <Routes>
+            <Route path='/apps/lexicon/:ship/:group/:word' element={<TestWord />} />
+            <Route path='/apps/lexicon/:ship/:group' element={<Space />} />
+            <Route exact path='/apps/lexicon' element={<Home />} />
+          </Routes>
+        </Router>
+      </LexContextProvider>
     </>
   );
 }
