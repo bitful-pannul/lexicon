@@ -10,13 +10,14 @@ How should a space even look?
 
 [~nut/florida] <- choose/change space.
 
-    [word (should also have stars?)] most-upvoted-def]
+    [word (((should also have stars?)] most-upvoted-def]
     [word (should also have stars?)] most-upvoted-def]
     [word (should also have stars?)] most-upvoted-def]
     [word (should also have stars?)] most-upvoted-def]
 
     [add-word]
 
+also, create lexicon/ word for your own group. might be solved by scrying the spaces agent through our own thing?
     --
 then if we click a specific word, route based on that ~nut/florida/florida-man
     (can also be conditionally rendered thing?)
