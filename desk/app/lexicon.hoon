@@ -59,13 +59,15 @@
     ?-    -.act
       ::
         %add
-      =/  def  [id=`@`eny.bowl def.act src.bowl sentence=sentence.act related=related.act upvotes=*(set @p) downvotes=*(set @p)]
+      =/  def  [id=(sham [def.act src.bowl sentence.act related.act]) def.act src.bowl now.bowl sentence.act related.act upvotes=*(set @p) downvotes=*(set @p)]
       ::
       :: check for if it's ours to distribute or not
       ?:  =(-.space.act our.bowl)
         ::  (distribute-local def space)
-        
+        ::  
+        :: other ships shouldn't really be able to add spaces right..?
         ?~  defs=(~(get by lex) space.act)
+          ?>  =(src.bowl our.bowl)
           =/  new-defs  (malt ~[[word.act ~[def]]])
           :_  state(lex (~(put by lex) space.act new-defs))
           :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%def-added word.act def])]
