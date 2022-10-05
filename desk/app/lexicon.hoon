@@ -87,17 +87,23 @@
       ==
     ::
         %delete
-      :: add word to action, fetch list, find specific def by id, add
-      :: sender to (set @p)
-      =/  defs  (~(get by lex) space.act)
-      ?~  defs  !! :: crash with error msg
-      =/  def-list  (need (~(get by (need defs)) word.act))
+      ?~  defs=(~(get by lex) space.act)
+        !!
+      =/  def-list  (~(got by u.defs) word.act)
       =/  index  (need (find ~[id.act] (turn def-list |=(a=definition id.a))))
-      =/  new-list  (oust [index 1] def-list)
-      :_  state(lex (~(gas by lex) ~[[space.act (~(gas by (need defs)) ~[[word.act new-list]])]]))
-      ~
-      ::  =/  def-list  (get-list:lexlib [lex path.act word.act])
+      =/  def  (snag index def-list)
+      ?>  =(src.bowl poster.def)
+      ?:  =(-.space.act our.bowl)
+        =/  new-list  (oust [index 1] def-list)
+        :_  state(lex (~(gas by lex) ~[[space.act (~(gas by (need defs)) ~[[word.act new-list]])]]))  
+        :~  [%give %fact ~[/[(scot %p -.space.act)]/[+.space.act]] %lexicon-reaction !>(`reaction`[%def-deleted word.act def id.act])]
+        ==
       ::
+      :_  state
+      :~  [%pass [/[(scot %p -.space.act)]/[+.space.act]] %agent [-.space.act %lexicon] %poke %lexicon-action !>(`action`[%delete space.act word.act id.act])]
+      ==
+      ::
+      ::  =/  def-list  (get-list:lexlib [lex path.act word.act])
          %vote
       =/  slex  (~(got by lex) space.act)
       =/  def-list  (~(gut by slex) word.act ~)
@@ -152,8 +158,8 @@
     ?+    -.sign  (on-agent:def wire sign)
         %watch-ack
       ?~  p.sign
-        ((slog '%lexicon-client: joining [insert space here] succeeded!' ~) `this)
-      ((slog '%lexicon-client: joining [insert space here] failed!' u.p.sign) `this)
+        ((slog '%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} succeeded!' ~) `this)
+      ((slog leaf+"%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} failed!" u.p.sign) `this)
     ::
         %kick
       :_  this
@@ -207,7 +213,14 @@
               ::
             %def-deleted
             ::  todo: deletion permissions/effects
-          !!
+          =/  sp  [(slav %p i.wire) i.t.wire]
+          ?~  sdefs=(~(get by lex) sp)
+            !!
+          =/  def-list  (~(got by u.sdefs) word.incoming)
+          =/  index  (need (find ~[id.incoming] (turn def-list |=(a=definition id.a))))
+          =/  new-list  (oust [index 1] def-list) 
+          ::`this(lex (~(put by lex) sp (~(put by u.sdefs) word.incoming new-defs)))
+          `this(lex (~(gas by lex) ~[[sp (~(gas by u.sdefs) ~[[word.incoming new-list]])]]))
           ::
         ==
       ==
