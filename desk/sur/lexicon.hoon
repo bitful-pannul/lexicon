@@ -5,7 +5,7 @@
 +$  space  [@p @t] 
 +$  definitions  (map word (list definition)) :: change list to set
 +$  word  @t                :: change defs to cords, change sentences to lists
-+$  definition  [id=@ def=@t poster=@p sentence=(list @t) related=(list word) upvotes=(set @p) downvotes=(set @p)]
++$  definition  [id=@uv def=@t poster=@p posted=@da sentence=(list @t) related=(list word) upvotes=(set @p) downvotes=(set @p)]
 ::
 ::  
 ::  +$  lexicon  (map space [=perms =definitions])
