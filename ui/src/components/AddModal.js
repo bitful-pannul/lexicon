@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Dropdown } from './index'
+import { Button } from '@holium/design-system'
 
 const AddModal = ({modalOpen, setModalOpen}) => {
   const { ship, group } = useParams()
@@ -17,7 +18,7 @@ const AddModal = ({modalOpen, setModalOpen}) => {
         space: `${ship}/${group}`,
         word,
         def,
-        sentences: [sentence],
+        sentence: [sentence],
         related: related.split(','),
       }
     }
@@ -56,8 +57,8 @@ const AddModal = ({modalOpen, setModalOpen}) => {
         <input type='text' placeholder='add some related words, [word, word]' onChange={(e) => setRelated(e.target.value)}/> 
       </div>
       <div>
-        <button onClick={(e) => setModalOpen(false)}>cancel</button>
-        <button onClick={handleSubmit}>submit</button>
+        <Button onClick={(e) => setModalOpen(false)}>cancel</Button>
+        <Button onClick={handleSubmit}>submit</Button>
       </div>
     </>
   )  
