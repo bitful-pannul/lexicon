@@ -5,7 +5,7 @@
 +$  space  [@p @t] 
 +$  definitions  (map word (list definition)) :: change list to set
 +$  word  @t                :: change defs to cords, change sentences to lists
-+$  definition  [id=@ def=@t poster=@p sentence=(list @t) related=(list word) upvotes=(set @p) downvotes=(set @p)]
++$  definition  [id=@uv def=@t poster=@p posted=@da sentence=(list @t) related=(list word) upvotes=(set @p) downvotes=(set @p)]
 ::
 ::  
 ::  +$  lexicon  (map space [=perms =definitions])
@@ -16,7 +16,7 @@
 ::  <- combine action itself with a space
 +$  action
   $%  [%add =space =word def=@t sentence=(list @t) related=(list word)]
-      [%delete space=space =word id=@]
+      [%delete space=space =word id=@uv]
       [%vote space=space =word id=@ vote-type=?(%upvotes %downvotes)]
       [%join-space =space]
       [%leave-space =space]
@@ -24,7 +24,7 @@
 ::
 +$  reaction
   $%  [%def-added =word def=definition]
-      [%def-deleted space word definition @]
+      [%def-deleted =word def=definition id=@uv]
       [%voted =space =word id=@ vote-type=?(%upvotes %downvotes) voter=@p]
       [%test space word]
       [%defs =definitions]
