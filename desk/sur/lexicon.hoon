@@ -3,7 +3,7 @@
 |%
 +$  lexicon  (map space definitions)
 +$  space  [@p @t] 
-+$  definitions  (map word (list definition)) :: change list to set
++$  definitions  (map word (list definition))
 +$  word  @t                :: change defs to cords, change sentences to lists
 +$  definition  [id=@uv def=@t poster=@p posted=@da sentence=(list @t) related=(list word) upvotes=(set @p) downvotes=(set @p)]
 ::
@@ -17,7 +17,7 @@
 +$  action
   $%  [%add =space =word def=@t sentence=(list @t) related=(list word)]
       [%delete space=space =word id=@uv]
-      [%vote space=space =word id=@ vote-type=?(%upvotes %downvotes)]
+      [%vote space=space =word id=@uv vote-type=?(%upvotes %downvotes)]
       [%join-space =space]
       [%leave-space =space]
   ==
@@ -25,8 +25,8 @@
 +$  reaction
   $%  [%def-added =word def=definition]
       [%def-deleted =word def=definition id=@uv]
-      [%voted =space =word id=@ vote-type=?(%upvotes %downvotes) voter=@p]
-      [%test space word]
+      [%voted =space =word id=@uv vote-type=?(%upvotes %downvotes) voter=@p]
+      [%test space word]    :: without this, won't compile...??
       [%defs =definitions]
   ==
 ::
