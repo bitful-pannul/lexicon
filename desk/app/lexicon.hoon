@@ -1,5 +1,6 @@
 ::  
-/-  *lexicon 
+/-  *lexicon
+/-  spaces-store
 /+  default-agent, dbug, lexlib
 ::
 ::
@@ -226,7 +227,7 @@
     ?+    -.sign  (on-agent:def wire sign)
         %watch-ack
       ?~  p.sign
-        ((slog '%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} succeeded!' ~) `this)
+        ((slog leaf+"%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} succeeded!" ~) `this)
       ((slog leaf+"%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} failed!" u.p.sign) `this)
     ::
         %kick
@@ -240,14 +241,6 @@
           %lexicon-reaction
         =/  incoming  !<(reaction q.cage.sign)
         ?+  -.incoming  (on-agent:def wire sign)
-            %defs
-          =/  sp  [(slav %p i.wire) i.t.wire]
-          ?~  (~(get by lex) sp)  ::... this shouldn't really be undefined ever
-          `this(lex (~(put by lex) sp +.incoming))
-          `this :: if space is defined after joining it...
-          ::    probably should concanate the map, if some kind of subscription weirdness arises.
-          ::
-          ::
             %def-added
           =/  sp  [(slav %p i.wire) i.t.wire]
           ::  
@@ -265,6 +258,16 @@
             (weld def-list ~[def.incoming])
           `this(lex (~(put by lex) sp (~(put by u.sdefs) word.incoming updated-list)))
           ::
+            %def-deleted
+          ::  todo: deletion permissions/effects
+          =/  sp  [(slav %p i.wire) i.t.wire]
+          ?~  sdefs=(~(get by lex) sp)
+            !!
+          =/  def-list  (~(got by u.sdefs) word.incoming)
+          =/  index  (need (find ~[id.incoming] (turn def-list |=(a=definition id.a))))
+          =/  new-list  (oust [index 1] def-list) 
+          `this(lex (~(gas by lex) ~[[sp (~(gas by u.sdefs) ~[[word.incoming new-list]])]]))
+          ::
             %voted
             :: note space.incoming and space in wire both available...
           =/  slex  (~(got by lex) space.incoming)
@@ -279,17 +282,13 @@
                 ::
           =/  new-defs  (snap def-list index new-def)
           `this(lex (~(put by lex) space.incoming (~(put by slex) word.incoming new-defs)))
-              ::
-            %def-deleted
-            ::  todo: deletion permissions/effects
+          ::
+            %defs
           =/  sp  [(slav %p i.wire) i.t.wire]
-          ?~  sdefs=(~(get by lex) sp)
-            !!
-          =/  def-list  (~(got by u.sdefs) word.incoming)
-          =/  index  (need (find ~[id.incoming] (turn def-list |=(a=definition id.a))))
-          =/  new-list  (oust [index 1] def-list) 
-          ::`this(lex (~(put by lex) sp (~(put by u.sdefs) word.incoming new-defs)))
-          `this(lex (~(gas by lex) ~[[sp (~(gas by u.sdefs) ~[[word.incoming new-list]])]]))
+          ?~  (~(get by lex) sp)  :: .this shouldn't really be undefined ever
+            `this(lex (~(put by lex) sp +.incoming))
+          `this   :: if space is defined after joining it...
+             :: probably should concanate the map, if some kind of subscription weirdness arises.
           ::
         ==
       ==
@@ -309,6 +308,11 @@
       =/  sp  [[(slav %p i.t.t.path) i.t.t.t.path]]
       =/  sdefs  (~(got by lex) sp)
       ``definitions+!>(sdefs)
+    ::
+    [%x %spaces %all ~]
+      =/  sps  .^(view:spaces-store %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/all/spaces-view)
+      ``spaces-view+!>(sps)
+    ::
   ==
 ::
 ++  on-arvo

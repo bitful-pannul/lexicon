@@ -1,5 +1,6 @@
 :: json and other helpers
 /-  *lexicon
+:: /-  membership
 ::
 |%
 ++  get-list
@@ -14,6 +15,13 @@
 ::    ?=(vote %up)  :: switch on these.
 ::      =/  set  (need (find ~[index] def-list))
 ::      :: add msg.sender..? src.bowl to this too
+:: 
+:: ++  check-membership
+::   |=  [joiner=@p =space t=@da]
+::   ^-  ?
+::   =/  res=
+::   .^(view:membership %gx /(scot %p -.space)/spaces/(scot %da t)/(scot %p -.space)/[+.space]/is-member/(scot %p joiner)/membership-view)
+::   is-member.res
 ::
 ++  space-rule
   ;~  plug  
