@@ -5,7 +5,8 @@ import { Home, Space } from './components'
 import './App.css'
 import TestWord from './components/TestWord';
 import { LexContextProvider } from './context';
-import { theme } from '@holium/design-system'
+import { theme, Box } from '@holium/design-system'
+import { ThemeProvider } from 'styled-components';
 
 const App = () => {
   // typescript state types + poke returns might be useful
@@ -38,15 +39,15 @@ const App = () => {
 
   return (
     <>
-      <LexContextProvider>
-        <Router>
-          <Routes>
-            <Route path='/apps/lexicon/:ship/:group/:word' element={<TestWord />} />
-            <Route path='/apps/lexicon/:ship/:group' element={<Space />} />
-            <Route exact path='/apps/lexicon' element={<Home />} />
-          </Routes>
-        </Router>
-      </LexContextProvider>
+        <LexContextProvider>
+          <Router>
+            <Routes>
+              <Route path='/apps/lexicon/:ship/:group/:word' element={<TestWord />} />
+              <Route path='/apps/lexicon/:ship/:group' element={<Space />} />
+              <Route exact path='/apps/lexicon' element={<Home />} />
+            </Routes>
+          </Router>
+        </LexContextProvider>
     </>
   );
 }

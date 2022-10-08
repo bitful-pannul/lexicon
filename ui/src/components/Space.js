@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { Dropdown, Word, AddModal } from './index'
 import { LexContext } from '../context'
-import { Button, Input } from '@holium/design-system'
+import { Button, Input} from '@holium/design-system'
 
 const Space = () => {
   // check if space exist, joined or not. 

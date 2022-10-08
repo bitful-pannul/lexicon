@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Dropdown } from './index'
-import { Text, Button } from '@holium/design-system'
+import { Text, Button, Input, theme, Page, Icons, Box, Flex, Ship } from '@holium/design-system'
+import { ThemeConsumer, ThemeProvider } from 'styled-components'
 
 const Home = () => {
   // welcome page, check if app installed or not
@@ -32,18 +33,21 @@ const Home = () => {
 
   return (
     <>
-        <Dropdown /> 
+      <Dropdown /> 
         <div>
           <input placeholder='search' />
+          
         </div>
 
-        <Text variant='body'>
-          testing
+        <Text variant='h6'>
+          testing text
         </Text>
 
         <div>
         receperint ad dictionary
         </div>
+        <Button onClick={() => history('/apps/lexicon/~rus/biolab', { replace: true })}>go to test space</Button> 
+
 
         <div>
           <input placeholder='join space' onChange={(e) => setJoinspace(e.target.value)}/>
