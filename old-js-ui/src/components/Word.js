@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-const Word = ({word, definitions}) => {
+const Word = ({ word, definitions }) => {
   const [view, setView] = useState('defs') // defs | sentences
   const [inputdef, setInputdef] = useState('')
   const { ship, group } = useParams()
