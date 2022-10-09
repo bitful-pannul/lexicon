@@ -28,6 +28,9 @@
       [%voted =space =word id=@uv vote-type=?(%upvotes %downvotes) voter=@p]
       [%test space word]    :: without this, won't compile...??
       [%defs =definitions]
+      :: [%error   @t]
+      :: [%success @t]
+
   ==
 ::
 +$  view
