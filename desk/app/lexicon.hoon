@@ -1,6 +1,7 @@
 ::  
 /-  *lexicon
 /-  spaces-store
+/-  membership
 /+  default-agent, dbug, lexlib
 ::
 ::
@@ -27,9 +28,19 @@
 ::
 ++  on-init
   ^-  (quip card _this)
-  :_  this
-  :: perhaps join holium space first
-  ::  :~  [%pass %watch]
+  =/  intro-def
+    :*
+      id=(sham [our.bowl 'our'])
+      def='lexicon is a dictionary for your own space & others'
+      poster=src.bowl
+      posted=now.bowl
+      sentence=~['based? ..based on what? just look it up on %lexicon']
+      related=~['urban dictionary' 'gloss']
+      upvotes=*(set @p)
+      downvotes=*(set @p)
+    ==
+  ::
+  :_  this(lex (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]])))
   ~
 ::
 ++  on-save  !>(state)
@@ -213,6 +224,16 @@
   ?+  path  (on-watch:def path)
     [@t @t ~]
     ?>  |(=(our.bowl src.bowl) =(our.bowl (slav %p i.path)))
+    ::  check if space is public or not [TODO in %spaces]
+    ::  check if src.bowl is member of space? 
+    ::  if not, reaction should maybe be a denied access reaction. 
+    ::  well, might be a bit unnecessary if UI looks like ballot
+    ::  that is, list all spaces+groups, then click +join, which joins-lexicon.
+    ::  ~/scry/spaces/<path>/is-member/<patp>.json 
+    =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/(scot %p our.bowl)/[i.t.path]/is-member/(scot %p src.bowl)/membership-view)
+    ~&  >  ismem
+    ~&  >  +.ismem
+    ?>  =(%.y +.ismem)
     =/  defs  (need (~(get by lex) [(slav %p i.path) i.t.path]))
     :_  this
     :~  [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs defs])]
@@ -328,4 +349,3 @@
 ++  on-leave  on-leave:def
 ++  on-fail   on-fail:def
 --
-
