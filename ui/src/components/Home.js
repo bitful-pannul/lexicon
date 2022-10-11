@@ -35,7 +35,7 @@ const Home = () => {
     <>
       <Dropdown /> 
         <div>
-          <Input placeholder='search' />
+          <Input placeholder='search' leftIcon={<Icons.Search aria-hidden />}/>
           
         </div>
 
@@ -43,16 +43,16 @@ const Home = () => {
           testing text
         </Text>
 
-        <div>
-        receperint ad dictionary
-        </div>
+        <Box>
+        <Text>receperint ad dictionary</Text>
+        </Box>
         <Button onClick={() => history('/apps/lexicon/~rus/biolab', { replace: true })}>go to test space</Button> 
 
 
-        <div>
-          <input placeholder='join space' onChange={(e) => setJoinspace(e.target.value)}/>
+        <Box>
+          <Input placeholder='join space' onChange={(e) => setJoinspace(e.target.value)}/>
           <Button onClick={handleJoinSpace}>join</Button> 
-        </div>
+        </Box>
     </>
   )
 }

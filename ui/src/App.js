@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home, Space } from './components'
 import './App.css'
 import TestWord from './components/TestWord';
-import { LexContextProvider } from './context';
-import { theme, Box } from '@holium/design-system'
+import { LexContextProvider, SpacesContextProvider } from './context';
+import { theme, Box, OSViewPort } from '@holium/design-system'
 import { ThemeProvider } from 'styled-components';
 
 const App = () => {
@@ -15,9 +15,9 @@ const App = () => {
   // if served directly by ship, unnecessary. for dev purposes 
   const connect = async () => {
     window.urbit = await Urbit.authenticate({
-      ship: "zod",
+      ship: "lur",
       url: "localhost:8080",
-      code: "lidlut-tabwed-pillex-ridrup",
+      code: "sanmet-dospyx-wacteb-lavpex",
       verbose: true
     })
   }
@@ -39,6 +39,9 @@ const App = () => {
 
   return (
     <>
+      {/* <ThemeProvider theme={theme.light}>
+      <OSViewPort> */}
+      <SpacesContextProvider>
         <LexContextProvider>
           <Router>
             <Routes>
@@ -48,6 +51,9 @@ const App = () => {
             </Routes>
           </Router>
         </LexContextProvider>
+      </SpacesContextProvider>
+      {/* </OSViewPort>
+      </ThemeProvider> */}
     </>
   );
 }

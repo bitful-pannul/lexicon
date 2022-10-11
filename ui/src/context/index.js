@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 
 const LexContext = React.createContext({ lex: {} })
 
+const SpacesContext = React.createContext({ spaces: {} })
+
 const LexContextProvider = ({ children }) => {
   const [lex, setLex] = useState()
 
@@ -12,7 +14,7 @@ const LexContextProvider = ({ children }) => {
       app: "lexicon",
       path: path,
     })
-    console.log('fetched stuff in context.', res)
+    console.log('fetched lex in context.', res)
     setLex(res)
   }
 
@@ -23,4 +25,25 @@ const LexContextProvider = ({ children }) => {
   return <LexContext.Provider value={{lex: lex}}>{children}</LexContext.Provider>
 }
 
-export { LexContext, LexContextProvider }
+const SpacesContextProvider = ({ children }) => {
+  const [spaces, setSpaces] = useState()
+
+  
+  const getSpaces = async () => {
+    const path = '/spaces/all'
+    const res = await window.urbit.scry({
+      app: "lexicon",
+      path: path,
+    })
+    console.log('fetched spaces in context.', res?.spaces)
+    setSpaces(res?.spaces)
+  }
+
+  useEffect(() => {
+    setTimeout(() => getSpaces(), 300)
+  }, [])
+
+  return <SpacesContext.Provider value={{spaces: spaces}}>{children}</SpacesContext.Provider>
+}
+
+export { LexContext, LexContextProvider, SpacesContext, SpacesContextProvider }
