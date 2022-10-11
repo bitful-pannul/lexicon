@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@holium/design-system": {
+      "signature": "3dea506ceb5c83de8853e4162ed61a52",
+      "file": true
+    }
+  }
+}
