@@ -35,7 +35,7 @@ const Home = () => {
     <>
       <Dropdown /> 
         <div>
-          <input placeholder='search' />
+          <Input placeholder='search' />
           
         </div>
 

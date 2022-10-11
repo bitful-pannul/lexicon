@@ -1,0 +1,60 @@
+{
+  "name": "@holium/design-system",
+  "author": "",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/holium-design-system.cjs.js",
+  "module": "dist/holium-design-system.esm.js",
+  "typings": "dist/holium-design-system.cjs.d.ts",
+  "scripts": {
+    "tsc": "tsc",
+    "prebuild:prod": "yarn clean",
+    "dev": "preconstruct dev",
+    "build": "preconstruct build",
+    "build:prod": "preconstruct build",
+    "clean": "rimraf dist",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=CHROMATIC_PROJECT_TOKEN"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "size-limit": [
+    {
+      "path": "dist/holium-design-system.cjs.prod.js",
+      "limit": "500 KB"
+    }
+  ],
+  "preconstruct": {
+    "globals": {
+      "react": "React",
+      "react-dom": "ReactDOM",
+      "react-is": "reactIs",
+      "styled-components": "styledComponents",
+      "styled-system": "styledSystem"
+    }
+  },
+  "dependencies": {
+    "@datepicker-react/hooks": "^2.8.4",
+    "@tlon/sigil-js": "^1.4.5"
+  },
+  "peerDependencies": {
+    "polished": "^4.1.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "styled-components": "^5.3.3",
+    "styled-system": "^5.1.5"
+  },
+  "yalcSig": "3dea506ceb5c83de8853e4162ed61a52"
+}
