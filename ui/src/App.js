@@ -15,9 +15,9 @@ const App = () => {
   // if served directly by ship, unnecessary. for dev purposes 
   const connect = async () => {
     window.urbit = await Urbit.authenticate({
-      ship: "lur",
+      ship: "dev",
       url: "localhost:8080",
-      code: "sanmet-dospyx-wacteb-lavpex",
+      code: "magsub-micsev-bacmug-moldex",
       verbose: true
     })
   }
