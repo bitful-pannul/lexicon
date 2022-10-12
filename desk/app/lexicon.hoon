@@ -334,6 +334,14 @@
       =/  sps  .^(view:spaces-store %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/all/spaces-view)
       ``spaces-view+!>(sps)
     ::
+    :: [%x %search @t ~]
+    ::   =/  defs  ~(val by lex)
+    ::   =/  match  (find `@t`i.t.t.path ~(key by defs))  
+    ::   ``noun+!>(match)
+      :: |-
+      ::   %+  turn  defs
+      ::   |=  [=word d=(list definition)]
+      ::   ?:  
   ==
 ::
 ++  on-arvo

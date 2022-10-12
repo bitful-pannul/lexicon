@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LexContext, SpacesContext } from '../context'
-import { Context } from '@holium/design-system'
+import { Context, Box, Flex } from '@holium/design-system'
 import { useParams } from 'react-router-dom'
 
 const Dropdown = () => {
     const { lex } = useContext(LexContext)
     const { spaces } = useContext(SpacesContext)
-    const [space, setSpace] = useState('~')
+    const [space, setSpace] = useState({})
     const history = useNavigate()
     const { ship, group } = useParams()
 
@@ -15,38 +15,52 @@ const Dropdown = () => {
     const handleChange = (e) => {  
       console.log('select: ', e)
     //   e.preventDefault()
-      history('/apps/lexicon/' + e.target.value, { replace: true })
-      setSpace(e.target.value)
+      history('/apps/lexicon/' + e.name, { replace: true })
+      setSpace(e.name)
     }
 
-    const testContexts = [
+    const firstContext = 
       {
-        type: 'ship',
-        name: '~bitful-pannul',
+        type: 'group',
+        name: '~dev/our',
         meta: {
           color: "#ff810a",
-          picture: null
+          picture: 'https://i.imgur.com/JRw8tTj.jpeg'
         }
-      }]
+      }
+
+    const testSpaces = spaces && Object.keys(spaces).map((s, i) => {
+      return {
+        type: 'group',
+        name: s.substring(1),
+        meta: {
+          color: spaces[s].color,
+          picture: spaces[s].picture
+        }
+      }
+    })
 
     useEffect(() => {
-      setSpace(ship + '/' + group)
+      
+      console.log('testspaces', testSpaces)
     }, [ship, group])
 
-    return lex ? (
+    return spaces ? (
       <>
-      <select onChange={handleChange}>
+      {/* <select onChange={handleChange}>
         { space ? <option key={0} value={space}>{space}</option> : null }
 
-      { Object.keys(lex).map((item , i) => {
+      { lex && Object.keys(lex).map((item , i) => {
         return <option key={i} value={item}>{item}</option>
-      }) }
+      }) } */}
 
-      { Object.keys(spaces).map((item, i) => {
-        return <option key={i*2} value={item.substring(1)}>{item.substring(1)}</option>
-      })}
-      </select>
-      <Context availableContexts={testContexts} selectedContext={testContexts[0]} />
+      {/* { spaces && Object.keys(spaces).map((item, i) => {
+        return <option key={i*2} value={item?.substring(1)}>{item?.substring(1)}</option>
+      }) }
+      </select> */}
+      <Flex>
+      <Context availableContexts={testSpaces} selectedContext={firstContext} menuOrientation='top-left' onContextClick={handleChange}/>
+      </Flex>
       </>
     ) : 'loading...'
 }

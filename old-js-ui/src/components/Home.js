@@ -18,7 +18,7 @@ const Home = () => {
 
   const handleJoinSpace = async (e) => {
     e.preventDefault()
-    
+
     const res = await window.urbit.subscribe({
       app: "lexicon",
       path: joinspace,
@@ -33,26 +33,28 @@ const Home = () => {
 
   return (
     <>
-      <Dropdown /> 
-        <div>
-          <Input placeholder='search' leftIcon={<Icons.Search aria-hidden />}/>
-          
-        </div>
+      <Dropdown />
+      <Box w={5} pt={2}>
+        <Input placeholder='search' leftIcon={<Icons.Search aria-hidden />} />
 
-        <Text variant='h6'>
-          testing text
-        </Text>
+      </Box>
 
-        <Box>
-        <Text>receperint ad dictionary</Text>
+      <Text variant='h6'>
+        testing text
+      </Text>
+      <Flex>
+        <Box m={2}>
+          <Text>receperint ad dictionary</Text>
         </Box>
-        <Button onClick={() => history('/apps/lexicon/~rus/biolab', { replace: true })}>go to test space</Button> 
-
-
-        <Box>
-          <Input placeholder='join space' onChange={(e) => setJoinspace(e.target.value)}/>
-          <Button onClick={handleJoinSpace}>join</Button> 
+        <Box m={1}>
+          <Button onClick={() => history('/apps/lexicon/~rus/biolab', { replace: true })}>go to test space</Button>
         </Box>
+      </Flex>
+
+      <Box w={5} pt={2}>
+        <Input placeholder='join space' onChange={(e) => setJoinspace(e.target.value)} />
+        <Button p={4} onClick={handleJoinSpace}> join </Button>
+      </Box>
     </>
   )
 }
