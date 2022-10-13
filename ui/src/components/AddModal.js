@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Dropdown } from './index'
-import { Button } from '@holium/design-system'
+import { Button, Input, Text, Box, Flex, Label } from '@holium/design-system'
 
-const AddModal = ({modalOpen, setModalOpen}) => {
+const AddModal = ({ modalOpen, setModalOpen }) => {
   const { ship, group } = useParams()
   const [word, setWord] = useState('')
   const [def, setDef] = useState('')
@@ -40,28 +40,31 @@ const AddModal = ({modalOpen, setModalOpen}) => {
     <>
       <Dropdown />
       <div onClick={() => setModalOpen(false)}>{'<-'}</div>
-      <div>
-        <span>word*: &nbsp;&nbsp;</span>
-        <input type='text' placeholder='type word' onChange={(e) => setWord(e.target.value)}/> 
-      </div>
-      <div>
-        <span>definition*: &nbsp;&nbsp;</span>
-        <input type='text' placeholder='your definition' onChange={(e) => setDef(e.target.value)}/> 
-      </div>
-      <div>
-        <span>sentence: &nbsp;&nbsp;</span>
-        <input type='text' placeholder='an example of how it is used' onChange={(e) => setSentence(e.target.value)}/> 
-      </div>
-      <div>
-        <span>related: &nbsp;&nbsp;</span>
-        <input type='text' placeholder='add some related words, [word, word]' onChange={(e) => setRelated(e.target.value)}/> 
-      </div>
-      <div>
-        <Button onClick={(e) => setModalOpen(false)}>cancel</Button>
-        <Button onClick={handleSubmit}>submit</Button>
-      </div>
+
+      <Flex flexDirection='column' width='50%'>
+        <Flex flexDirection='column'>
+          <Label required my='2'>word &nbsp;</Label>
+          <Input placeholder='type word' onChange={(e) => setWord(e.target.value)} />
+        </Flex>
+        <Flex flexDirection='column'>
+          <Label required my='2'>definition &nbsp;</Label>
+          <Input placeholder='type your definition..' onChange={(e) => setDef(e.target.value)} />
+        </Flex>
+        <Flex flexDirection='column'>
+        <Label required my='2'>sentence &nbsp;</Label>
+          <Input placeholder='an example of how it is used...' onChange={(e) => setSentence(e.target.value)} />
+        </Flex>
+        <Flex flexDirection='column'>
+        <Label required my='2'>related &nbsp;</Label>
+          <Input placeholder='add some related words, [word, word]' onChange={(e) => setRelated(e.target.value)} />
+        </Flex>
+        <Flex justifyContent='flex-end' mt='5' gap='5'>
+          <Button onClick={(e) => setModalOpen(false)}>cancel</Button>
+          <Button onClick={handleSubmit}>submit</Button>
+        </Flex>
+      </Flex>
     </>
-  )  
+  )
 }
 
 export default AddModal
