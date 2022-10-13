@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import { Dropdown, Word, AddModal } from './index'
+import { Dropdown, Word, AddModal, NoMatch } from './index'
 import { LexContext } from '../context'
 import { Button, Input} from '@holium/design-system'
 
@@ -30,7 +30,7 @@ const Space = () => {
         <div>
           { (lex && currentword === '') ? 
           (
-            Object.keys(lex[`${ship}/${group}`]).map((word, i) => {
+            Object.keys(lex[`${ship}/${group}`])?.map((word, i) => {
               
              return (
               <>
@@ -53,7 +53,7 @@ const Space = () => {
           : (currentword !== '') ?
           <Word word={currentword} definitions={lex[`${ship}/${group}`][currentword]}/>  //  some real weirdness with setting object to state instead of word
           :
-          (<div>no definitions for this space yet</div>)
+          (<NoMatch />)
           }
         </div>
     </>
