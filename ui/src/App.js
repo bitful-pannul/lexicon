@@ -25,16 +25,16 @@ const App = () => {
 
 
   useEffect(() => {
-    // window.urbit = new Urbit("")
-    // window.urbit.ship = window.ship;
     // window.urbit.onOpen = () => setStatus("con");
     // window.urbit.onRetry = () => setStatus("try");
     // window.urbit.onError = (err) => setStatus("err");
-    // connect()
+    window.urbit = new Urbit("")
+    window.urbit.ship = window.ship;
+
+    connect()
 
 
     console.log('window :', window.urbit)
-    console.log('ubrit: ', Urbit)
     // commented out connect() for production build, if using locally, call connect() here
   }, [])
 
