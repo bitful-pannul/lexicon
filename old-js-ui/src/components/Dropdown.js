@@ -80,7 +80,7 @@ const Dropdown = () => {
     console.log('testspaces', testSpaces)
     console.log('selected space: ', testSpaces?.[space])
     setSpace('/' + ship + '/' + group)
-  }, [ship, group, spaces])
+  }, [ship, group])
 
   return testSpaces ? (
     <>
