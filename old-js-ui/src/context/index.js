@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 const LexContext = React.createContext({ lex: {} })
 
@@ -7,7 +7,6 @@ const SpacesContext = React.createContext({ spaces: {} })
 const LexContextProvider = ({ children }) => {
   const [lex, setLex] = useState()
 
-  
   const getLexicon = async () => {
     const path = '/definitions/all'
     const res = await window.urbit.scry({
@@ -19,7 +18,7 @@ const LexContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    setTimeout(() => getLexicon(), 300)
+    setTimeout(() => getLexicon(), 1)
   }, [])
 
   return <LexContext.Provider value={{lex: lex}}>{children}</LexContext.Provider>
@@ -27,7 +26,6 @@ const LexContextProvider = ({ children }) => {
 
 const SpacesContextProvider = ({ children }) => {
   const [spaces, setSpaces] = useState()
-
   
   const getSpaces = async () => {
     const path = '/spaces/all'
@@ -40,7 +38,7 @@ const SpacesContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    setTimeout(() => getSpaces(), 300)
+    getSpaces()
   }, [])
 
   return <SpacesContext.Provider value={{spaces: spaces}}>{children}</SpacesContext.Provider>
