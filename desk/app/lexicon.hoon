@@ -2,7 +2,7 @@
 /-  *lexicon
 /-  spaces-store
 /-  membership
-/+  default-agent, dbug, lexlib
+/+  default-agent, dbug, lexlib, verb
 ::
 ::
 ::
@@ -16,6 +16,7 @@
 +$  card     card:agent:gall
 --
 %-  agent:dbug
+%+  verb  &
 ::
 =|  state-0
 =*  state  -
