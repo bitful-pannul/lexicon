@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Dropdown } from './index'
+import { Dropdown, Search } from './index'
 import { Text, Button, Input, theme, Page, Icons, Box, Flex, Ship } from '@holium/design-system'
 import { ThemeConsumer, ThemeProvider } from 'styled-components'
 
@@ -34,10 +34,7 @@ const Home = () => {
   return (
     <>
       <Dropdown />
-      <Box w={5} pt={2}>
-        <Input placeholder='search' leftIcon={<Icons.Search aria-hidden />} />
-
-      </Box>
+      <Flex width='20%'><Search  /></Flex>
 
       <Text variant='h6'>
         testing text

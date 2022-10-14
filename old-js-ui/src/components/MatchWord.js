@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState, useContext } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { LexContext } from '../context'
 import { Text, Flex, Box, Button, Input } from '@holium/design-system'
-import { MdThumbDownOffAlt, MdThumbDownAlt, MdThumbUpAlt, MdOutlineThumbUpOffAlt } from "react-icons/md"
+import { MdThumbDownOffAlt, MdThumbDownAlt, MdThumbUpAlt, MdOutlineThumbUpOffAlt, MdKeyboardBackspace } from "react-icons/md"
+import { Dropdown, Search } from './index'
 
-const Word = ({ word, definitions }) => {
+
+const MatchWord = () => {
+  const { lex } = useContext(LexContext)
   const [view, setView] = useState('defs') // defs | sentences
   const [inputdef, setInputdef] = useState('')
-  const { ship, group } = useParams()
+  const { ship, group, word } = useParams()
+  const history = useNavigate()
+
+  const defs = lex && lex[`${ship}/${group}`][word]
 
   const addDef = async (e) => {
     const addJson = {
@@ -58,6 +65,7 @@ const Word = ({ word, definitions }) => {
 
 
 
+
   const WordView = ({ def }) => (
 
 
@@ -84,6 +92,13 @@ const Word = ({ word, definitions }) => {
   if (view === 'defs') return (
     // error handling necessary? do something global [not-found page]
     <>
+    <Flex width='25%' flexDirection='column' mb='3'>
+      <Dropdown />
+      <Search />
+    </Flex>
+
+      <MdKeyboardBackspace onClick={() => history('/apps/lexicon/' + ship + '/' + group)}/>
+
       <Text variant='h3' my='5'>{word}</Text>
 
       <Box mb='5'>
@@ -94,10 +109,11 @@ const Word = ({ word, definitions }) => {
 
 
 
-      {definitions?.map((d, i) => {
-        return <WordView key={'word' + i} def={d} />
+      {defs?.map((d, i) => {
+        console.log(d)
+        return <WordView def={d} />
       })}
-      <Flex flexDirection='column'>
+      <Flex flexDirection='column' width='25%'>
         <Input placeholder='add a definition' onChange={handleChange} />
         <Button variant='minimal' onClick={addDef}>submit</Button>
       </Flex>
@@ -116,13 +132,13 @@ const Word = ({ word, definitions }) => {
 
 
 
-      {definitions?.map((d, i) => {
+      {defs?.map((d, i) => {
         return (
           d.sentence?.map((sen, i) => {
             return (
               <Flex justifyContent='space-between' key={'sen' + i}>
-                <Text variant='caption'>{sen}</Text>
-                <Text variant='caption'>{d.poster}</Text>
+                <Text variant='caption'>{sen} {d.poster}</Text>
+                {/*<Text variant='caption'>tt test </Text>*/}
               </Flex>
             )
           })
@@ -132,5 +148,4 @@ const Word = ({ word, definitions }) => {
   )
 }
 
-
-export default Word
+export default MatchWord

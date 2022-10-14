@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Urbit from '@urbit/http-api'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home, Space } from './components'
+import { Home, Space, MatchWord } from './components'
 import './App.css'
-import TestWord from './components/TestWord';
 import { LexContextProvider, SpacesContextProvider } from './context';
 import { theme, Box, OSViewPort } from '@holium/design-system'
 import { ThemeProvider } from 'styled-components';
@@ -47,7 +46,7 @@ const App = () => {
         <LexContextProvider>
           <Router>
             <Routes>
-              <Route path='/apps/lexicon/:ship/:group/:word' element={<TestWord />} />
+              <Route path='/apps/lexicon/:ship/:group/:word' element={<MatchWord />} />
               <Route path='/apps/lexicon/:ship/:group' element={<Space />} />
               <Route exact path='/apps/lexicon' element={<Home />} />
             </Routes>

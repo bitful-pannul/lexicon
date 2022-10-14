@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import { Dropdown, Word, AddModal, NoMatch } from './index'
+import { Dropdown, Word, AddModal, NoMatch, Search } from './index'
 import { LexContext } from '../context'
 import { Button, Input, Flex, Text, MenuItem, Box} from '@holium/design-system'
 import { MdKeyboardBackspace } from 'react-icons/md'
@@ -21,8 +21,8 @@ const Space = () => {
   return !modalOpen ? (
     <>
     <Dropdown />
-    <Flex width='20%' gap='4' my='2'>
-      <Input placeholder='search' />
+    <Flex width='25%' gap='4' my='2'>
+      <Search />
       <Button variant='minimal'onClick={() => setModalOpen(true)}>add word</Button>
     </Flex> 
 
