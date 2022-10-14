@@ -2,7 +2,8 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { Dropdown, Word, AddModal, NoMatch } from './index'
 import { LexContext } from '../context'
-import { Button, Input} from '@holium/design-system'
+import { Button, Input, Flex, Text, MenuItem, Box} from '@holium/design-system'
+import { MdKeyboardBackspace } from 'react-icons/md'
 
 const Space = () => {
   // check if space exist, joined or not. 
@@ -20,21 +21,21 @@ const Space = () => {
   return !modalOpen ? (
     <>
     <Dropdown />
-    <div>
-      <input placeholder='search' />
-      <Button onClick={() => setModalOpen(true)}>add word</Button>
-    </div> 
+    <Flex width='20%' gap='4' my='2'>
+      <Input placeholder='search' />
+      <Button variant='minimal'onClick={() => setModalOpen(true)}>add word</Button>
+    </Flex> 
 
-        { currentword && <div onClick={() => setCurrentword('')}>{'<-'}</div> }
+        { currentword && <MdKeyboardBackspace onClick={() => setCurrentword('')}/>}
 
-        <div>
+        <Flex flexDirection='column' width='25%'>
           { (lex && currentword === '') ? 
           (
             Object.keys(lex[`${ship}/${group}`])?.map((word, i) => {
               
              return (
               <>
-              <div key={i} onClick={() => setCurrentword(word)}>{word}</div>
+              <MenuItem key={i} onClick={() => setCurrentword(word)} label={<Box bg='primary'><Text variant='h5'>{word}</Text></Box>} />
               {/* <div>definitions: {defs[word].map((d, i) => {
                 return (
                   <>
@@ -55,7 +56,7 @@ const Space = () => {
           :
           (<NoMatch />)
           }
-        </div>
+        </Flex>
     </>
   ) : <AddModal modalOpen={modalOpen} setModalOpen={setModal} />
 }

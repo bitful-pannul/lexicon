@@ -18,7 +18,7 @@ const LexContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    setTimeout(() => getLexicon(), 300)
+    setTimeout(() => getLexicon(), 380)
   }, [setLex])
 
   return <LexContext.Provider value={{lex: lex}}>{children}</LexContext.Provider>
@@ -38,7 +38,7 @@ const SpacesContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    setTimeout(() => getSpaces(), 310)
+    setTimeout(() => getSpaces(), 400)
   }, [setSpaces])
 
   return <SpacesContext.Provider value={{spaces: spaces}}>{children}</SpacesContext.Provider>
