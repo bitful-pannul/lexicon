@@ -98,7 +98,7 @@ const Dropdown = () => {
 
       {/* conditionally render firstcontext? storing in state leads to issues for now  */}
 
-      <Flex>
+      <Flex my='3'>
         <Context availableContexts={testSpaces} selectedContext={selectSpace(space)} menuOrientation='top-left' onContextClick={handleChange} style={{ color: 'black' }} />
       </Flex>
     </>
