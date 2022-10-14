@@ -35,7 +35,7 @@
       ^-  $-(json definition)
       %-  ot
       :~
-        [%id (se %ud)]
+        [%id (se %uv)]
         [%word so]
         [%poster (se %p)]
         [%posted (se %da)]
@@ -83,8 +83,8 @@
         :~
           [%space (su space-rule)]
           [%word so]
-          [%id (se %ud)]
-          [%vote-type (su (perk %upvotes %downvotes ~))]
+          [%id (se %uv)]
+          [%vote-type (su (perk ~[%upvotes %downvotes]))]
         ==
       ==
   --
@@ -110,7 +110,7 @@
     ^-  json
     %-  pairs
     :~
-      [%id %s (scot %ud id.def)]
+      [%id %s (scot %uv id.def)]
       [%def %s def.def]
       [%poster (ship poster.def)]
       [%posted (sect posted.def)]
