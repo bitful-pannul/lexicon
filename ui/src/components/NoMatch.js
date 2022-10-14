@@ -11,14 +11,10 @@ const NoMatch = () => {
   const { ship, group } = useParams()
   const [joinSpace, setJoinSpace] = useState('')
 
-  const isour = ship.substring(1) === window?.urbit?.ship
+  const isour = () => ship.substring(1) === window?.urbit?.ship
 
 
-  useEffect(() => {
-    console.log('our? ', isour)
-  }, [])
-
-  return (isour && lex) ? (
+  return (isour() && lex) ? (
     <>
       <Text>no lexicon yet for {`${ship}/${group}`}</Text>
       <Text>do you want to create one?</Text>

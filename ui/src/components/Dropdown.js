@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { LexContext, SpacesContext } from '../context'
 import { Context, Box, Flex } from '@holium/design-system'
-import { useParams } from 'react-router-dom'
 
 const Dropdown = () => {
   const { spaces } = useContext(SpacesContext)
@@ -106,4 +105,4 @@ const Dropdown = () => {
 
 }
 
-export default Dropdown
+export default React.memo(Dropdown)

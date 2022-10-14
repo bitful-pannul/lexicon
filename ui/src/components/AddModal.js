@@ -52,16 +52,16 @@ const AddModal = ({ modalOpen, setModalOpen }) => {
           <Input placeholder='type your definition..' onChange={(e) => setDef(e.target.value)} />
         </Flex>
         <Flex flexDirection='column'>
-          <Label required my='2'>sentence &nbsp;</Label>
+          <Label my='2'>sentence &nbsp;</Label>
           <Input placeholder='an example of how it is used...' onChange={(e) => setSentence(e.target.value)} />
         </Flex>
         <Flex flexDirection='column'>
-          <Label required my='2'>related &nbsp;</Label>
+          <Label my='2'>related &nbsp;</Label>
           <Input placeholder='add some related words, [word, word]' onChange={(e) => setRelated(e.target.value)} />
         </Flex>
         <Flex justifyContent='flex-end' mt='5' gap='5'>
-          <Button onClick={(e) => setModalOpen(false)}>cancel</Button>
-          <Button onClick={handleSubmit}>submit</Button>
+          <Button variant='minimal' onClick={(e) => setModalOpen(false)}>cancel</Button>
+          <Button variant='minimal' onClick={handleSubmit}>submit</Button>
         </Flex>
       </Flex>
     </>
