@@ -17,6 +17,14 @@ const Space = () => {
     setModalOpen(val)
   }
 
+  const spaceLex = () => {
+    try {
+      return lex[`${ship}/${group}`]
+    } catch {
+      return undefined
+    }
+  }
+
 
   return !modalOpen ? (
     <>
@@ -29,7 +37,7 @@ const Space = () => {
         { currentword && <MdKeyboardBackspace onClick={() => setCurrentword('')}/>}
 
         <Flex flexDirection='column' width='25%'>
-          { (lex && currentword === '') ? 
+          { (spaceLex() && currentword === '') ? 
           (
             Object.keys(lex[`${ship}/${group}`])?.map((word, i) => {
               

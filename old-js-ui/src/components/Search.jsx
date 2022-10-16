@@ -48,7 +48,7 @@ const SearchResultList = React.memo((props) => {
       ) : (
         props.results.map((result, index) => (
           
-          <MenuItemStyle key={`${index}`} onClick={() => handleNavigate(result.word, result.space)}><Box width='100%' height='100%'><Text variant='caption'>{result.word}</Text></Box></MenuItemStyle>
+          <MenuItemStyle key={`${index}`}><Box width='100%' height='100%' onClick={() => handleNavigate(result.word, result.space)}><Text variant='caption'>{result.word}</Text></Box></MenuItemStyle>
           
         ))
       )}
