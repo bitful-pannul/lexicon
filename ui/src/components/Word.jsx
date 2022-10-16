@@ -8,7 +8,9 @@ const Word = ({ word, definitions }) => {
   const [inputdef, setInputdef] = useState('')
   const { ship, group } = useParams()
 
-  const addDef = async (e) => {
+  const [defs, setDefs] = useState(definitions)
+
+  const handleAdd = async (e) => {
     const addJson = {
       add: {
         space: `${ship}/${group}`,
@@ -26,9 +28,18 @@ const Word = ({ word, definitions }) => {
       onSuccess: () => console.log('success! added definition: ', addJson),
       onError: () => console.log("error! adding definition: ", addJson),
     })
+
+    const def = {
+      poster: window.urbit.ship,
+      def: inputdef,
+      upvotes: [],
+      downvotes: [],
+    }
+
+    setDefs([...defs, def])
   }
 
-  // id=@uv votetype=?(%upvotes %downvotes)
+  // id=@uv votetype=?(upvotes downvotes)
   const handleVote = async (id, votetype) => {
     const voteJson = {
       vote: {
@@ -39,7 +50,6 @@ const Word = ({ word, definitions }) => {
       }
     }
 
-    console.log(voteJson)
 
     await window.urbit.poke({
       app: "lexicon",
@@ -48,6 +58,17 @@ const Word = ({ word, definitions }) => {
       onSuccess: () => console.log("success! voted on: ", voteJson),
       onError: () => console.log('error votin on: ', voteJson)
     })
+
+    const updatedDefs = defs.map((d) => {
+      if (d.id === id) {
+        const tempDef = d
+        tempDef[votetype] = d[votetype].concat('~' + window.urbit.ship)
+        return tempDef
+      }
+      return d
+    })
+
+    setDefs(updatedDefs)
   }
 
 
@@ -94,12 +115,12 @@ const Word = ({ word, definitions }) => {
 
 
 
-      {definitions?.map((d, i) => {
+      {defs?.map((d, i) => {
         return <WordView key={'word' + i} def={d} />
       })}
       <Flex flexDirection='column'>
         <Input placeholder='add a definition' onChange={handleChange} />
-        <Button variant='minimal' onClick={addDef}>submit</Button>
+        <Button variant='minimal' onClick={handleAdd}>submit</Button>
       </Flex>
     </>
   )
@@ -116,7 +137,7 @@ const Word = ({ word, definitions }) => {
 
 
 
-      {definitions?.map((d, i) => {
+      {defs?.map((d, i) => {
         return (
           d.sentence?.map((sen, i) => {
             return (
