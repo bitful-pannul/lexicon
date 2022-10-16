@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { Dropdown, Search } from './index'
 import { Text, Button, Input, theme, Page, Icons, Box, Flex, Ship } from '@holium/design-system'
 import { ThemeConsumer, ThemeProvider } from 'styled-components'
+import { useLexiconStore } from '../store'
 
 const Home = () => {
   // welcome page, check if app installed or not
   // browse spaces?
-  const [lex, setLex] = useState({})
-  const [dropdown, setDropdown] = useState('~')
   const [joinspace, setJoinspace] = useState('')
   const history = useNavigate()
+  const { init, loading, setLoading } = useLexiconStore()
 
   const handleEvent = (e) => {
     console.log('incoming event.. ', e)
@@ -30,6 +30,13 @@ const Home = () => {
     console.log('joined! ', res)
   }
 
+
+  useEffect(() => {
+    console.log('at the start. loading: ', loading)
+    console.log('setting loading now, ', setLoading('we fetching dawg.'))
+    console.log('loading again: ', loading)
+    console.log('does this return anything? ', init().then((r)=>console.log(r)))
+  }, [])
 
   return (
     <>

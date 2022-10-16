@@ -34,6 +34,8 @@ const AddModal = ({ modalOpen, setModalOpen }) => {
 
     console.log('added this: ', res)
 
+    setModalOpen(false)
+    window.location.reload(false)
 
   }
 
