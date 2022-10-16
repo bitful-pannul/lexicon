@@ -1,6 +1,8 @@
 import { loadEnv, defineConfig } from 'vite';
 import reactRefresh from '@vitejs/plugin-react-refresh';
 import { urbitPlugin } from '@urbit/vite-plugin-urbit';
+import path from "path";
+
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
@@ -9,11 +11,6 @@ export default ({ mode }) => {
   console.log(SHIP_URL);
 
   return defineConfig({
-    base: "/apps/lexicon/",
-    mode: process.env.NODE_ENV,
     plugins: [urbitPlugin({ base: 'lexicon', target: SHIP_URL, secure: false }), reactRefresh()],
-    server: {
-       port: 3000,
-    }	    
-  });
+        });
 };

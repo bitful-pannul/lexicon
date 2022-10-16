@@ -7,6 +7,9 @@ import { LexContextProvider, SpacesContextProvider } from './context';
 import { theme, Box, OSViewPort } from '@holium/design-system'
 import { ThemeProvider } from 'styled-components';
 
+const api = new Urbit('', '', window.desk);
+api.ship = window.ship;
+window.urbit = api;
 
 const App = () => {
   // typescript state types + poke returns might be useful
@@ -27,10 +30,10 @@ const App = () => {
     // window.urbit.onOpen = () => setStatus("con");
     // window.urbit.onRetry = () => setStatus("try");
     // window.urbit.onError = (err) => setStatus("err");
-    window.urbit = new Urbit("")
-    window.urbit.ship = window.ship;
-
-    connect()
+    //window.urbit = new Urbit("")
+    //window.urbit.ship = window.ship;
+//
+    //connect()
 
 
     console.log('window :', window.urbit)

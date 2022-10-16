@@ -1,19 +1,12 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { LexContext } from '../context'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { Text, Flex, Box, Button, Input } from '@holium/design-system'
-import { MdThumbDownOffAlt, MdThumbDownAlt, MdThumbUpAlt, MdOutlineThumbUpOffAlt, MdKeyboardBackspace } from "react-icons/md"
-import { Dropdown, Search } from './index'
+import { MdThumbDownOffAlt, MdThumbDownAlt, MdThumbUpAlt, MdOutlineThumbUpOffAlt } from "react-icons/md"
 
-
-const MatchWord = () => {
-  const { lex } = useContext(LexContext)
+const Word = ({ word, definitions }) => {
   const [view, setView] = useState('defs') // defs | sentences
   const [inputdef, setInputdef] = useState('')
-  const { ship, group, word } = useParams()
-  const history = useNavigate()
-
-  const defs = lex && lex[`${ship}/${group}`][word]
+  const { ship, group } = useParams()
 
   const addDef = async (e) => {
     const addJson = {
@@ -41,7 +34,7 @@ const MatchWord = () => {
       vote: {
         space: `${ship}/${group}`,
         word: word,
-        id, id,
+        id,
         "vote-type": votetype,
       }
     }
@@ -62,7 +55,6 @@ const MatchWord = () => {
     e.preventDefault()
     setInputdef(e.target.value)
   }
-
 
 
 
@@ -92,13 +84,6 @@ const MatchWord = () => {
   if (view === 'defs') return (
     // error handling necessary? do something global [not-found page]
     <>
-    <Flex width='25%' flexDirection='column' mb='3'>
-      <Dropdown />
-      <Search />
-    </Flex>
-
-      <MdKeyboardBackspace onClick={() => history('/apps/lexicon/' + ship + '/' + group)}/>
-
       <Text variant='h3' my='5'>{word}</Text>
 
       <Box mb='5'>
@@ -109,11 +94,10 @@ const MatchWord = () => {
 
 
 
-      {defs?.map((d, i) => {
-        console.log(d)
-        return <WordView def={d} />
+      {definitions?.map((d, i) => {
+        return <WordView key={'word' + i} def={d} />
       })}
-      <Flex flexDirection='column' width='25%'>
+      <Flex flexDirection='column'>
         <Input placeholder='add a definition' onChange={handleChange} />
         <Button variant='minimal' onClick={addDef}>submit</Button>
       </Flex>
@@ -132,13 +116,13 @@ const MatchWord = () => {
 
 
 
-      {defs?.map((d, i) => {
+      {definitions?.map((d, i) => {
         return (
           d.sentence?.map((sen, i) => {
             return (
               <Flex justifyContent='space-between' key={'sen' + i}>
-                <Text variant='caption'>{sen} {d.poster}</Text>
-                {/*<Text variant='caption'>tt test </Text>*/}
+                <Text variant='caption'>{sen}</Text>
+                <Text variant='caption'>{d.poster}</Text>
               </Flex>
             )
           })
@@ -148,4 +132,5 @@ const MatchWord = () => {
   )
 }
 
-export default MatchWord
+
+export default Word

@@ -20,10 +20,10 @@ const Dropdown = () => {
   const firstContext =
   {
     type: 'group',
-    name: '~dev/our',
+    name: `~our`,
     meta: {
       color: "#ff810a",
-      picture: 'https://i.imgur.com/JRw8tTj.jpeg'
+      picture: 'https://i.imgur.com/EeTzEns.jpg'
     }
   }
 

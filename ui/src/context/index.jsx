@@ -18,7 +18,7 @@ const LexContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    setTimeout(() => getLexicon(), 380)
+    setTimeout(() => getLexicon(), 400)
   }, [setLex])
 
   return <LexContext.Provider value={{lex: lex}}>{children}</LexContext.Provider>
