@@ -40,7 +40,10 @@ const SearchResultList = React.memo((props) => {
     <ResultList>
       {!hasResults ? (
         <MenuItemStyle>
-        <Box onClick={() => history('/apps/lexicon/dict/' + props.searchQuery)}>
+        <Box onClick={() => history('/apps/lexicon/dict/' + props.searchQuery)}
+	width='100%'
+	height='100%'
+	 >
           <span role="img" aria-label="tear emoji">
             😪
           </span>{' '}
