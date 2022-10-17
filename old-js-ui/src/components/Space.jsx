@@ -6,7 +6,6 @@ import { Button, Input, Flex, Text, MenuItem, Box} from '@holium/design-system'
 import { MdKeyboardBackspace } from 'react-icons/md'
 
 const Space = () => {
-  // check if space exist, joined or not. 
   //
   const { lex } = useContext(LexContext)
   const { ship, group } = useParams()
@@ -43,7 +42,7 @@ const Space = () => {
               
              return (
               <>
-              <MenuItem key={i} onClick={() => setCurrentword(word)} label={<Box bg='primary'><Text variant='h5'>{word}</Text></Box>} />
+              <MenuItem key={'word' + i} onClick={() => setCurrentword(word)} label={<Box bg='primary'><Text variant='h5'>{word}</Text></Box>} />
               {/* <div>definitions: {defs[word].map((d, i) => {
                 return (
                   <>

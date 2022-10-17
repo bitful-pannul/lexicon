@@ -34,6 +34,8 @@ const NoMatch = () => {
       onSuccess: () => console.log('success! added definition: ', joinJson),
       onError: () => console.log("error! adding definition: ", joinJson),
     })
+
+    window.location.reload(false)
   }
 
 
@@ -56,6 +58,8 @@ const NoMatch = () => {
       onSuccess: () => console.log('success! added definition: ', addJson),
       onError: () => console.log("error! adding definition: ", addJson),
     })
+
+    window.location.reload(false)
   }
 
   return (isour() && !spaceLex()) ? (
