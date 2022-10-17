@@ -101,7 +101,7 @@ const Dropdown = () => {
         <Context availableContexts={testSpaces} selectedContext={selectSpace(space)} menuOrientation='top-left' onContextClick={handleChange} style={{ color: 'black' }} />
       </Flex>
     </>
-  ) : <Context availableContexts={[firstContext]} selectedContext={firstContext} menuOrientation='top-left' onContextClick={handleChange} style={{ color: 'black' }} />
+  ) : <Flex my='3'><Context availableContexts={[firstContext]} selectedContext={firstContext} menuOrientation='top-left'  onContextClick={handleChange} style={{ color: 'black' }} /></Flex>
 
 }
 
