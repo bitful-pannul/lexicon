@@ -2,6 +2,7 @@
 
 copy these + /desk to a fakezod 
 
+```
 .
 ├── app
 │   └── spaces.hoon
@@ -39,3 +40,5 @@ copy these + /desk to a fakezod
     │   ├── path.hoon
     │   └── store.hoon
     └── visas.hoon
+
+```

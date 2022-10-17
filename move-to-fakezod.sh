@@ -1,4 +1,4 @@
 #!/bin/bash
 # rsync script
-rsync -avL desk/ ../$1/base
+rsync -avL desk/ ../$1/lexicon
 
