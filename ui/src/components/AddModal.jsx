@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Dropdown } from './index'
 import { Button, Input, Text, Box, Flex, Label } from '@holium/design-system'
 import { MdKeyboardBackspace } from "react-icons/md"
+import { useTheme } from 'styled-components'
 
 const AddModal = ({ modalOpen, setModalOpen }) => {
   const { ship, group } = useParams()
@@ -10,6 +11,7 @@ const AddModal = ({ modalOpen, setModalOpen }) => {
   const [def, setDef] = useState('')
   const [sentence, setSentence] = useState('')
   const [related, setRelated] = useState('')
+  const theme = useTheme()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -42,7 +44,7 @@ const AddModal = ({ modalOpen, setModalOpen }) => {
   return modalOpen && (
     <>
       <Dropdown />
-      <MdKeyboardBackspace onClick={() => setModalOpen(false)} />
+      <MdKeyboardBackspace color={theme.colors.ui.primary} onClick={() => setModalOpen(false)} />
 
       <Flex flexDirection='column' width='50%'>
         <Flex flexDirection='column'>
