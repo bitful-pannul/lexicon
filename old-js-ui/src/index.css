@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-
-body {
+{/*  taliwind overwrites globals 
+  
+  body {
   margin: 2rem;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
 }
+*/}
