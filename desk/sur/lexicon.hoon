@@ -1,10 +1,9 @@
 ::  urban dictionary
-::  TODO: permissions, 
 |%
 +$  lexicon  (map space definitions)
 +$  space  [@p @t] 
 +$  definitions  (map word (list definition))
-+$  word  @t                :: change defs to cords, change sentences to lists
++$  word  @t  
 +$  definition  [id=@uv def=@t poster=@p posted=@da sentence=(list @t) related=(list word) upvotes=(set @p) downvotes=(set @p)]
 ::
 ::  

@@ -8,20 +8,7 @@
   =/  defs  (~(get by lex) space)
   ?~  defs  !!
   (need (~(get by (need defs)) word))
-::  ++  vote  (specific id?)
-::    |=  [lex=lexicon liker=@p path=path word=word vote=?(%up %down) id=@]
-::    =/  def-list  (get-list [lex path word]
-::    =/  index  (find ~[id] (turn def-list |=(a=definition id.a)))
-::    ?=(vote %up)  :: switch on these.
-::      =/  set  (need (find ~[index] def-list))
-::      :: add msg.sender..? src.bowl to this too
-:: 
-:: ++  check-membership
-::   |=  [joiner=@p =space t=@da]
-::   ^-  ?
-::   =/  res=
-::   .^(view:membership %gx /(scot %p -.space)/spaces/(scot %da t)/(scot %p -.space)/[+.space]/is-member/(scot %p joiner)/membership-view)
-::   is-member.res
+::
 ::
 ++  space-rule
   ;~  plug  
