@@ -10,7 +10,6 @@
 +$  state-0
   $:  %0
       lex=lexicon 
-      :: subscription tracking.?
   ==
 ::
 +$  card     card:agent:gall
