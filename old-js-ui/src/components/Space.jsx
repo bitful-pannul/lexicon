@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { Dropdown, Word, AddModal, NoMatch, Search } from './index'
-import { LexContext } from '../context'
+import { LexContext, SpacesContext, useSpaceTheme } from '../context'
 import { Button, Input, Flex, Text, MenuItem, Box, theme, IconButton} from '@holium/design-system'
 import { MdKeyboardBackspace } from 'react-icons/md'
 import { useTheme} from 'styled-components'
@@ -14,6 +14,10 @@ const Space = () => {
   // turns out useTheme() might work. As long as we specify the theme from somewhere... Another scry..?
 
   const { lex } = useContext(LexContext)
+  const { spaces } = useContext(SpacesContext)
+
+  const { setSpaceTheme, spaceTheme } = useSpaceTheme()
+
   const { ship, group } = useParams()
   const [currentword, setCurrentword] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
@@ -33,12 +37,50 @@ const Space = () => {
     }
   }
 
+  const space = () => {
+    try {
+      return spaces[`/${ship}/${group}`]
+    } catch {
+      return undefined 
+    }
+  }
+
+  useEffect(() => {
+    // set global theme, bg not being rendered by <ThemeProvider> rn 
+    try {
+      const spTheme = space()
+
+      const newTheme = spaceTheme
+      newTheme.colors.text.primary = spTheme.theme.textColor
+      newTheme.colors.bg.primary = spTheme.color
+      // wallpaper
+  
+      // document.body.style.backgroundColor = spTheme.color
+
+  
+      // console.log('tje,e', spaceTheme)
+      // console.log('sptheme', spTheme)
+      // console.log('saces', spaces)
+      // console.log('newTheme', newTheme)
+      // console.log('theme ', theme)
+
+  
+      if (spTheme && spaces) {
+        setSpaceTheme(newTheme)
+      }
+    } catch {
+      console.log('error fetching')
+    }
+
+
+  }, [spaces, group]) 
+
   return !modalOpen ? (
     <>
     <Dropdown />
     <Flex width='25%' gap='4' my='2'>
       <Search />
-      <Button variant='minimal' onClick={() => setModalOpen(true)}>add word</Button>
+      <Button variant='minimal' onClick={() => setModalOpen(true)}>Add word</Button>
     </Flex> 
 
         { currentword && <><MdKeyboardBackspace color={theme.colors.ui.primary} onClick={() => setCurrentword('')}/></>}
