@@ -111,9 +111,9 @@ const Word = ({ word, definitions }) => {
       <Text variant='h3' my='5'>{word}</Text>
 
       <Box mb='5'>
-        <Button variant='minimal' onClick={() => setView('defs')}>definitions</Button>
+        <Button variant='minimal' onClick={() => setView('defs')}>Definitions</Button>
         <span>&nbsp;&nbsp;&nbsp;</span>
-        <Button variant='minimal' onClick={() => setView('sentences')}>sentences</Button>
+        <Button variant='minimal' onClick={() => setView('sentences')}>Sentences</Button>
       </Box>
 
 
@@ -123,7 +123,7 @@ const Word = ({ word, definitions }) => {
       })}
       <Flex flexDirection='column'>
         <Input placeholder='add a definition' onChange={handleChange} />
-        <Button variant='minimal' onClick={handleAdd}>submit</Button>
+        <Button variant='minimal' onClick={handleAdd}>Submit</Button>
       </Flex>
     </>
   )
@@ -133,9 +133,9 @@ const Word = ({ word, definitions }) => {
       <Text variant='h3' my='5'>{word}</Text>
 
       <Box mb='5'>
-        <Button variant='minimal' onClick={() => setView('defs')}>definitions</Button>
+        <Button variant='minimal' onClick={() => setView('defs')}>Definitions</Button>
         <span>&nbsp;&nbsp;&nbsp;</span>
-        <Button variant='minimal' onClick={() => setView('sentences')}>sentences</Button>
+        <Button variant='minimal' onClick={() => setView('sentences')}>Sentences</Button>
       </Box>
 
 

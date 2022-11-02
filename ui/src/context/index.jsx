@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-
+import { theme } from '@holium/design-system'
 const LexContext = React.createContext({ lex: {} })
 
 const SpacesContext = React.createContext({ spaces: {} })
@@ -44,4 +44,12 @@ const SpacesContextProvider = ({ children }) => {
   return <SpacesContext.Provider value={{spaces: spaces}}>{children}</SpacesContext.Provider>
 }
 
-export { LexContext, LexContextProvider, SpacesContext, SpacesContextProvider }
+
+const useSpaceTheme = () => {
+  const [spaceTheme, setSpaceTheme] = useState(theme.light)
+
+  return { spaceTheme, setSpaceTheme }
+
+}
+
+export { LexContext, LexContextProvider, SpacesContext, SpacesContextProvider, useSpaceTheme }
