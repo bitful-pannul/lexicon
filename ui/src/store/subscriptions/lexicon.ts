@@ -40,7 +40,7 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             if (voteobj['vote-type'] === "upvotes") {
                 voting.upvotes = voting.upvotes.concat(voteobj.voter)
             } else {
-                voting.downvotes.concat(voteobj.voter)
+                voting.downvotes = voting.downvotes.concat(voteobj.voter)
             }
             // voteobj['vote-type'] === "upvotes" ?  voting?.upvotes.concat(voteobj.voter) : voting?.downvotes.concat(voteobj.voter)
             prevlex[voteobj.space][voteobj.word].map(def => def.id === voteobj.id || voting)
