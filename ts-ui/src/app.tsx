@@ -1,47 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import Urbit from '@urbit/http-api';
-import { Charges, ChargeUpdateInitial, scryCharges } from '@urbit/api';
-import { AppTile } from './components/AppTile';
-import api from './api';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import Dictionary from './components/Dictionary';
+import Space from './components/Space';
+import Word from './components/Word';
 import useLexiconStore from './store/lexiconStore';
 
+
 export function App() {
-  const [apps, setApps] = useState<Charges>();
   const { init, loading } = useLexiconStore();
   const lex = useLexiconStore(state => state.lex)
 
-
   useEffect(() => {
-//    async function init() {
-//      const charges = (await api.scry<ChargeUpdateInitial>(scryCharges)).initial;
-//      setApps(charges);
-//    }
 
     init();
   }, []);
 
-  return (
-    <main className="flex items-center justify-center min-h-screen">
-      <div className="max-w-md space-y-6 py-20">
-        <h1 className="text-3xl font-bold">Welcome to lexicon</h1>
-        <p>Here&apos;s your urbit&apos;s installed apps:</p>
-        {apps && (
-          <ul className="space-y-4">
-            {Object.entries(apps).map(([desk, app]) => (
-              <li key={desk} className="flex items-center space-x-3 text-sm leading-tight">
-                <AppTile {...app} />
-                <div className="flex-1 text-black">
-                  <p>
-                    <strong>{app.title || desk}</strong>
-                  </p>
-                  {app.info && <p>{app.info}</p>}
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-        <button onClick={() => console.log(lex)}>test</button>
-      </div>
+  return loading ? <div>loading </div> : (
+    <main className="flex justify-start min-h-screen">
+      <Router>
+        <Routes>
+          <Route path='/apps/lexicon/:ship/:group/:word' element={<Word /> } />
+          <Route path='/apps/lexicon/:ship/:group' element={<Space />} />
+          <Route path='/apps/lexicon/dict/:word' element={<Dictionary />} />
+          <Route path='/apps/lexicon' element={<div>hey there</div>} />
+        </Routes>
+
+      </Router>
     </main>
   );
 }

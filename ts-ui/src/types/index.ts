@@ -20,6 +20,7 @@ export interface Definition {
 
 export interface AddDef {
     space: string
+    word: string
     def: string
     sentence: string[]
     related: string[]
