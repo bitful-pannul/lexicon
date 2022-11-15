@@ -127,21 +127,36 @@
     ::  deletions might need a proper refresh&refetch on browser side
     %-  pairs
       :~
+        [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
         [%word %s word.rec]
         [%def (def def.rec)]
       ==
     ::
       %defs
-    (defs definitions.rec)
+    %-  pairs
+    :~
+        [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
+        [%definitions (defs definitions.rec)]
+    ==
     ::
+      %def-deleted
+    %-  pairs
+      :~
+        [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
+        [%word %s word.rec]
+        [%id %s (scot %uv id.rec)]
+      ==  
       %voted
     %-  pairs
       :~
         [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
         [%word %s word.rec]
-        [%id %s (scot %ud id.rec)]
-        [%vote-type %s (scot %tas vote-type.rec)]     
+        [%id %s (scot %uv id.rec)]
+        [%vote-type %s (scot %tas vote-type.rec)]   
+        [%voter %s (scot %p voter.rec)]  
       ==
+      %lex
+    (lex lexicon.rec)
     ==
   -- 
 --
