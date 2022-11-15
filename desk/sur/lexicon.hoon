@@ -8,25 +8,29 @@
 ::
 ::  
 ::  +$  lexicon  (map space [=perms =definitions])
-::  +$  perms  $%  [%mod ships=(set @p)]  [%admin ships=(set @p)]
-:: OR
-::  +$  permissions  (map space perms)
+::  +$  group-perms  +$  ?(%public %private)
+::  +$  perm    ?(%owner %admin %member)
+::  +$  perms   (map =ship =perm)
+:: 
+::  +$  permissions (map space [group-perms perms])
 ::
 ::  <- combine action itself with a space
 +$  action
   $%  [%add =space =word def=@t sentence=(list @t) related=(list word)]
       [%delete space=space =word id=@uv]
-      [%vote space=space =word id=@uv vote-type=?(%upvotes %downvotes)]
+      [%vote =space =word id=@uv vote-type=?(%upvotes %downvotes)]
       [%join-space =space]
       [%leave-space =space]
   ==
 ::
-+$  reaction
-  $%  [%def-added =word def=definition]
-      [%def-deleted =word def=definition id=@uv]
++$  reaction   :: for a single on-watch to /updates to return all reactions, they need their space context within the reaction
+::
+  $%  [%def-added =space =word def=definition]
+      [%def-deleted =space =word id=@uv]
       [%voted =space =word id=@uv vote-type=?(%upvotes %downvotes) voter=@p]
-      [%test space word]    :: without this, won't compile...??
-      [%defs =definitions]
+      [%test =space =word]    :: without this, won't compile...??
+      [%defs =space =definitions]
+      [%lex =lexicon]
       :: [%error   @t]
       :: [%success @t]
 
