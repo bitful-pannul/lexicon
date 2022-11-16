@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useLexiconStore from '../store/lexiconStore'
+import List from './styled/List'
 
 const Home = () => {
   const [joinspace, setJoinspace] = useState('')
   const lex = useLexiconStore(state => state.lex)
-  const { loading } = useLexiconStore()
-
-  const navigate = useNavigate()
 
   const spaces = Object.keys(lex)
 
+  const items = spaces.map((s) => ({ label: s, navlink: s }))
+
   return (
     <>
-
       <div className=''>
-      {spaces.map((s) => {
-        return (
-          <div onClick={() => navigate('/apps/lexicon/' + s)}>{s}</div>
-        )
-      })}
+        <List items={items} />
       </div>
     </>
   )

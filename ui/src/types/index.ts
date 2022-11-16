@@ -22,8 +22,8 @@ export interface AddDef {
     space: string
     word: string
     def: string
-    sentence: string[]
-    related: string[]
+    sentence: string[] | []
+    related: string[] | []
 }
 
 export interface AddVote {
