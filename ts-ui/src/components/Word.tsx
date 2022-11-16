@@ -32,6 +32,12 @@ const Word = () => {
     setInputDef(e.target.value)
   }
 
+  const handleSubmit = (e: any) => {
+    //@ts-ignore, word is defined in params if we're in this component
+    addDefinition({ space, word, def: inputDef, related: [], sentence: [] })
+    setInputDef('')
+  }
+
 
   const WordView = ({ def, upvotes, downvotes, poster, id }: Definition) => (
 
@@ -59,8 +65,8 @@ if (view === 'defs') return (
       <Search /> */}
 
 
-      <MdKeyboardBackspace onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />
-
+      <MdKeyboardBackspace className='-mt-5 ml-2' onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />
+      
       <h4>{word}</h4>
     </div>
 
@@ -79,15 +85,15 @@ if (view === 'defs') return (
         })}
       </ul>
       <div className=''>
-        <input placeholder='add a definition' onChange={handleChange} />
+        <input placeholder='add a definition' onChange={handleChange} value={inputDef} />
         {/* @ts-ignore useParams return type for 'word'.. */}
-        <button onClick={() => addDefinition({ space, word, def: inputDef, related: [], sentence: [] })}>submit</button>
+        <button onClick={handleSubmit}>submit</button>
       </div>
     </div>
   </>
 )
 
-//
+
 else return (
   <>
     <MdKeyboardBackspace onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />

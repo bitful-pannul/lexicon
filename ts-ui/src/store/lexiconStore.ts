@@ -10,21 +10,22 @@ const our: string = (window as any)?.api?.ship || ''
 export interface LexiconStore {
     loading: string | null,
     lex: Lexicon;
-    pathname: string,
+    modalOpen: boolean,
     init: () => Promise<void>,
     setLoading: (loading: string | null) => void,
     getLexicon: () => Promise<void>,
     getSpaces: () => Promise<void>,
-    addDefinition: (add: AddDef) => Promise<void>,
     joinLex: (space: string) => Promise<void>,
+    addDefinition: (add: AddDef) => Promise<void>,
     voteDef: (add: AddVote) => Promise<void>,
     delDef: (del: DelDef) => Promise<void>,
+    setModalOpen: (val: boolean) => void,
   }
 
 const useLexiconStore = create<LexiconStore>((set, get) => ({
   loading: "loading lexicon...",
   lex: [] as unknown as Lexicon, // initial empty array issues with never[] assingment
-  pathname: "/",    
+  modalOpen: false,
   init: async () => {
     set({ loading: 'Loading lexicon...' })
     const { getLexicon, getSpaces } = get()
@@ -32,19 +33,35 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
     await api.subscribe(createSubscription("lexicon", "/updates", handleLexiconUpdate(get, set)))  // handleLexupdate
     set({ loading: '' })
   },
+
   getLexicon: async () => {
     const rawLex = await api.scry({ app: 'lexicon', path: '/definitions/all' })
     
     //  const projects = generateProjects(rawProjects, get().projects)
     console.log('rawlex:', rawLex)
     return rawLex
-  },        // ~zod/our?
+  },   
+       // ~zod/our?
   setLoading: (loading: string | null) => set({ loading }),
+
+  setModalOpen: (val: boolean) => set({ modalOpen: val }),
+
   getSpaces: async () => {
     const rawSpaces = await api.scry({ app: 'spaces', path: '/all'})
     
     console.log('rawspaces: ', rawSpaces)
   },
+  
+  joinLex: async (space: string) => {
+    const joinJson = {
+      "join-space": {
+        space
+      }
+    }
+    // wait this is a poke 
+    await api.subscribe(createSubscription("lexicon", space, handleLexiconUpdate(get, set)))  // handleLexupdate
+  },
+
   addDefinition: async (add: AddDef) => {
     const { space, word, def, sentence, related } = add
     
@@ -66,15 +83,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
       onError: () => console.log("error! adding definition: ", addJson),
     })
   },
-  joinLex: async (space: string) => {
-    const joinJson = {
-      "join-space": {
-        space
-      }
-    }
 
-    await api.subscribe(createSubscription("lexicon", space, handleLexiconUpdate(get, set)))  // handleLexupdate
-  },
   voteDef: async(add: AddVote) => {
     const { space, word, id } = add
 
