@@ -26,11 +26,7 @@ const Dictionary = () => {
     }, [])
 
 
-
-
-
     return !defs ? <div>loading</div> : (
-        // error handling necessary? do something global [not-found page]
         <>
 
             <div onClick={() => navigate('/apps/lexicon/~dev/our', { replace: true })}>{"<-"}</div>
@@ -46,9 +42,8 @@ const Dictionary = () => {
 
 
             <ul>
-            {defs ? defs?.map((def: any, i: number) => <WordView def={def} i/>)
-                : <div>no definitions found for: {word}</div>
-            }
+                {defs ? defs?.map((def: any, i: number) => <WordView def={def} i />)
+                    : <div>no definitions found for: {word}</div>}
             </ul>
 
 

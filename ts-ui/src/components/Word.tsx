@@ -36,13 +36,13 @@ const Word = () => {
   const WordView = ({ def, upvotes, downvotes, poster, id }: Definition) => (
 
 
-    <ul className='mt-10'>
+    <ul className=''>
       <div>{def}</div>
-      <div className='inline-flex grid-cols-2 gap-5 w-max'>
+      <div className='inline-flex grid-cols-2'>
         {/* @ts-ignore}*/}
         {upvotes?.includes('~' + our) ? <span><MdThumbUpAlt />{upvotes.length}</span> : <span><MdOutlineThumbUpOffAlt onClick={() => voteDef({ space, word, id, "vote-type": 'upvotes' })} /> {upvotes.length} </span>}                                                                                                                      {/* @ts-ignore}*/}
         {downvotes?.includes('~' + our) ? <span><MdThumbDownAlt />{downvotes.length}</span> : <span><MdThumbDownOffAlt onClick={() => voteDef({ space, word, id, "vote-type": 'downvotes' })} /> {downvotes.length} </span>}
-        <span className='justify-end'>{poster}</span>
+        <span className=''>{poster}</span>
       </div>
         {/* <span>{new Date(def.posted).toISOString()}</span> */ }
     </ul >
@@ -54,7 +54,7 @@ const Word = () => {
 if (view === 'defs') return (
   // error handling necessary? do something global [not-found page]
   <>
-    <div className='flex-col mb-3'>
+    <div className=''>
       {/*  <Dropdown />
       <Search /> */}
 
@@ -64,13 +64,13 @@ if (view === 'defs') return (
       <h4>{word}</h4>
     </div>
 
-    <div className='my-3'>
+    <div className=''>
       <button onClick={() => setView('defs')}>definitions</button>
       <span>&nbsp;&nbsp;&nbsp;</span>
       <button onClick={() => setView('sentences')}>sentences</button>
     </div>
 
-    <div className='flex-row mx-3 my-2'>
+    <div className=''>
       <ul>
         {spaceLex()?.map((d, i: number) => {
 
@@ -78,7 +78,7 @@ if (view === 'defs') return (
           return <WordView def={def} upvotes={upvotes} downvotes={downvotes} poster={poster} id={id} posted={posted} related={related} sentence={sentence} />
         })}
       </ul>
-      <div className='flex-col w-5 mt-5'>
+      <div className=''>
         <input placeholder='add a definition' onChange={handleChange} />
         {/* @ts-ignore useParams return type for 'word'.. */}
         <button onClick={() => addDefinition({ space, word, def: inputDef, related: [], sentence: [] })}>submit</button>
@@ -106,7 +106,7 @@ else return (
       return (
         d.sentence?.map((sen, i) => {
           return (
-            <div className='justify-between' key={'sen' + i}>
+            <div className='' key={'sen' + i}>
               <div>{sen} {d.poster}</div>
               {/*<Text variant='caption'>tt test </Text>*/}
             </div>
