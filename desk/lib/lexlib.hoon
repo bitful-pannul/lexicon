@@ -65,6 +65,14 @@
           [%space (su space-rule)]
         ==
         ::
+        :-  %create-space
+        %-  ot
+        :~
+          [%space (su space-rule)]
+          [%perms (su (perk ~[%public %private]))]
+          [%members `(set @p)`(as (se %p))]
+        ==
+        ::
         :-  %vote
         %-  ot
         :~
@@ -117,6 +125,21 @@
     :-  `@t`(rap 3 (scot %p -.space) '/' +.space ~)  
     (defs definitions)
     ::
+  ++  whiteliste
+    |=  w=whitelist
+    ^-  json
+    %-  pairs
+    %+  turn  ~(tap by w)
+    |=  [=space [=perms =members]]
+    ^-  [@t json]
+    :-  `@t`(rap 3 (scot %p -.space) '/' +.space ~)
+    ::
+    %-  pairs
+    :~
+      [%members %a (turn ~(tap in members) ship)]
+      [%perms %s (scot %tas perms)]
+    ==
+    ::
   ++  reaction
     |=  rec=^reaction
     ^-  json
@@ -158,6 +181,8 @@
       %lex
     (lex lexicon.rec)
     ::
+      %whiteliste
+    (whiteliste whitelist.rec)
       %success
     [%s message.rec]
     ::
