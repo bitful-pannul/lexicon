@@ -157,6 +157,12 @@
       ==
       %lex
     (lex lexicon.rec)
+    ::
+      %success
+    [%s message.rec]
+    ::
+      %error
+    [%s message.rec]
     ==
   -- 
 --

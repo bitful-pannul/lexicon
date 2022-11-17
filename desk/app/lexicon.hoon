@@ -9,7 +9,8 @@
 |%
 +$  state-0
   $:  %0
-      lex=lexicon 
+      lex=lexicon
+      =whitelist
   ==
 ::
 +$  card     card:agent:gall
@@ -40,7 +41,7 @@
       downvotes=*(set @p)
     ==
   ::
-  :_  this(lex (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]])))
+  :_  this(lex (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]])), whitelist (~(put by whitelist) [our.bowl 'our'] [%public ~]))
   ~
 ::
 ++  on-save  !>(state)
@@ -69,6 +70,37 @@
     |=  act=action
     ^-  (quip card _state) 
     ?-    -.act
+      ::
+        %create-space
+      ?>  =(-.space.act our.bowl)
+      ?:  =(%public perms.act)
+        :_  state(lex (~(put by lex) space.act *definitions))
+        :~
+          [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'created lexicon for: '])]
+        ==
+      :: %private
+      :_  state(lex (~(put by lex) space.act *definitions), whitelist (~(put by whitelist) space.act [perms.act members.act]))
+      :~
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'created private lexicon for: '])]
+      ==
+      ::
+        %add-whitelist
+      ?>  =(-.space.act our.bowl)
+      =/  info  (~(got by whitelist) space.act)
+      =/  new-mems  (~(put in members.info) ship.act)
+      :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
+      :~
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'added :ship to :space'])]
+      ==
+      ::
+        %remove-whitelist
+      ?>  =(-.space.act our.bowl)
+      =/  info  (~(got by whitelist) space.act)
+      =/  new-mems  (~(del in members.info) ship.act)
+      :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
+      :~
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'removed :ship from :space'])]
+      ==
       ::
         %add
       =/  def
@@ -263,6 +295,16 @@
       :: ~&  >  +.ismem
       ::  ?>  =(%.y +.ismem)
       =/  sp  [(slav %p i.path) i.t.path]
+      =/  info  (~(got by whitelist) sp)
+      ?:  =(perms.info %public)
+        =/  defs  (need (~(get by lex) sp))
+        :_  this
+        :~  
+          [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
+        ==
+      :: %private
+      :: todo, permission error from joining instead of crash
+      ?>  (~(has in members.info) src.bowl)
       =/  defs  (need (~(get by lex) sp))
       :_  this
       :~  
@@ -274,6 +316,7 @@
       :~  
         [%give %fact ~ %lexicon-reaction !>(`reaction`[%lex lex])]
       ==
+    :: todo: include whitelist map in initial updates subscription.?
   ==
  ::
 ++  on-agent  
