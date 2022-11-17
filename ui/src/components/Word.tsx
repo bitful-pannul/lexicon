@@ -96,11 +96,11 @@ if (view === 'defs') return (
 
 else return (
   <>
-    <MdKeyboardBackspace onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />
+    <MdKeyboardBackspace className='-mt-5 ml-2' onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />
 
     <h3>{word}</h3>
 
-    <div className='my-3'>
+    <div className=''>
       <button onClick={() => setView('defs')}>definitions</button>
       <span>&nbsp;&nbsp;&nbsp;</span>
       <button onClick={() => setView('sentences')}>sentences</button>

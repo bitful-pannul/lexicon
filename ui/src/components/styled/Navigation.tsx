@@ -1,16 +1,19 @@
 import React from 'react'
 import { useParams, useNavigate, Outlet } from 'react-router-dom'
+import { Popup, Search } from '../'
 import useLexiconStore from '../../store/lexiconStore'
-import Search from '../Search'
 
 
 const Navigation = () => {
   const { ship, group, word } = useParams()
   const navigate = useNavigate()
   const { setModalOpen } = useLexiconStore()
+  const popup = useLexiconStore(state => state.popup)
 
   return (
   <>
+    {popup && <div className='flex justify-center'><Popup type={popup.type} message={popup.message} /></div>}
+
     <nav aria-label="Breadcrumb">
       <ol role="list" className="flex items-center gap-1 text-sm text-gray-600">
         <li>

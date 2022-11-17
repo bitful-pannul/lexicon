@@ -1,6 +1,6 @@
 import create from "zustand"
 import api from "../api"
-import { Lexicon, AddDef, AddVote, DelDef } from "../types";
+import { Lexicon, AddDef, AddVote, DelDef, Whitelist } from "../types";
 import { createSubscription } from "./subscriptions/createSubscription"
 import { handleLexiconUpdate } from "./subscriptions/lexicon";
 import produce from 'immer'
@@ -10,9 +10,12 @@ const our: string = (window as any)?.api?.ship || ''
 export interface LexiconStore {
     loading: string | null,
     lex: Lexicon;
+    whitelist: Whitelist,
     modalOpen: boolean,
+    popup: {type: string, message: string} | undefined,
     init: () => Promise<void>,
     setLoading: (loading: string | null) => void,
+    setPopup: (type?: string, message?: string) => void,
     getLexicon: () => Promise<void>,
     getSpaces: () => Promise<void>,
     joinLex: (space: string) => Promise<void>,
@@ -20,12 +23,16 @@ export interface LexiconStore {
     voteDef: (add: AddVote) => Promise<void>,
     delDef: (del: DelDef) => Promise<void>,
     setModalOpen: (val: boolean) => void,
+    addMember: (space: string, member: string) => Promise<void>
+    createLex: (space: string, perms: string, members: string[]) => Promise<void>,
   }
 
 const useLexiconStore = create<LexiconStore>((set, get) => ({
   loading: "loading lexicon...",
+  popup: undefined,
   lex: [] as unknown as Lexicon, // initial empty array issues with never[] assingment
   modalOpen: false,
+  whitelist: [] as unknown as Whitelist,
   init: async () => {
     set({ loading: 'Loading lexicon...' })
     const { getLexicon, getSpaces } = get()
@@ -44,6 +51,18 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
        // ~zod/our?
   setLoading: (loading: string | null) => set({ loading }),
 
+  setPopup: (type: string | undefined, message: string | undefined) => {
+    if (type && message) {
+      set({ popup: { type, message }})
+      setTimeout(() => {
+        set({ popup: undefined })
+      }, 5000)
+    } else {
+      set({ popup: undefined })
+    }
+
+  },
+
   setModalOpen: (val: boolean) => set({ modalOpen: val }),
 
   getSpaces: async () => {
@@ -58,8 +77,14 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
         space
       }
     }
-    // wait this is a poke 
-    await api.subscribe(createSubscription("lexicon", space, handleLexiconUpdate(get, set)))  // handleLexupdate
+
+    await api.poke({
+      app: "lexicon",
+      mark: "lexicon-action",
+      json: joinJson,
+      onSuccess: () => set({ popup: {type: 'success', message: 'joined space: ' + space}}),
+      onError: () => set({ popup: {type: 'error', message: 'failed joining space: ' + space}}), // no timeout here..
+    })
   },
 
   addDefinition: async (add: AddDef) => {
@@ -84,7 +109,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
     })
   },
 
-  voteDef: async(add: AddVote) => {
+  voteDef: async (add: AddVote) => {
     const { space, word, id } = add
 
     const voteJson = {
@@ -104,7 +129,45 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
       onError: () => console.log("error! voted: ", voteJson),
     })
   },
-  delDef: async(add: DelDef) => {
+
+  addMember: async (space: string, member: string) => {
+    const memJson = {
+      "add-whitelist": {
+        space,
+        ship: member,
+      }
+    }
+
+    await api.poke({
+      app: "lexicon",
+      mark: "lexicon-action",
+      json: memJson,
+      onSuccess: () => console.log('success! added member: ', memJson),
+      onError: () => console.log('error! added member ', memJson)
+    })
+  },
+
+  createLex: async (space: string, perms: string, members: string[]) => {
+    const sp = `~${our}/${space}`
+
+    const createJson = {
+      "create-space": {
+        space: sp,
+        perms,
+        members,
+      }
+    }
+
+    await api.poke({
+      app: "lexicon",
+      mark: "lexicon-action",
+      json: createJson,
+      onSuccess: () => console.log('success! created space: ', createJson),
+      onError: () => console.log('error! created space: ', createJson)
+    })
+  },
+
+  delDef: async (add: DelDef) => {
     const { space, word, id } = add
 
     const delJson = {

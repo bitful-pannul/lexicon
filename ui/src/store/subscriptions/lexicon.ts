@@ -11,6 +11,11 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
         case 'lex':
             const lex = reaction['lex']
             set({ lex })
+
+        case 'whiteliste':
+            const wl = reaction['whiteliste']
+            set({  whitelist: wl })   
+        
         case 'def-added':
             const def = reaction['def-added']
             const definition: Definition = def?.def
@@ -30,6 +35,7 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             //    draft[space][word] = [...draft[space][word], definition]
             //}) 
             //set({ lex: modstate })
+
         case 'voted': 
             const voteobj = reaction['voted']
             var prevlex: Lexicon = get().lex
@@ -45,17 +51,34 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             // voteobj['vote-type'] === "upvotes" ?  voting?.upvotes.concat(voteobj.voter) : voting?.downvotes.concat(voteobj.voter)
             prevlex[voteobj.space][voteobj.word].map(def => def.id === voteobj.id || voting)
             set({ lex: prevlex})
+
         case 'def-deleted':
             const delobj = reaction['def-deleted']
             var prevlex: Lexicon = get().lex
 
             prevlex[delobj.space][delobj.word] = prevlex[delobj.space][delobj.word].filter(def => def.id !== delobj.id)
             set({ lex: prevlex })
+
         case 'defs':
             const defs = reaction['defs']
             var prevlex: Lexicon = get().lex
 
             prevlex[defs.space] = defs.definitions
             set({ lex: prevlex })
+
+        case 'success':
+            var m = reaction['success']
+            set({ popup: { type: 'success', message: m.message }})
+            setTimeout(() => {
+                set({ popup: undefined })
+            }, 5000)    
+
+        case 'error':
+            var m = reaction['success']
+            set({ popup: { type: 'success', message: m.message }})
+            setTimeout(() => {
+                set({ popup: undefined })
+            }, 5000)    
+                 
         }
 }
