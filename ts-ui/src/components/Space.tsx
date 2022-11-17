@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import useLexiconStore from '../store/lexiconStore'
 import { MdKeyboardBackspace } from 'react-icons/md'
-import AddModal from './AddModal'
-import List from './styled/List'
+import { AddModal, List, Perms } from './index'
 
 
 const Space = () => {
   const lex = useLexiconStore(state => state.lex)
   const modalOpen = useLexiconStore(state => state.modalOpen)
+  const wl = useLexiconStore(state => state.whitelist)
+
   const { setModalOpen } = useLexiconStore()
   const navigate = useNavigate()
 
@@ -28,11 +29,24 @@ const Space = () => {
     }
   }
 
-  const navigateToWord = (word: string) => {
-    navigate('/apps/lexicon/' + ship + '/' + group + '/' + word)
+  const spacePerms = () => {
+    try {
+      //@ts-ignore handled if undefined
+      return wl[`${ship}/${group}`]
+    } catch {
+      return undefined
+    }
   }
 
+  const isOur = () => {
+    const our: string = '~' + (window as any)?.api?.ship || ''
+    return our === ship
+  }
+
+
   const items = spaceLex() && Object.keys(lex[`${ship}/${group}`])?.map((word, i) => ({ label: word, navlink: `${ship}/${group}/${word}` }))
+
+
 
   //@ts-ignore if modalOpen then AddModal will render
   return modalOpen ? <AddModal modalOpen={modalOpen} setModalOpen={setModal} />
@@ -43,7 +57,8 @@ const Space = () => {
           <MdKeyboardBackspace className='-mt-5 ml-2' onClick={() => navigate('/apps/lexicon/')} />
 
         </div>
-        <button onClick={() => setModalOpen(true)}>Add word</button>
+        {/* @ts-ignore is defined if goes through*/}
+        {(isOur() && spacePerms()) && <Perms members={spacePerms()?.members} perms={spacePerms()?.perms} />}
 
 
         <div className='w-1/2'>

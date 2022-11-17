@@ -18,6 +18,15 @@ export interface Definition {
     downvotes: string[] // (set @p) format
 }
 
+export interface Whitelist {
+    [space: string]: WLInfo
+}
+
+export interface WLInfo {
+    perms: string
+    members: string[]
+}
+
 export interface AddDef {
     space: string
     word: string
@@ -30,7 +39,7 @@ export interface AddVote {
     space: string
     word: string
     id: string
-    'vote-type': string 
+    'vote-type': string
 }
 
 export interface DelDef {
