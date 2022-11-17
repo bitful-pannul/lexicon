@@ -35,6 +35,7 @@
       [%test =space =word]    :: without this, won't compile...??
       [%defs =space =definitions]
       [%lex =lexicon]
+      [%whiteliste =whitelist]
       :: these are only sent out to frontend
       [%error message=@t]
       [%success message=@t]

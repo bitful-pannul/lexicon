@@ -74,7 +74,7 @@
         %create-space
       ?>  =(-.space.act our.bowl)
       ?:  =(%public perms.act)
-        :_  state(lex (~(put by lex) space.act *definitions))
+        :_  state(lex (~(put by lex) space.act *definitions), whitelist (~(put by whitelist) space.act [perms.act *members]))
         :~
           [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'created lexicon for: '])]
         ==
@@ -284,16 +284,7 @@
   ?+  path  (on-watch:def path)
     [@t @t ~]
       ?>  |(=(our.bowl src.bowl) =(our.bowl (slav %p i.path)))
-      ::  check if space is public or not [TODO in %spaces]
-      ::  check if src.bowl is member of space? 
-      ::  if not, reaction should maybe be a denied access reaction. 
-      ::  well, might be a bit unnecessary if UI looks like ballot
-      ::  that is, list all spaces+groups, then click +join, which joins-lexicon.
-      ::  ~/scry/spaces/<path>/is-member/<patp>.json 
-      :: =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/(scot %p our.bowl)/[i.t.path]/is-member/(scot %p src.bowl)/membership-view)
-      :: ~&  >  ismem
-      :: ~&  >  +.ismem
-      ::  ?>  =(%.y +.ismem)
+      ::  
       =/  sp  [(slav %p i.path) i.t.path]
       =/  info  (~(got by whitelist) sp)
       ?:  =(perms.info %public)
@@ -301,10 +292,18 @@
         :_  this
         :~  
           [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
+          :: if not handled in on-agent, and passed on to /updates manually... causes infinite loop
+          :: not sure if 3 separate %facts, host -> joiner -> frontend are optimal...
+          [%give %fact ~ %lexicon-reaction !>(`reaction`[%success 'successfully joined the space: '])]
         ==
       :: %private
       :: todo, permission error from joining instead of crash
-      ?>  (~(has in members.info) src.bowl)
+      ?.  (~(has in members.info) src.bowl)
+        :_  this
+        :~
+          [%give %fact ~ %lexicon-reaction !>(`reaction`[%error 'you do not have the permissions to join the space: '])]
+        ==
+      ::
       =/  defs  (need (~(get by lex) sp))
       :_  this
       :~  
@@ -315,6 +314,7 @@
       :_  this
       :~  
         [%give %fact ~ %lexicon-reaction !>(`reaction`[%lex lex])]
+        [%give %fact ~ %lexicon-reaction !>(`reaction`[%whiteliste whitelist])]
       ==
     :: todo: include whitelist map in initial updates subscription.?
   ==
@@ -425,11 +425,22 @@
           ::
             %defs
           =/  sp  [(slav %p i.wire) i.t.wire]
-          ?~  (~(get by lex) sp)  :: .this shouldn't really be undefined ever
+          ?~  (~(get by lex) sp)
             `this(lex (~(put by lex) sp definitions.incoming))
-          `this   :: if space is defined after joining it...
+          `this(lex (~(put by lex) sp definitions.incoming))
              :: probably should concanate the map, if some kind of subscription weirdness arises.
           ::
+            %success
+          :_  this
+          :~
+            [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success message.incoming])]
+          ==
+          ::
+            %error
+          :_  this
+          :~
+            [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%error message.incoming])]
+          ==
         ==
       ==
     ==
