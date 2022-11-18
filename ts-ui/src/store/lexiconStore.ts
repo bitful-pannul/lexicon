@@ -77,6 +77,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
         space
       }
     }
+    console.log('joinjson:', joinJson)
 
     await api.poke({
       app: "lexicon",

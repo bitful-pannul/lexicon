@@ -90,7 +90,7 @@
       ?:  =(-.space.act our.bowl)
         ::  (distribute-local def space)
         ::  
-        :: other ships shouldn't really be able to add spaces right..?
+        :: 
         ?~  defs=(~(get by lex) space.act)
           ?>  =(src.bowl our.bowl)
           =/  new-defs  (malt ~[[word.act ~[def]]])
@@ -257,6 +257,7 @@
         [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%whitelist-added (malt ~[[space.act [perms.act members.act]]])])]
       ==
       ::
+      ::
         %add-whitelist
       ?>  =(-.space.act our.bowl)
       =/  info  (~(got by whitelist) space.act)
@@ -298,6 +299,8 @@
       ::  
       =/  sp  [(slav %p i.path) i.t.path]
       =/  info  (~(got by whitelist) sp)
+      ::
+      :: check flow for non-existing space, should crash with (need .) calls 
       ?:  =(perms.info %public)
         =/  defs  (need (~(get by lex) sp))
         :_  this
@@ -319,6 +322,7 @@
       :_  this
       :~  
         [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
+        [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
       ==
     ::
     [%updates ~]
