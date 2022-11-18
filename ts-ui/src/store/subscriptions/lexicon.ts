@@ -1,7 +1,10 @@
 import { GetState, SetState } from "zustand";
-import { Definition, Definitions, Lexicon } from "../../types";
+import { Definition, Definitions, Lexicon, Whitelist } from "../../types";
 import useLexiconStore, { LexiconStore } from "../lexiconStore";
 import produce from 'immer' // immer gets weird w/ objects
+
+const our: string = (window as any)?.api?.ship || ''
+
 
 export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<LexiconStore>) => (reaction: any) => {
     console.log('reaction: ', reaction)
@@ -13,7 +16,7 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             set({ lex })
 
         case 'whiteliste':
-            const wl = reaction['whiteliste']
+            var wl = reaction['whiteliste']
             set({  whitelist: wl })   
         
         case 'def-added':
@@ -68,7 +71,50 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
 
         case 'success':
             var m = reaction['success']
-            set({ popup: { type: 'success', message: m.message }})
+
+            // adding member adding + lex creation here instead of 2 new reactions in /sur
+
+            console.log(m)
+
+            if (m.substring(0, 7) === 'created') {
+                var spname = m.substring(
+                    m.indexOf("'") + 1, 
+                    m.lastIndexOf("'")
+                );
+
+                var sp = our + '/' + spname
+
+                var prevlex: Lexicon = get().lex
+                prevlex[sp] = {}
+
+                // note, creating a space for an existing one would null it temporarily on frontend
+
+                set({ lex: prevlex })
+            }
+
+            if (m.substring(0, 5) === 'added') {
+
+                var spname = m.substring(
+                    m.indexOf("'") + 1, 
+                    m.lastIndexOf("'")
+                );
+
+                const re = /~\S+/
+                
+                const matc = m.match(re)
+                const added = matc[0] 
+                var sp = '~' + our + '/' + spname
+
+
+                var whitel: Whitelist = get().whitelist
+
+                whitel[sp].members = whitel[sp].members.concat(added)
+
+
+                set({ whitelist: whitel })
+            }
+
+            set({ popup: { type: 'success', message: m }})
             setTimeout(() => {
                 set({ popup: undefined })
             }, 5000)    

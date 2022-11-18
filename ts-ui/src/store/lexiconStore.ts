@@ -134,7 +134,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
     const memJson = {
       "add-whitelist": {
         space,
-        ship: member,
+        member,
       }
     }
 
