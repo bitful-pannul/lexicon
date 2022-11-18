@@ -1,7 +1,5 @@
 ::  
 /-  *lexicon
-/-  spaces-store
-::  /-  membership
 /+  default-agent, dbug, lexlib, verb
 ::
 ::
@@ -460,9 +458,9 @@
       =/  sdefs  (~(got by lex) sp)
       ``definitions+!>(sdefs)
     ::
-    [%x %spaces %all ~]
-      =/  sps  .^(view:spaces-store %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/all/spaces-view)
-      ``spaces-view+!>(sps)
+    :: [%x %spaces %all ~]
+    ::  =/  sps  .^(view:spaces-store %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/all/spaces-view)
+    ::  ``spaces-view+!>(sps)
     ::
     :: [%x %search @t ~]
     ::   =/  defs  ~(val by lex)
