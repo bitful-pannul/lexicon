@@ -70,7 +70,14 @@
         :~
           [%space (su space-rule)]
           [%perms (su (perk ~[%public %private]))]
-          [%members `(set @p)`(as (se %p))]
+          [%members (as (se %p))]
+        ==
+        ::
+        :-  %add-whitelist
+        %-  ot
+        :~
+          [%space (su space-rule)]
+          [%member (su ;~(pfix sig fed:ag))]
         ==
         ::
         :-  %vote
@@ -184,10 +191,10 @@
       %whiteliste
     (whiteliste whitelist.rec)
       %success
-    [%s message.rec]
+    (tape message.rec)
     ::
       %error
-    [%s message.rec]
+    (tape message.rec)
     ==
   -- 
 --
