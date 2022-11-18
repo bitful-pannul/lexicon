@@ -69,11 +69,26 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             prevlex[defs.space] = defs.definitions
             set({ lex: prevlex })
 
+        case 'whitelist-added':
+            const wla = reaction['whitelist-added']
+
+            var prevwl: Whitelist = get().whitelist
+            var prevlex: Lexicon = get().lex
+
+            var newl: Whitelist = Object.assign(prevwl, wla)
+            
+            var sp = Object.keys(wla)[0] // incoming wl space
+            prevlex[sp] = {}
+
+            set({ lex: prevlex })
+
+            set({ whitelist: newl })
+
         case 'success':
-            var m = reaction['success']
+            var m: string = reaction['success']
 
             // adding member adding + lex creation here instead of 2 new reactions in /sur
-
+            
             console.log(m)
 
             if (m.substring(0, 7) === 'created') {
@@ -102,7 +117,7 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
                 const re = /~\S+/
                 
                 const matc = m.match(re)
-                const added = matc[0] 
+                const added = matc![0] 
                 var sp = '~' + our + '/' + spname
 
 
@@ -112,7 +127,8 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
 
 
                 set({ whitelist: whitel })
-            }
+            }   
+
 
             set({ popup: { type: 'success', message: m }})
             setTimeout(() => {
@@ -120,8 +136,8 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             }, 5000)    
 
         case 'error':
-            var m = reaction['success']
-            set({ popup: { type: 'success', message: m.message }})
+            var m: string = reaction['success']
+            set({ popup: { type: 'success', message: m }})
             setTimeout(() => {
                 set({ popup: undefined })
             }, 5000)    
