@@ -41,7 +41,7 @@
       downvotes=*(set @p)
     ==
   ::
-  :_  this(lex (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]])), whitelist (~(put by whitelist) [our.bowl 'our'] [%public ~]))
+  :_  this(lex (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]])), whitelist (~(put by whitelist) [our.bowl 'our'] [%public (silt ~[our.bowl])]))
   ~
 ::
 ++  on-save  !>(state)
@@ -76,30 +76,30 @@
       ?:  =(%public perms.act)
         :_  state(lex (~(put by lex) space.act *definitions), whitelist (~(put by whitelist) space.act [perms.act *members]))
         :~
-          [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'created lexicon for: '])]
+          [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "created lexicon for: {<space.act>}"])]
         ==
       :: %private
       :_  state(lex (~(put by lex) space.act *definitions), whitelist (~(put by whitelist) space.act [perms.act members.act]))
       :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'created private lexicon for: '])]
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "created private lexicon for: {<space.act>}"])]
       ==
       ::
         %add-whitelist
       ?>  =(-.space.act our.bowl)
       =/  info  (~(got by whitelist) space.act)
-      =/  new-mems  (~(put in members.info) ship.act)
+      =/  new-mems  (~(put in members.info) member.act)
       :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
       :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'added :ship to :space'])]
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "added {<member.act>} to: {<space.act>}"])]
       ==
       ::
         %remove-whitelist
       ?>  =(-.space.act our.bowl)
       =/  info  (~(got by whitelist) space.act)
-      =/  new-mems  (~(del in members.info) ship.act)
+      =/  new-mems  (~(del in members.info) member.act)
       :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
       :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success 'removed :ship from :space'])]
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "removed {<member.act>} from: {<space.act>}"])]
       ==
       ::
         %add
@@ -294,14 +294,14 @@
           [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
           :: if not handled in on-agent, and passed on to /updates manually... causes infinite loop
           :: not sure if 3 separate %facts, host -> joiner -> frontend are optimal...
-          [%give %fact ~ %lexicon-reaction !>(`reaction`[%success 'successfully joined the space: '])]
+          [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
         ==
       :: %private
       :: todo, permission error from joining instead of crash
       ?.  (~(has in members.info) src.bowl)
         :_  this
         :~
-          [%give %fact ~ %lexicon-reaction !>(`reaction`[%error 'you do not have the permissions to join the space: '])]
+          [%give %fact ~ %lexicon-reaction !>(`reaction`[%error "you do not have the permissions to join: {<sp>}"])]
         ==
       ::
       =/  defs  (need (~(get by lex) sp))

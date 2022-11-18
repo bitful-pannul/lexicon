@@ -10,7 +10,7 @@
 ::
 ::
 +$  perms     ?(%public %private)
-+$  members    (set ship)
++$  members    (set @p)
 +$  whitelist  (map space [=perms =members])
 ::
 ::
@@ -20,9 +20,9 @@
       [%delete space=space =word id=@uv]
       [%vote =space =word id=@uv vote-type=?(%upvotes %downvotes)]
       ::
-      [%create-space =space =perms members=(set ship)]
-      [%add-whitelist =space =ship]
-      [%remove-whitelist =space =ship]
+      [%create-space =space =perms members=(set @p)]
+      [%add-whitelist =space member=@p]
+      [%remove-whitelist =space member=@p]
       [%join-space =space]
       [%leave-space =space]
   ==
@@ -37,8 +37,8 @@
       [%lex =lexicon]
       [%whiteliste =whitelist]
       :: these are only sent out to frontend
-      [%error message=@t]
-      [%success message=@t]
+      [%error message=tape]
+      [%success message=tape]
   ==
 ::
 +$  view
