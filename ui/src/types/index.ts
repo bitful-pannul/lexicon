@@ -1,6 +1,6 @@
 export interface Lexicon {
     // specific formatting for space?
-    [space: string]: Definitions | undefined // create space has no template entry for now, ++  on-init does.
+    [space: string]: Definitions // create space has no template entry for now, ++  on-init does.
 }
 
 export interface Definitions {

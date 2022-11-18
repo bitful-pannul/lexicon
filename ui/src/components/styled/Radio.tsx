@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 // todo, generalize for choices & adding options
 // -> form
 interface RadioProps {
   // options: string[]
-  setSelected: (s: string) => void
+  setSelected: Dispatch<SetStateAction<"public" | "private">>
 }
 
 const Radio = ({ setSelected }: RadioProps) => {
@@ -27,7 +27,7 @@ const Radio = ({ setSelected }: RadioProps) => {
           htmlFor="ColorBlack"
           className="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white"
         >
-          <p className="text-sm font-medium" onClick={() => {setSelected('public'); setShowPublic(true); }}>%public</p>
+          <p className="text-sm font-medium" onClick={() => { setSelected('public'); setShowPublic(true); }}>%public</p>
         </label>
       </div>
 
@@ -45,7 +45,7 @@ const Radio = ({ setSelected }: RadioProps) => {
           htmlFor="ColorRed"
           className="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white"
         >
-          <p className="text-sm font-medium" onClick={() => {setSelected('private'); setShowPublic(false); }}>%private</p>
+          <p className="text-sm font-medium" onClick={() => { setSelected('private'); setShowPublic(false); }}>%private</p>
         </label>
       </div>
     </fieldset>
