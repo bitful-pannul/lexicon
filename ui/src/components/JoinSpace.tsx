@@ -16,6 +16,8 @@ const JoinSpace = ({ modalOpen, setModalOpen }: ModalProps) => {
 
   const { createLex, joinLex } = useLexiconStore()
 
+  const our: string = (window as any)?.api?.ship || ''
+
 
   const handleJoin = (e: any) => {
     // verify space + @p 
@@ -26,7 +28,9 @@ const JoinSpace = ({ modalOpen, setModalOpen }: ModalProps) => {
 
   const handleCreate = (e: any) => {
     // verify group name sanity
-    const mems = members.split(',')
+    var mems = members.split(',')
+    
+    if (mems[0] === '') { mems = ['~' + our ]}
 
     createLex(createSpace, perms, mems)
   }
@@ -37,7 +41,7 @@ const JoinSpace = ({ modalOpen, setModalOpen }: ModalProps) => {
         <button onClick={() => setModalOpen(false)}>X</button>
         <div className='my-3'>
           <input placeholder='~zod/our' onChange={(e) => setSpace(e.target.value)} value={space} />
-          <button onClick={handleJoin} className='bg-blue-100 rounded'>join space</button>
+          <button onClick={handleJoin} className='bg-blue-100 rounded'>join lex</button>
         </div>
 
         <div className='inline-flex grid-cols-2'>
@@ -46,7 +50,7 @@ const JoinSpace = ({ modalOpen, setModalOpen }: ModalProps) => {
         </div>
         <div className='my-3'>
           <input placeholder='~zod,~rus,~nec' onChange={(e) => setMembers(e.target.value)} value={members} />
-          <button onClick={handleCreate} className='bg-blue-100 rounded'>create space</button>
+          <button onClick={handleCreate} className='bg-blue-100 rounded'>create lex</button>
         </div>
       </div>
     </>

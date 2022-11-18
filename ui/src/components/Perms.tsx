@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useLexiconStore from '../store/lexiconStore'
 import { MdKeyboardBackspace } from 'react-icons/md'
+import { useParams } from 'react-router-dom'
 
 interface PermsProps {
   perms: string
@@ -11,13 +12,18 @@ const Perms = ({ perms, members }: PermsProps) => {
   const [showMembers, setShowMembers] = useState(false)
   const [member, setMember] = useState('')
 
+  const { ship, group } = useParams()
+  const { addMember } = useLexiconStore()
+
   const handleChange = (e: any) => {
     setMember(e.target.value)
   }
 
   const handleAddMember = (e: any) => {
     // validate proper planet name? 
-    
+    const sp = `${ship}/${group}`
+    addMember(sp, member)
+    setMember('')
   }
 
   return !showMembers ? (
