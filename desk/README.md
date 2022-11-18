@@ -1,29 +1,17 @@
 ### %
 
 ```
-.
 ├── app
-│   ├── lexicon.hoon
-│   ├── temp-app.hoon
-│   └── tester-app.hoon
+│   └── lexicon.hoon
 ├── lib
-│   ├── lexlib.hoon
-│   ├── membership.hoon
-│   └── spaces.hoon
+│   └── lexlib.hoon
 ├── mar
 │   ├── definitions.hoon
 │   ├── lexicon
 │   │   ├── action.hoon
 │   │   └── reaction.hoon
-│   ├── lexicon.hoon
-│   └── spaces.hoon
+│   └── lexicon.hoon
+├── README.md
 └── sur
-    ├── alternative-sur-file.hoon
-    ├── lexicon.hoon
-    ├── membership.hoon
-    ├── spaces
-    │   ├── path.hoon
-    │   └── store.hoon
-    └── visas.hoon
-
+    └── lexicon.hoon
 ```
