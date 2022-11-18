@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import useLexiconStore from '../../store/lexiconStore'
 
 interface PopupProps {
@@ -7,7 +7,6 @@ interface PopupProps {
 }
 
 const Popup = ({ type, message }: PopupProps) => {
-  const [show, setShow] = useState(false)
   const { setPopup } = useLexiconStore()
 
   const color = `text-${(type === 'success' ? 'green' : 'red')}-600`

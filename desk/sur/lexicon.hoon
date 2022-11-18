@@ -31,8 +31,10 @@
 ::
   $%  [%def-added =space =word def=definition]
       [%def-deleted =space =word id=@uv]
+      [%whitelist-added =whitelist]
+      :: [%member-removed =@p] 
       [%voted =space =word id=@uv vote-type=?(%upvotes %downvotes) voter=@p]
-      [%test =space =word]    :: without this, won't compile...??
+      [%test =space =word]    :: without this, lexlib won't compile?
       [%defs =space =definitions]
       [%lex =lexicon]
       [%whiteliste =whitelist]

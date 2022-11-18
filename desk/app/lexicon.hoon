@@ -39,7 +39,11 @@
       downvotes=*(set @p)
     ==
   ::
-  :_  this(lex (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]])), whitelist (~(put by whitelist) [our.bowl 'our'] [%public (silt ~[our.bowl])]))
+  :_
+    %=    this
+      lex        (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]]))
+      whitelist  (~(put by whitelist) [our.bowl 'our'] [%public (silt ~[our.bowl])])
+    ==
   ~
 ::
 ++  on-save  !>(state)
@@ -68,37 +72,6 @@
     |=  act=action
     ^-  (quip card _state) 
     ?-    -.act
-      ::
-        %create-space
-      ?>  =(-.space.act our.bowl)
-      ?:  =(%public perms.act)
-        :_  state(lex (~(put by lex) space.act *definitions), whitelist (~(put by whitelist) space.act [perms.act *members]))
-        :~
-          [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "created lexicon for: {<space.act>}"])]
-        ==
-      :: %private
-      :_  state(lex (~(put by lex) space.act *definitions), whitelist (~(put by whitelist) space.act [perms.act members.act]))
-      :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "created private lexicon for: {<space.act>}"])]
-      ==
-      ::
-        %add-whitelist
-      ?>  =(-.space.act our.bowl)
-      =/  info  (~(got by whitelist) space.act)
-      =/  new-mems  (~(put in members.info) member.act)
-      :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
-      :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "added {<member.act>} to: {<space.act>}"])]
-      ==
-      ::
-        %remove-whitelist
-      ?>  =(-.space.act our.bowl)
-      =/  info  (~(got by whitelist) space.act)
-      =/  new-mems  (~(del in members.info) member.act)
-      :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
-      :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "removed {<member.act>} from: {<space.act>}"])]
-      ==
       ::
         %add
       =/  def
@@ -262,7 +235,47 @@
           !>(`action`[%vote space.act word.act id.act vote-type.act])
         ==
       ==
-        ::
+      ::
+        %create-space
+      ?>  =(-.space.act our.bowl)
+      ?:  =(%public perms.act)
+        :_
+          %=    state
+            lex        (~(put by lex) space.act *definitions)
+            whitelist  (~(put by whitelist) space.act [perms.act members.act])
+          ==
+        :~
+          [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%whitelist-added (malt ~[[space.act [perms.act members.act]]])])]
+        ==
+      :: %private
+      :_ 
+        %=    state
+          lex        (~(put by lex) space.act *definitions)
+          whitelist  (~(put by whitelist) space.act [perms.act members.act])
+        ==
+      :~
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%whitelist-added (malt ~[[space.act [perms.act members.act]]])])]
+      ==
+      ::
+        %add-whitelist
+      ?>  =(-.space.act our.bowl)
+      =/  info  (~(got by whitelist) space.act)
+      =/  new-mems  (~(put in members.info) member.act)
+      ::
+      ::
+      :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
+      :~
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "added {<member.act>} to: {<space.act>}"])]
+      ==
+      ::
+        %remove-whitelist
+      ?>  =(-.space.act our.bowl)
+      =/  info  (~(got by whitelist) space.act)
+      =/  new-mems  (~(del in members.info) member.act)
+      :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
+      :~
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "removed {<member.act>} from: {<space.act>}"])]
+      ==
         :: this needs to be called before interacting with a spaces' lexicon. 
         %join-space
       :_  state  
@@ -321,19 +334,6 @@
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
   ?+    wire  (on-agent:def wire sign)
-      ::  add /updates frontend subscriptions
-::      [%updates @t @t ~]
-::    ?+    -.sign  (on-agent:def wire sign)
-::        %watch-ack
-::      ?~  p.sign
-::        ((slog leaf+"%lexicon-client: joining /updates/{<i.wire>}/{<i.t.wire>} succeeded!" ~) `this)
-::      ((slog leaf+"%lexicon-client: joining /updates/{<i.wire>}/{<i.t.wire>} failed!" u.p.sign) `this)
-::    ::
-::        %kick
-::      :_  this
-::      :~  [%pass /updates/[i.wire]/[i.t.wire] %agent [src.bowl dap.bowl] %watch /[i.wire]/[i.t.wire]]
-::      ==
-::    ==
       [@t @t ~]
     ?+    -.sign  (on-agent:def wire sign)
         %watch-ack
@@ -398,7 +398,7 @@
           ==
           ::
             %voted
-            :: note space.incoming and space in wire both available...
+            :: note space.incoming and space in wire both available
           =/  slex  (~(got by lex) space.incoming)
           =/  def-list  (fall (~(get by slex) word.incoming) ~)
           =/  index  (need (find ~[id.incoming] (turn def-list |=(a=definition id.a))))
@@ -439,14 +439,18 @@
           :~
             [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%error message.incoming])]
           ==
+          ::
+            %whitelist-added
+          :_  this
+          :~
+            [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%whitelist-added whitelist.incoming])]
+          ==
         ==
       ==
     ==
   ==
 ::
 ++  on-peek
-  :: TODO: add searching by word functions
-  :: also sorting by upvotes/downvotes
   |=  =path
   ^-  (unit (unit cage))
   ?+  path  (on-peek:def path)

@@ -24,6 +24,7 @@ const JoinSpace = ({ modalOpen, setModalOpen }: ModalProps) => {
 
     // or determine create/join flow based on if it's your @p or not
     joinLex(space)
+    setSpace('')
   }
 
   const handleCreate = (e: any) => {
@@ -33,6 +34,7 @@ const JoinSpace = ({ modalOpen, setModalOpen }: ModalProps) => {
     if (mems[0] === '') { mems = ['~' + our ]}
 
     createLex(createSpace, perms, mems)
+    setCreateSpace('')
   }
 
   return modalOpen && (

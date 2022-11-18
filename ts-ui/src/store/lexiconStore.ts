@@ -104,8 +104,8 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
       app: "lexicon",
       mark: "lexicon-action",
       json: addJson,
-      onSuccess: () => console.log('success! added definition: ', addJson),
-      onError: () => console.log("error! adding definition: ", addJson),
+      onSuccess: () => set({ popup: { type: "success", message: "added definition: " + def + "to word: " + word }}),
+      onError: () => set({ popup: { type: "error", message: "when adding definition: " + def + "to word: " + word }}),
     })
   },
 
@@ -142,8 +142,8 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
       app: "lexicon",
       mark: "lexicon-action",
       json: memJson,
-      onSuccess: () => console.log('success! added member: ', memJson),
-      onError: () => console.log('error! added member ', memJson)
+      onSuccess: () => () => set({ popup: { type: "success", message: "added member " + member + "to lex: " +  space}}),
+      onError: () => set({ popup: { type: "error", message: "when adding member " + member + "to lex: " +  space}})
     })
   },
 
@@ -162,8 +162,8 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
       app: "lexicon",
       mark: "lexicon-action",
       json: createJson,
-      onSuccess: () => console.log('success! created space: ', createJson),
-      onError: () => console.log('error! created space: ', createJson)
+      onSuccess: () => set({ popup: { type: "success", message: "created" + perms + "lex " + sp }}),
+      onError: () => set({ popup: { type: "error", message: "when creating" + perms + "lex " + sp }})
     })
   },
 

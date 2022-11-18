@@ -195,6 +195,9 @@
     ::
       %error
     (tape message.rec)
+    ::
+      %whitelist-added
+    (whiteliste whitelist.rec)
     ==
   -- 
 --
