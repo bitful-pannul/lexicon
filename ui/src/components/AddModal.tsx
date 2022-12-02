@@ -1,70 +1,137 @@
-import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { MdKeyboardBackspace } from "react-icons/md"
-import useLexiconStore from '../store/lexiconStore'
-
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { MdKeyboardBackspace } from "react-icons/md";
+import useLexiconStore from "../store/lexiconStore";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
 interface ModalProps {
-  modalOpen: boolean
-  setModalOpen: (val: boolean) => void
+  modalOpen: boolean;
+  setModalOpen: (val: boolean) => void;
 }
 
-const AddModal = ({ modalOpen, setModalOpen }: ModalProps) => {
-  const { ship, group } = useParams()
-  const [word, setWord] = useState('')
-  const [def, setDef] = useState('')
-  const [sentence, setSentence] = useState('')
-  const [related, setRelated] = useState('')
+const AddModal = () => {
+  const { ship, group } = useParams();
+  const [word, setWord] = useState("");
+  const [def, setDef] = useState("");
+  const [sentence, setSentence] = useState("");
+  const [related, setRelated] = useState("");
 
-  const { addDefinition } = useLexiconStore()
-  const space = `${ship}/${group}`
-
+  const { addDefinition, setModalOpen, modalOpen } = useLexiconStore();
+  const space = `${ship}/${group}`;
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-
-    const rel = related.split(',')
+    const rel = related.split(",");
 
     addDefinition({
       space,
       word,
       def,
       sentence: [sentence],
-      related: rel
-    })
+      related: rel,
+    });
+
+    setModalOpen(false);
+  };
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+  return (
+    <Dialog
+      open={modalOpen}
+      onClose={handleClose}
+      aria-labelledby="add-entry-dialog"
+      aria-describedby="add an entry here"
+      maxWidth={"sm"}
+      fullWidth
+    >
+      <DialogTitle id="alert-dialog-title" fontWeight={"bold"}>
+        Add new entry
+      </DialogTitle>
+      <DialogContent>
+        <TextField
+          sx={{ marginTop: 1 }}
+          spellCheck="true"
+          error={false}
+          size="small"
+          id="name"
+          label="Word"
+          type="text"
+          value={word}
+          onChange={(event: any) => {
+            setWord(event.target.value);
+          }}
+          fullWidth
+        />
+        <TextField
+          sx={{ marginTop: 1 }}
+          spellCheck="true"
+          error={false}
+          size="small"
+          id="name"
+          label="Definition"
+          type="text"
+          value={def}
+          onChange={(event: any) => {
+            setDef(event.target.value);
+          }}
+          fullWidth
+        />
+        <TextField
+          sx={{ marginTop: 1 }}
+          spellCheck="true"
+          error={false}
+          size="small"
+          id="name"
+          label="Example Sentence"
+          type="text"
+          value={sentence}
+          onChange={(event: any) => {
+            setSentence(event.target.value);
+          }}
+          fullWidth
+        />
+        <TextField
+          sx={{ marginTop: 1 }}
+          spellCheck="true"
+          error={false}
+          size="small"
+          id="name"
+          label="Related Words(apple,lemon,orange)"
+          type="text"
+          value={related}
+          onChange={(event: any) => {
+            setRelated(event.target.value);
+          }}
+          fullWidth
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="contained"
+          //  disabled={inputValue.length === 0}
+          onClick={handleSubmit}
+          size="small"
+        >
+          Submit
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          color="error"
+          onClick={handleClose}
+        >
+          cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+export default AddModal;
 
 
-    setModalOpen(false)
-
-  }
-
-  return modalOpen && (
-    <>
-      <MdKeyboardBackspace onClick={() => setModalOpen(false)} />
-
-      <div>
-        <div>
-          <label className='my-2'>word &nbsp;</label>
-          <input placeholder='type word' onChange={(e) => setWord(e.target.value)} />
-        </div>
-        <div>
-          <label className='my-2'>definition &nbsp;</label>
-          <input placeholder='type your definition..' onChange={(e) => setDef(e.target.value)} />
-        </div>
-        <div >
-          <label className='my-2'>sentence &nbsp;</label>
-          <input placeholder='an example of how it is used...' onChange={(e) => setSentence(e.target.value)} />
-        </div>
-        <div>
-          <label className='my-2'>related &nbsp;</label>
-          <input placeholder='add some related words, [word, word]' onChange={(e) => setRelated(e.target.value)} />
-        </div>
-        <div className='justify-end mt-5 gap-5'>
-          <button onClick={(e) => setModalOpen(false)}>cancel</button>
-          <button onClick={handleSubmit}>submit</button>
-        </div>
-      </div>
-    </>
-  )
-}
-
-export default AddModal
