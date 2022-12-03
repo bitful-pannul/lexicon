@@ -34,10 +34,7 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             }
             
              set({ lex: prevlex })           
-            //const modstate = produce(prevlex, draft => {
-            //    draft[space][word] = [...draft[space][word], definition]
-            //}) 
-            //set({ lex: modstate })
+
 
         case 'voted': 
             const voteobj = reaction['voted']
@@ -88,6 +85,7 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             var m: string = reaction['success']
 
             // adding member adding + lex creation here instead of 2 new reactions in /sur
+            // actually going to change reactions in /sur instead
             
             console.log(m)
 
@@ -102,7 +100,7 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
                 var prevlex: Lexicon = get().lex
                 prevlex[sp] = {}
 
-                // note, creating a space for an existing one would null it temporarily on frontend
+                // note, creating a space for an existing one would null it temporarily only on frontend
 
                 set({ lex: prevlex })
             }

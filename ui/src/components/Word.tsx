@@ -10,11 +10,14 @@ const Word = () => {
   const [inputDef, setInputDef] = useState('')
   const { ship, group, word } = useParams()
   const navigate = useNavigate()
-  const our: string = (window as any)?.api?.ship || ''
 
+  const space: string = `${ship}/${group}`
+  const our: string = (window as any)?.api?.ship || ''
 
   const lex = useLexiconStore(state => state.lex)
   const { voteDef, addDefinition } = useLexiconStore()
+
+
 
   const spaceLex = (): Definition[] | undefined => {
     try {
@@ -26,7 +29,6 @@ const Word = () => {
   }
 
 
-  const space: string = `${ship}/${group}`
 
   const handleChange = (e: { preventDefault: () => void; target: { value: React.SetStateAction<string> } }) => {
     setInputDef(e.target.value)
@@ -45,83 +47,94 @@ const Word = () => {
     <ul className=''>
       <div>{def}</div>
       <div className='inline-flex grid-cols-2'>
-        {/* @ts-ignore}*/}
-        {upvotes?.includes('~' + our) ? <span><MdThumbUpAlt />{upvotes.length}</span> : <span><MdOutlineThumbUpOffAlt onClick={() => voteDef({ space, word, id, "vote-type": 'upvotes' })} /> {upvotes.length} </span>}                                                                                                                      {/* @ts-ignore}*/}
-        {downvotes?.includes('~' + our) ? <span><MdThumbDownAlt />{downvotes.length}</span> : <span><MdThumbDownOffAlt onClick={() => voteDef({ space, word, id, "vote-type": 'downvotes' })} /> {downvotes.length} </span>}
+        {upvotes?.includes('~' + our) ? 
+            <span><MdThumbUpAlt />{upvotes.length}</span> : 
+            /* @ts-ignore}*/
+              <span><MdOutlineThumbUpOffAlt onClick={() => voteDef({ space, word, id, "vote-type": 'upvotes' })} /> {upvotes.length} </span>}
+            
+
+        {downvotes?.includes('~' + our) ? 
+          <span><MdThumbDownAlt />{downvotes.length}</span> :
+            /* @ts-ignore}*/
+            <span><MdThumbDownOffAlt onClick={() => voteDef({ space, word, id, "vote-type": 'downvotes' })} /> {downvotes.length} </span>}
         <span className=''>{poster}</span>
       </div>
-        {/* <span>{new Date(def.posted).toISOString()}</span> */ }
+      {/* <span>{new Date(def.posted).toISOString()}</span>, iso formatting weirdness */}
     </ul >
   )
 
 
 
 
-if (view === 'defs') return (
-  // error handling necessary? do something global [not-found page]
-  <>
-    <div className=''>
-      {/*  <Dropdown />
-      <Search /> */}
-
-
-      <MdKeyboardBackspace className='-mt-5 ml-2' onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />
-      
-      <h4>{word}</h4>
-    </div>
-
-    <div className=''>
-      <button onClick={() => setView('defs')}>definitions</button>
-      <span>&nbsp;&nbsp;&nbsp;</span>
-      <button onClick={() => setView('sentences')}>sentences</button>
-    </div>
-
-    <div className=''>
-      <ul>
-        {spaceLex()?.map((d, i: number) => {
-
-          const { def, upvotes, downvotes, poster, id, posted, related, sentence } = d
-          return <WordView def={def} upvotes={upvotes} downvotes={downvotes} poster={poster} id={id} posted={posted} related={related} sentence={sentence} />
-        })}
-      </ul>
+  if (view === 'defs') return (
+    <>
       <div className=''>
-        <input placeholder='add a definition' onChange={handleChange} value={inputDef} />
-        {/* @ts-ignore useParams return type for 'word'.. */}
-        <button onClick={handleSubmit}>submit</button>
+
+        <MdKeyboardBackspace className='-mt-5 ml-2' onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />
+
+        <h4>{word}</h4>
       </div>
-    </div>
-  </>
-)
+
+      <div className=''>
+        <button onClick={() => setView('defs')}>definitions</button>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        <button onClick={() => setView('sentences')}>sentences</button>
+      </div>
+
+      <div className=''>
+        <ul>
+          {spaceLex()?.map((d, i: number) => {
+            //props weirdness
+            const { def, upvotes, downvotes, poster, id, posted, related, sentence } = d
+            return <WordView 
+                    def={def} 
+                    upvotes={upvotes} 
+                    downvotes={downvotes} 
+                    poster={poster} 
+                    id={id} 
+                    posted={posted} 
+                    related={related} 
+                    sentence={sentence} />
+          })}
+        </ul>
+        <div className=''>
+          <input placeholder='add a definition' onChange={handleChange} value={inputDef} />
+          {/* @ts-ignore useParams return type for 'word'.. */}
+          <button onClick={handleSubmit}>submit</button>
+        </div>
+      </div>
+    </>
+  )
 
 
-else return (
-  <>
-    <MdKeyboardBackspace className='-mt-5 ml-2' onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />
+  else return (
+    <>
+      <MdKeyboardBackspace className='-mt-5 ml-2' onClick={() => navigate('/apps/lexicon/' + ship + '/' + group)} />
 
-    <h3>{word}</h3>
+      <h3>{word}</h3>
 
-    <div className=''>
-      <button onClick={() => setView('defs')}>definitions</button>
-      <span>&nbsp;&nbsp;&nbsp;</span>
-      <button onClick={() => setView('sentences')}>sentences</button>
-    </div>
+      <div className=''>
+        <button onClick={() => setView('defs')}>definitions</button>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        <button onClick={() => setView('sentences')}>sentences</button>
+      </div>
 
 
 
-    {spaceLex()?.map((d, i) => {
-      return (
-        d.sentence?.map((sen, i) => {
-          return (
-            <div className='' key={'sen' + i}>
-              <div>{sen} {d.poster}</div>
-              {/*<Text variant='caption'>tt test </Text>*/}
-            </div>
-          )
-        })
-      )
-    })}
-  </>
-)
+      {spaceLex()?.map((d, i) => {
+        return (
+          d.sentence?.map((sen, i) => {
+            return (
+              <div className='' key={'sen' + i}>
+                <div>{sen} {d.poster}</div>
+                {/*<Text variant='caption'>tt test </Text>*/}
+              </div>
+            )
+          })
+        )
+      })}
+    </>
+  )
 }
 
 export default Word

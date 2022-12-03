@@ -23,8 +23,8 @@ const Dictionary = () => {
     } catch {
       setError(true)
     }
-        
-    }
+
+  }
 
   useEffect(() => {
     fetchDict()
