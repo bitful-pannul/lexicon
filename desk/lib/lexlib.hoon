@@ -1,15 +1,6 @@
 :: json and other helpers
 /-  *lexicon
-:: /-  membership
-::
 |%
-++  get-list
-  |=  [lex=lexicon space=space word=word]
-  =/  defs  (~(get by lex) space)
-  ?~  defs  !!
-  (need (~(get by (need defs)) word))
-::
-::
 ++  space-rule
   ;~  plug  
     ;~(pfix sig fed:ag)
@@ -152,9 +143,11 @@
     ^-  json
     %+  frond  -.rec
     ?+  -.rec  ~
-      %def-added  ::  can I read which subscription the added def is coming from?
-    ::  this needs to only be reactive for local adds, so we'll know the specific space we're in
-    ::  deletions might need a proper refresh&refetch on browser side
+      %def-added  
+    ::  can I read which subscription the added def is coming from?
+    ::  this needs to only be reactive for local adds, so we'll know the
+    ::  specific space we're in deletions might need a proper
+    ::  refresh&refetch on browser side
     %-  pairs
       :~
         [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
@@ -201,4 +194,3 @@
     ==
   -- 
 --
-
