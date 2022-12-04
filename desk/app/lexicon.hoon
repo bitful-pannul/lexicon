@@ -2,11 +2,7 @@
 /+  default-agent, dbug, verb, agentio, lexlib
 |%
 +$  card  card:agent:gall
-+$  state-0
-  $:  %0
-      lex=lexicon
-      =whitelist
-  ==
++$  state-0  [%0 lex=lexicon =whitelist]
 --
 ::
 %-  agent:dbug
