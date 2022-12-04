@@ -2,14 +2,14 @@
 +$  space  [@p @t] 
 +$  word  @t  
 +$  definition  
-  $:  id=@uv :: maybe unsigned decimal base 32 is common for use in ids?
-      def=@t :: definition is just a piece of text
+  $:  id=@uv
+      def=@t :: definition
       poster=@p :: the person who posted it
       posted=@da :: the time they posted it
-      sentence=(list @t) :: example sentences probably
+      sentence=(list @t) :: example sentences
       related=(list word) :: related words
       upvotes=(set @p) :: approval from others
-      downvotes=(set @p) :: disapproval, disappoint.
+      downvotes=(set @p) :: disapproval, disappoint!
   ==
 +$  definitions  (map word (list definition))
 +$  lexicon  (map space definitions)
