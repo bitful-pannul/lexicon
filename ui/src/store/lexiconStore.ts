@@ -12,6 +12,8 @@ export interface LexiconStore {
   lex: Lexicon;
   whitelist: Whitelist;
   modalOpen: boolean;
+  joinSpaceModalOpen: boolean;
+  createSpaceModalOpen: boolean;
   popup: { type: string; message: string } | undefined;
   init: () => Promise<void>;
   setLoading: (loading: string | null) => void;
@@ -23,6 +25,8 @@ export interface LexiconStore {
   voteDef: (add: AddVote) => Promise<void>;
   delDef: (del: DelDef) => Promise<void>;
   setModalOpen: (val: boolean) => void;
+  setJoinSpaceModalOpen: (val: boolean) => void;
+  setCreateSpaceModalOpen: (val: boolean) => void;
   addMember: (space: string, member: string) => Promise<void>;
   createLex: (space: string, perms: string, members: string[]) => Promise<void>;
 }
@@ -32,6 +36,8 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
   popup: undefined,
   lex: [] as unknown as Lexicon, // initial empty array issues with never[] assingment
   modalOpen: false,
+  joinSpaceModalOpen: false,
+  createSpaceModalOpen: false,
   whitelist: [] as unknown as Whitelist,
   init: async () => {
     set({ loading: "Loading lexicon..." });
@@ -65,6 +71,9 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
   },
 
   setModalOpen: (val: boolean) => set({ modalOpen: val }),
+  setJoinSpaceModalOpen: (state: boolean) => set({ joinSpaceModalOpen: state }),
+  setCreateSpaceModalOpen: (state: boolean) =>
+    set({ createSpaceModalOpen: state }),
 
   getSpaces: async () => {
     const rawSpaces = await api.scry({ app: "spaces", path: "/all" });
@@ -104,7 +113,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
         related,
       },
     };
-    console.log("here",addJson);
+    console.log("here", addJson);
 
     try {
       const result = await api.poke({
@@ -192,7 +201,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
         members,
       },
     };
-
+    console.log('createJson',createJson)
     await api.poke({
       app: "lexicon",
       mark: "lexicon-action",

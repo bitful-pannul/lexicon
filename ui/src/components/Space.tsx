@@ -49,27 +49,15 @@ const Space = () => {
     }));
 
   //@ts-ignore if modalOpen then AddModal will render
-  return modalOpen ? (
-    <AddModal modalOpen={modalOpen} setModalOpen={setModal} />
-  ) : (
+  return (
     <>
-      <div className="">
-        {/* <Search />*/}
-        <MdKeyboardBackspace
-          className="-mt-5 ml-2"
-          onClick={() => navigate("/apps/lexicon/")}
-        />
-      </div>
       {/* @ts-ignore is defined if goes through*/}
       {isOur() && spacePerms() && (
         <Perms members={spacePerms()?.members} perms={spacePerms()?.perms} />
       )}
 
-      <div className="w-1/2">
-        {/*@ts-ignore nullcheck in place*/}
-        {spaceLex() && <List items={items} />}
-    
-      </div>
+      {/*@ts-ignore nullcheck in place*/}
+      {spaceLex() && <List items={items} />}
     </>
   );
 };

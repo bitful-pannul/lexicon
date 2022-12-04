@@ -10,3 +10,5 @@ export { default as Perms } from "./Perms"
 export { default as Popup } from "./styled/Popup"
 export { default as Radio } from './styled/Radio'
 export { default as JoinSpace } from './JoinSpace'
+export { default as JoinSpaceModal } from './JoinSpaceModal'
+export { default as CreateSpaceModal } from './CreateSpaceModal'

@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Home, Space, Dictionary, Navigation, Word, AddModal } from "./components";
+import {
+  Home,
+  Space,
+  Dictionary,
+  Navigation,
+  Word,
+  AddModal,
+  JoinSpaceModal,
+  CreateSpaceModal
+} from "./components";
 import useLexiconStore from "./store/lexiconStore";
 import Container from "@mui/material/Container";
 
@@ -14,6 +23,8 @@ export function App() {
   return (
     <Container maxWidth="sm">
       <AddModal />
+      <JoinSpaceModal />
+      <CreateSpaceModal />
       <Router>
         <Routes>
           <Route element={<Navigation />}>
