@@ -100,7 +100,7 @@ const AddModal = () => {
           error={false}
           size="small"
           id="related-words"
-          label="Related Words(apple,lemon,orange)"
+          label="Set related Words [apple,lemon,orange]..."
           type="text"
           value={related}
           onChange={(event: any) => {

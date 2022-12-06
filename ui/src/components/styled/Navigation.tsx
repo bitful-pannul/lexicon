@@ -20,11 +20,14 @@ import Box from "@mui/material/Box";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import { alpha, styled } from "@mui/material/styles";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
 
 const CustomTextField = styled(TextField)({
   "& .MuiInputBase-root": {
     padding: "8px",
     backgroundColor: "#FCFCFC",
+    fontSize: "14px",
   },
 
   "& .MuiOutlinedInput-root": {
@@ -87,19 +90,7 @@ const Navigation = () => {
           Add word
         </button>
       </Stack>
-      <Paper
-        component="form"
-        variant="outlined"
-        sx={{
-          margin: "20px 12px",
-
-          backgroundColor: "#fff",
-          border: "1px solid rgba(51, 51, 51, 0.12)",
-          borderRadius: "6px",
-          boxSizing: "border-box",
-          padding: "16px",
-        }}
-      >
+      <WrapperBackground>
         <Stack marginBottom={"30px"}>
           <Stack flex={1} direction="row" justifyContent="space-between">
             <Typography fontWeight={"bold"} variant="h5">
@@ -280,14 +271,146 @@ const Navigation = () => {
             Submit
           </button>
         </Stack>
-      </Paper>
+      </WrapperBackground>
+      <WrapperBackground>
+        <Stack>
+          <Typography
+            fontWeight={"bold"}
+            variant="h5"
+            color={"rgba(51, 51, 51, 0.3)"}
+            marginBottom={"18px"}
+          >
+            Type word
+          </Typography>
+          <Stack spacing={"12px"}>
+            <FormControl variant="standard">
+              <FormLabel
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  color: "text.primary",
+                  marginBottom: "6px",
+                }}
+                htmlFor="type-definition-textfield"
+              >
+                Definition <span style={{ color: "error" }}>*</span>
+              </FormLabel>
+              <CustomTextField
+                id="type-definition-textfield"
+                variant="outlined"
+                multiline
+                placeholder="Type your definition..."
+                fullWidth
+              />
+            </FormControl>
+            <FormControl variant="standard">
+              <FormLabel
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  color: "text.primary",
+                  marginBottom: "6px",
+                }}
+                htmlFor="type-definition-textfield"
+              >
+                Sentence
+              </FormLabel>
+              <CustomTextField
+                id="type-definition-textfield"
+                variant="outlined"
+                multiline
+                placeholder="An example of how it's used..."
+                fullWidth
+              />
+            </FormControl>
+            <FormControl variant="standard">
+              <FormLabel
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  color: "text.primary",
+                  marginBottom: "6px",
+                }}
+                htmlFor="type-definition-textfield"
+              >
+                Related
+              </FormLabel>
+              <CustomTextField
+                id="type-definition-textfield"
+                variant="outlined"
+                multiline
+                placeholder="Set related Words [apple,lemon,orange]..."
+                fullWidth
+              />
+            </FormControl>
+          </Stack>
+          <Stack
+            direction={"row"}
+            justifyContent={"flex-end"}
+            spacing={"10px"}
+            marginTop={"125px"}
+          >
+            <button
+              style={{
+                textAlign: "center",
+                height: 30,
+                padding: "8px 7px",
+                borderRadius: "6px",
+                fontSize: "14px",
+                lineHeight: "16px",
+                color: "rgba(51, 51, 51, 0.4)",
+                fontFamily: "Rubik, sans-serif",
+                fontWeight: 600,
+              }}
+              onClick={() => setModalOpen(true)}
+            >
+              Cancel
+            </button>
+            <button
+              style={{
+                textAlign: "center",
+                height: 30,
+                padding: "8px 7px",
+                borderRadius: "6px",
+                backgroundColor: "rgba(78, 158, 253, 0.09)",
+                fontSize: "14px",
+                lineHeight: "16px",
+                color: "#4E9EFD",
+                fontFamily: "Rubik, sans-serif",
+                fontWeight: 600,
+              }}
+              onClick={() => setModalOpen(true)}
+            >
+              Submit
+            </button>
+          </Stack>
+        </Stack>
+      </WrapperBackground>
+
       <Outlet />
     </>
   );
 };
 
 export default Navigation;
-
+function WrapperBackground({ children }) {
+  return (
+    <Paper
+      component="form"
+      variant="outlined"
+      sx={{
+        margin: "20px 12px",
+        backgroundColor: "#fff",
+        border: "1px solid rgba(51, 51, 51, 0.12)",
+        borderRadius: "6px",
+        boxSizing: "border-box",
+        padding: "16px",
+      }}
+    >
+      {children}
+    </Paper>
+  );
+}
 function IconBreadcrumbs({ group, ship, word }: any) {
   return (
     <Breadcrumbs
