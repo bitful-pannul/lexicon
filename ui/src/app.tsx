@@ -8,11 +8,22 @@ import {
   Word,
   AddModal,
   JoinSpaceModal,
-  CreateSpaceModal
+  CreateSpaceModal,
 } from "./components";
 import useLexiconStore from "./store/lexiconStore";
 import Container from "@mui/material/Container";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
+const theme = createTheme({
+
+  palette: {
+    primary: { main: "#4E9EFD" },
+  },
+  typography: {
+    fontFamily: ["Rubik"].join(","),
+  },
+
+});
 export function App() {
   const { init, loading } = useLexiconStore();
 
@@ -21,20 +32,31 @@ export function App() {
   }, []);
   //TODO: reinstate loader
   return (
-    <Container maxWidth="sm">
-      <AddModal />
-      <JoinSpaceModal />
-      <CreateSpaceModal />
-      <Router>
-        <Routes>
-          <Route element={<Navigation />}>
-            <Route path="/apps/lexicon/:ship/:group/:word" element={<Word />} />
-            <Route path="/apps/lexicon/:ship/:group" element={<Space />} />
-            <Route path="/apps/lexicon/dict/:word" element={<Dictionary />} />
-            <Route path="/apps/lexicon/" element={<Home />} />
-          </Route>
-        </Routes>
-      </Router>
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container
+        sx={{
+          backgroundColor: "#FBFBFB",
+          width: "432px",
+          padding: "0px!important",
+        }}
+      >
+        <AddModal />
+        <JoinSpaceModal />
+        <CreateSpaceModal />
+        <Router>
+          <Routes>
+            <Route element={<Navigation />}>
+              <Route
+                path="/apps/lexicon/:ship/:group/:word"
+                element={<Word />}
+              />
+              <Route path="/apps/lexicon/:ship/:group" element={<Space />} />
+              <Route path="/apps/lexicon/dict/:word" element={<Dictionary />} />
+              <Route path="/apps/lexicon/" element={<Home />} />
+            </Route>
+          </Routes>
+        </Router>
+      </Container>
+    </ThemeProvider>
   );
 }

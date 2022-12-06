@@ -1,0 +1,10 @@
+:~
+  title+'Lexicon'
+  info+'urbit dictionary'
+  color+0xee.dfc9
+  version+[1 0 0]
+  website+'https://github.com/bitful-pannul/lexicon'
+  license+'MIT'
+  base+'lexicon'
+  glob-ames+[~zod 0v0]
+==
