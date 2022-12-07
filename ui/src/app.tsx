@@ -40,7 +40,6 @@ export function App() {
           padding: "0px!important",
         }}
       >
-        <AddModal />
         <JoinSpaceModal />
         <CreateSpaceModal />
         <Router>

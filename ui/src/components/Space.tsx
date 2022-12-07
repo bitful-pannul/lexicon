@@ -52,9 +52,9 @@ const Space = () => {
   return (
     <>
       {/* @ts-ignore is defined if goes through*/}
-      {isOur() && spacePerms() && (
+      {/*isOur() && spacePerms() && (
         <Perms members={spacePerms()?.members} perms={spacePerms()?.perms} />
-      )}
+      )*/}
 
       {/*@ts-ignore nullcheck in place*/}
       {spaceLex() && <List items={items} />}

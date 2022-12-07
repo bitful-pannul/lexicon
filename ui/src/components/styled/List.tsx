@@ -16,13 +16,27 @@ const List = ({ items }: ListProps) => {
 
   return (
     <>
-      <Stack direction="column" spacing={1} paddingBottom={5}>
+      <Stack
+        direction="column"
+        spacing={1}
+        paddingTop={"12px"}
+        marginLeft={"20px"}
+        marginRight={"20px"}
+        marginBottom={"20px"}
+      >
         {items.map((item, index) => {
           return (
             <Paper
               key={index}
               variant="outlined"
-              sx={{ padding: "4px 10px", cursor: "pointer", width: "100%" }}
+              sx={{
+                padding: "4px 10px",
+                cursor: "pointer",
+                width: "100%",
+                "&:hover": {
+                  backgroundColor: "rgba(51, 51, 51, 0.3)",
+                },
+              }}
               onClick={() => navigate("/apps/lexicon/" + item.navlink)}
             >
               <Typography

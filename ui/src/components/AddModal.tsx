@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { MdKeyboardBackspace } from "react-icons/md";
 import useLexiconStore from "../store/lexiconStore";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-interface ModalProps {
-  modalOpen: boolean;
-  setModalOpen: (val: boolean) => void;
-}
+
+import {
+  WrappedBackground,
+  CustomTextField,
+  CustomButton,
+} from "../components";
+import InputBase from "@mui/material/InputBase";
+
+import Stack from "@mui/material/Stack";
+
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
 
 const AddModal = () => {
   const { ship, group } = useParams();
@@ -25,8 +25,9 @@ const AddModal = () => {
   const space = `${ship}/${group}`;
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     const rel = related.split(",");
-
+    console.log({ space, word, def, sentence: [sentence], related: rel });
     addDefinition({
       space,
       word,
@@ -34,100 +35,131 @@ const AddModal = () => {
       sentence: [sentence],
       related: rel,
     });
-
+    setWord("");
+    setDef("");
+    setSentence("");
+    setRelated("");
     setModalOpen(false);
   };
   const handleClose = () => {
     setModalOpen(false);
   };
+  if (!modalOpen) return null;
   return (
-    <Dialog
-      open={modalOpen}
-      onClose={handleClose}
-      aria-labelledby="add-entry-dialog"
-      aria-describedby="add an entry here"
-      maxWidth={"sm"}
-      fullWidth
-    >
-      <DialogTitle id="alert-dialog-title" fontWeight={"bold"}>
-        Add new entry
-      </DialogTitle>
-      <DialogContent>
-        <TextField
-          sx={{ marginTop: 1 }}
-          error={false}
-          size="small"
-          id="word"
-          label="Word"
+    <WrappedBackground>
+      <Stack>
+        <InputBase
+          sx={{
+            fontWeight: "bold",
+            fontSize: "24px",
+            marginBottom: "18px",
+          }}
+          inputProps={{
+            color: "rgba(51, 51, 51, 0.3)",
+          }}
+          placeholder="Type word"
           type="text"
+          id="word"
           value={word}
           onChange={(event: any) => {
             setWord(event.target.value);
           }}
-          fullWidth
+          autoFocus
         />
-        <TextField
-          sx={{ marginTop: 1 }}
-          spellCheck="true"
-          error={false}
-          size="small"
-          id="definition"
-          label="Definition"
-          type="text"
-          value={def}
-          onChange={(event: any) => {
-            setDef(event.target.value);
-          }}
-          fullWidth
-        />
-        <TextField
-          sx={{ marginTop: 1 }}
-          spellCheck="true"
-          error={false}
-          size="small"
-          id="example-sentence"
-          label="Example Sentence"
-          type="text"
-          value={sentence}
-          onChange={(event: any) => {
-            setSentence(event.target.value);
-          }}
-          fullWidth
-        />
-        <TextField
-          sx={{ marginTop: 1 }}
-          spellCheck="true"
-          error={false}
-          size="small"
-          id="related-words"
-          label="Set related Words [apple,lemon,orange]..."
-          type="text"
-          value={related}
-          onChange={(event: any) => {
-            setRelated(event.target.value);
-          }}
-          fullWidth
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="contained"
-          //  disabled={inputValue.length === 0}
-          onClick={handleSubmit}
-          size="small"
+
+        <Stack spacing={"12px"}>
+          <FormControl variant="standard">
+            <FormLabel
+              sx={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                color: "text.primary",
+                marginBottom: "6px",
+              }}
+              htmlFor="type-definition-textfield"
+            >
+              Definition <span style={{ color: "#F08735" }}>*</span>
+            </FormLabel>
+            <CustomTextField
+              variant="outlined"
+              multiline
+              placeholder="Type your definition..."
+              fullWidth
+              id="definition"
+              value={def}
+              onChange={(event: any) => {
+                setDef(event.target.value);
+              }}
+            />
+          </FormControl>
+          <FormControl variant="standard">
+            <FormLabel
+              sx={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                color: "text.primary",
+                marginBottom: "6px",
+              }}
+              htmlFor="type-definition-textfield"
+            >
+              Sentence
+            </FormLabel>
+            <CustomTextField
+              variant="outlined"
+              multiline
+              placeholder="An example of how it's used..."
+              fullWidth
+              id="example-sentence"
+              value={sentence}
+              onChange={(event: any) => {
+                setSentence(event.target.value);
+              }}
+            />
+          </FormControl>
+          <FormControl variant="standard">
+            <FormLabel
+              sx={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                color: "text.primary",
+                marginBottom: "6px",
+              }}
+              htmlFor="type-definition-textfield"
+            >
+              Related
+            </FormLabel>
+            <CustomTextField
+              variant="outlined"
+              multiline
+              placeholder="Set related Words [apple,lemon,orange]..."
+              fullWidth
+              id="related-words"
+              value={related}
+              onChange={(event: any) => {
+                setRelated(event.target.value);
+              }}
+            />
+          </FormControl>
+        </Stack>
+        <Stack
+          direction={"row"}
+          justifyContent={"flex-end"}
+          spacing={"10px"}
+          marginTop={"125px"}
         >
-          Submit
-        </Button>
-        <Button
-          variant="contained"
-          size="small"
-          color="error"
-          onClick={handleClose}
-        >
-          cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <CustomButton
+            sx={{
+              color: "rgba(51, 51, 51, 0.4)",
+              backgroundColor: "unset",
+            }}
+            onClick={handleClose}
+          >
+            Cancel
+          </CustomButton>
+          <CustomButton onClick={(e) => handleSubmit(e)}>Submit</CustomButton>
+        </Stack>
+      </Stack>
+    </WrappedBackground>
   );
 };
 
