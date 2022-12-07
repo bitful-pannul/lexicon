@@ -279,7 +279,7 @@ function DefinitionElement({
               !upVotes?.includes("~" + our) && vote(id, "upvotes");
             }}
           >
-            <ThumbUpOutlinedIcon fontSize="18px" color="primary" />
+            <ThumbUpOutlinedIcon style={{ fontSize: "18px" }} color="primary" />
             <Typography variant="subtitle2" color="primary">
               {upVotes?.length}
             </Typography>
@@ -299,7 +299,7 @@ function DefinitionElement({
             }}
           >
             <ThumbDownOutlinedIcon
-              fontSize="18px"
+              style={{ fontSize: "18px" }}
               htmlColor="rgba(51, 51, 51, 0.5)"
             />
             <Typography variant="subtitle2" color="text.secondary">

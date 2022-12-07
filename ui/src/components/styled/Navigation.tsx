@@ -1,5 +1,10 @@
-import React from "react";
-import { useParams, useNavigate, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  useParams,
+  useNavigate,
+  Outlet,
+  useSearchParams,
+} from "react-router-dom";
 import {
   Popup,
   Search,
@@ -20,10 +25,19 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 const Navigation = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { ship, group, word } = useParams();
   const navigate = useNavigate();
   const popup = useLexiconStore((state) => state.popup);
   const { setModalOpen, modalOpen } = useLexiconStore();
+
+  useEffect(() => {
+    const spaceId = searchParams.get("spaceId");
+    if (spaceId) {
+      navigate("/apps/lexicon/" + spaceId);
+    }
+  }, [searchParams.get("spaceId")]);
 
   return (
     <>
