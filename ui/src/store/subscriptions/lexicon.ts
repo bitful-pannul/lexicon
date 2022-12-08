@@ -13,6 +13,7 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
     switch (mark) {
         case 'lex':
             const lex = reaction['lex']
+            console.log('lexicon', lex)
             set({ lex })
 
         case 'whiteliste':

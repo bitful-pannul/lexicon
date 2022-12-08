@@ -5,13 +5,14 @@ import { List } from "./";
 const Home = () => {
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const lex = useLexiconStore((state) => state.lex);
+  const getSpaces = useLexiconStore((state) => state.getSpaces);
+
   const setJoinSpaceModalOpen = useLexiconStore(
     (state) => state.setJoinSpaceModalOpen
   );
   const setCreateSpaceModalOpen = useLexiconStore(
     (state) => state.setCreateSpaceModalOpen
   );
-
   const spaces = Object.keys(lex);
 
   const items = spaces.map((s) => ({ label: s, navlink: s }));

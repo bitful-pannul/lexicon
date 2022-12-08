@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useLexiconStore from "../store/lexiconStore";
-import { MdKeyboardBackspace } from "react-icons/md";
-import { AddModal, List, Perms } from "./index";
+import { WrappedBackground, WordItem } from "./index";
 
+//TODO: add upvote and downvote elements the word element
 const Space = () => {
   const lex = useLexiconStore((state) => state.lex);
   const modalOpen = useLexiconStore((state) => state.modalOpen);
@@ -57,7 +57,11 @@ const Space = () => {
       )*/}
 
       {/*@ts-ignore nullcheck in place*/}
-      {spaceLex() && <List items={items} />}
+      <WrappedBackground styles={{ padding: "6px 8px" }}>
+        {spaceLex() && (
+          <WordItem items={items} clearSearch={() => null} largeText />
+        )}
+      </WrappedBackground>
     </>
   );
 };

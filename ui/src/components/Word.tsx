@@ -32,6 +32,7 @@ const Word = () => {
   const our: string = (window as any)?.api?.ship || "";
   const [tabValue, setTabValue] = React.useState(0);
   const [newDefinition, setNewDefinition] = useState<string>("");
+  const [newExampleSentence, setNewExampleSentence] = useState<string>("");
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
@@ -231,6 +232,22 @@ const Word = () => {
                 );
               });
             })}
+            <Stack alignItems={"flex-end"} spacing={"17px"} marginTop={"30px"}>
+              <CustomTextField
+                id="add-definition-textfield"
+                variant="outlined"
+                multiline
+                placeholder="Add a new example sentence..."
+                fullWidth
+                value={newExampleSentence}
+                onChange={(e) => {
+                  setNewExampleSentence(e.target.value);
+                }}
+              />
+              <CustomButton onClick={handleAddNewDefinition}>
+                Submit
+              </CustomButton>
+            </Stack>
           </TabPanel>
         </Box>
       </Stack>
@@ -255,6 +272,9 @@ function DefinitionElement({
   vote,
   our,
 }: any) {
+  const ourUpVoted = upVotes?.includes("~" + our);
+  const ourDownVoted = downVotes?.includes("~" + our);
+
   return (
     <Stack spacing={"6px"} marginTop={"10px"}>
       <Typography variant="subtitle2">{def}</Typography>
@@ -271,16 +291,34 @@ function DefinitionElement({
             sx={{
               p: "4px 3.5px",
               borderRadius: "4px",
-              backgroundColor: "rgba(78, 158, 253, 0.08)",
+              backgroundColor: ourUpVoted
+                ? "rgba(78, 158, 253, 0.08)"
+                : "default",
             }}
             spacing={"4.75px"}
             role="button"
             onClick={() => {
-              !upVotes?.includes("~" + our) && vote(id, "upvotes");
+              if (ourUpVoted) {
+                //we up voted already, remove the vote
+                //TODO: remove vote
+              } else {
+                //we haven't up voted, up vote this!
+                vote(id, "upvotes");
+              }
             }}
           >
-            <ThumbUpOutlinedIcon style={{ fontSize: "18px" }} color="primary" />
-            <Typography variant="subtitle2" color="primary">
+            <ThumbUpOutlinedIcon
+              style={{
+                fontSize: "18px",
+              }}
+              sx={{
+                color: ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)",
+              }}
+            />
+            <Typography
+              variant="subtitle2"
+              color={ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)"}
+            >
               {upVotes?.length}
             </Typography>
           </Stack>
@@ -291,18 +329,32 @@ function DefinitionElement({
             sx={{
               p: "4px 3.5px",
               borderRadius: "4px",
+              backgroundColor: ourUpVoted
+                ? "rgba(255, 98, 64, 0.08)"
+                : "default",
             }}
             spacing={"4.75px"}
             role="button"
             onClick={() => {
-              !downVotes?.includes("~" + our) && vote(id, "downvotes");
+              if (ourDownVoted) {
+                //we down voted already, remove the vote
+                //TODO: remove vote
+              } else {
+                //we haven't down voted, down vote this!
+                vote(id, "downvotes");
+              }
             }}
           >
             <ThumbDownOutlinedIcon
               style={{ fontSize: "18px" }}
-              htmlColor="rgba(51, 51, 51, 0.5)"
+              sx={{
+                color: ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)",
+              }}
             />
-            <Typography variant="subtitle2" color="text.secondary">
+            <Typography
+              variant="subtitle2"
+              color={ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)"}
+            >
               {downVotes?.length}
             </Typography>
           </Stack>
@@ -314,11 +366,101 @@ function DefinitionElement({
     </Stack>
   );
 }
-function SentencesElement({ sentence, poster }: any) {
+function SentencesElement({
+  sentence,
+  poster,
+  upVotes = [],
+  downVotes = [],
+}: any) {
+  const ourUpVoted = false;
+  const ourDownVoted = false;
+  const vote = (id: string, type: string) => {
+    return;
+  };
   return (
     <Stack spacing={"6px"} marginTop={"10px"}>
       <Typography variant="subtitle2">{sentence}</Typography>
-      <Stack alignItems={"flex-end"}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent={"space-between"}
+      >
+        <Stack direction={"row"} spacing={"15px"}>
+          <Stack
+            direction="row"
+            justifyContent={"center"}
+            alignItems="center"
+            sx={{
+              p: "4px 3.5px",
+              borderRadius: "4px",
+              backgroundColor: ourUpVoted
+                ? "rgba(78, 158, 253, 0.08)"
+                : "default",
+            }}
+            spacing={"4.75px"}
+            role="button"
+            onClick={() => {
+              if (ourUpVoted) {
+                //we up voted already, remove the vote
+                //TODO: remove vote
+              } else {
+                //we haven't up voted, up vote this!
+                vote(id, "upvotes");
+              }
+            }}
+          >
+            <ThumbUpOutlinedIcon
+              style={{
+                fontSize: "18px",
+              }}
+              sx={{
+                color: ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)",
+              }}
+            />
+            <Typography
+              variant="subtitle2"
+              color={ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)"}
+            >
+              {upVotes?.length}
+            </Typography>
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent={"center"}
+            alignItems="center"
+            sx={{
+              p: "4px 3.5px",
+              borderRadius: "4px",
+              backgroundColor: ourUpVoted
+                ? "rgba(255, 98, 64, 0.08)"
+                : "default",
+            }}
+            spacing={"4.75px"}
+            role="button"
+            onClick={() => {
+              if (ourDownVoted) {
+                //we down voted already, remove the vote
+                //TODO: remove vote
+              } else {
+                //we haven't down voted, down vote this!
+                vote(id, "downvotes");
+              }
+            }}
+          >
+            <ThumbDownOutlinedIcon
+              style={{ fontSize: "18px" }}
+              sx={{
+                color: ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)",
+              }}
+            />
+            <Typography
+              variant="subtitle2"
+              color={ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)"}
+            >
+              {downVotes?.length}
+            </Typography>
+          </Stack>
+        </Stack>
         <Typography variant="subtitle2" color="text.secondary">
           {poster}
         </Typography>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useParams,
   useNavigate,
@@ -26,7 +26,7 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 const Navigation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [ok, setOk] = useState("");
   const { ship, group, word } = useParams();
   const navigate = useNavigate();
   const popup = useLexiconStore((state) => state.popup);
@@ -36,9 +36,10 @@ const Navigation = () => {
     const spaceId = searchParams.get("spaceId");
     if (spaceId) {
       navigate("/apps/lexicon/" + spaceId);
+      setOk(spaceId);
     }
   }, [searchParams.get("spaceId")]);
-
+  console.log("ok", ok);
   return (
     <>
       {/*popup && (
@@ -57,7 +58,13 @@ const Navigation = () => {
         {word && (
           <IconButton
             aria-label="navigate back"
-            onClick={() => navigate(`/apps/lexicon/${ship}/${group}`)}
+            onClick={() => {
+              if (!ship || !group) {
+                navigate(-1);
+              } else {
+                navigate(`/apps/lexicon/${ship}/${group}`);
+              }
+            }}
           >
             <ArrowBackOutlinedIcon fontSize="medium" htmlColor="#8B8B8B" />
           </IconButton>
