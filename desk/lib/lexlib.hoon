@@ -52,6 +52,13 @@
           [%sentence (ar so)]
           [%related (ar so)]
         ==
+        :-  %delete
+        %-  ot
+        :~
+          [%space (su space-rule)]
+          [%word so]
+          [%id (se %uv)]
+        ==
         ::
         :-  %join-space
         %-  ot
@@ -69,15 +76,6 @@
         %-  ot
         :~
           [%space (su space-rule)]
-          [%perms (su (perk ~[%public %private]))]
-          [%members (as (se %p))]
-        ==
-        ::
-        :-  %add-whitelist
-        %-  ot
-        :~
-          [%space (su space-rule)]
-          [%member (su ;~(pfix sig fed:ag))]
         ==
         ::
         :-  %vote
@@ -132,20 +130,6 @@
     :-  `@t`(rap 3 (scot %p -.space) '/' +.space ~)  
     (defs definitions)
     ::
-  ++  whiteliste
-    |=  w=whitelist
-    ^-  json
-    %-  pairs
-    %+  turn  ~(tap by w)
-    |=  [=space [=perms =members]]
-    ^-  [@t json]
-    :-  `@t`(rap 3 (scot %p -.space) '/' +.space ~)
-    ::
-    %-  pairs
-    :~
-      [%members %a (turn ~(tap in members) ship)]
-      [%perms %s (scot %tas perms)]
-    ==
     ::
   ++  reaction
     |=  rec=^reaction
@@ -188,16 +172,17 @@
       %lex
     (lex lexicon.rec)
     ::
-      %whiteliste
-    (whiteliste whitelist.rec)
       %success
     (tape message.rec)
     ::
       %error
     (tape message.rec)
     ::
-      %whitelist-added
-    (whiteliste whitelist.rec)
+      %space-created
+    %-  pairs
+      :~
+        [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
+      ==  
     ==
   -- 
 --

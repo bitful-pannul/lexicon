@@ -66,20 +66,17 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
             prevlex[defs.space] = defs.definitions
             set({ lex: prevlex })
 
-        case 'whitelist-added':
-            const wla = reaction['whitelist-added']
+        case 'space-created':
+            const spc = reaction['space-created']
 
-            var prevwl: Whitelist = get().whitelist
             var prevlex: Lexicon = get().lex
 
-            var newl: Whitelist = Object.assign(prevwl, wla)
             
-            var sp = Object.keys(wla)[0] // incoming wl space
+            var sp = Object.keys(spc)[0] // incoming wl space
+            console.log('sp')
             prevlex[sp] = {}
 
             set({ lex: prevlex })
-
-            set({ whitelist: newl })
 
         case 'success':
             var m: string = reaction['success']

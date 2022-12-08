@@ -11,6 +11,7 @@ export interface LexiconStore {
     loading: string | null,
     lex: Lexicon;
     whitelist: Whitelist,
+    spaces: string[],
     modalOpen: boolean,
     popup: {type: string, message: string} | undefined,
     init: () => Promise<void>,
@@ -18,13 +19,14 @@ export interface LexiconStore {
     setPopup: (type?: string, message?: string) => void,
     getLexicon: () => Promise<void>,
     getSpaces: () => Promise<void>,
+    getSpaceMembers: () => Promise<void>,
     joinLex: (space: string) => Promise<void>,
     addDefinition: (add: AddDef) => Promise<void>,
     voteDef: (add: AddVote) => Promise<void>,
     delDef: (del: DelDef) => Promise<void>,
     setModalOpen: (val: boolean) => void,
     addMember: (space: string, member: string) => Promise<void>
-    createLex: (space: string, perms: string, members: string[]) => Promise<void>,
+    createLex: (space: string) => Promise<void>,
   }
 
 const useLexiconStore = create<LexiconStore>((set, get) => ({
@@ -32,12 +34,13 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
   popup: undefined,
   lex: [] as unknown as Lexicon, // initial empty array issues with never[] assingment
   modalOpen: false,
+  spaces: [],
   whitelist: [] as unknown as Whitelist,
   init: async () => {
     set({ loading: 'Loading lexicon...' })
-    const { getLexicon, getSpaces } = get()
 
     await api.subscribe(createSubscription("lexicon", "/updates", handleLexiconUpdate(get, set)))  // handleLexupdate
+    await get().getSpaces()
     set({ loading: '' })
   },
 
@@ -68,7 +71,14 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
   getSpaces: async () => {
     const rawSpaces = await api.scry({ app: 'spaces', path: '/all'})
     
-    console.log('rawspaces: ', rawSpaces)
+    const arr = Object.keys(rawSpaces?.spaces)
+
+    console.log('rawspaces: ', arr)
+    set({ spaces: arr})
+  },
+
+  getSpaceMembers: async () => {
+    
   },
   
   joinLex: async (space: string) => {
@@ -148,14 +158,11 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
     })
   },
 
-  createLex: async (space: string, perms: string, members: string[]) => {
-    const sp = `~${our}/${space}`
+  createLex: async (space: string) => {
 
     const createJson = {
       "create-space": {
-        space: sp,
-        perms,
-        members,
+        space: space,
       }
     }
 
@@ -163,8 +170,8 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
       app: "lexicon",
       mark: "lexicon-action",
       json: createJson,
-      onSuccess: () => set({ popup: { type: "success", message: "created" + perms + "lex " + sp }}),
-      onError: () => set({ popup: { type: "error", message: "when creating" + perms + "lex " + sp }})
+      onSuccess: () => set({ popup: { type: "success", message: "created lex " + space }}),
+      onError: () => set({ popup: { type: "error", message: "when creating lex " + space }})
     })
   },
 
@@ -183,8 +190,8 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
       app: "lexicon",
       mark: "lexicon-action",
       json: delJson,
-      onSuccess: () => console.log('success! deleted: ', delJson),
-      onError: () => console.log("error! deleted: ", delJson),
+      onSuccess: () => set({ popup: { type: "success", message: "deleted " + id }}),
+      onError: () => set({ popup: { type: "error", message: "when deleting" + id }})
     })
   },
 

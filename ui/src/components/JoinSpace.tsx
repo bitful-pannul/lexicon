@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { MdKeyboardBackspace } from "react-icons/md"
 import useLexiconStore from '../store/lexiconStore'
-import { Radio } from './'
+import { SpaceDropdown } from './'
 
 interface ModalProps {
   modalOpen: boolean
@@ -9,49 +9,42 @@ interface ModalProps {
 }
 
 const JoinSpace = ({ modalOpen, setModalOpen }: ModalProps) => {
-  const [space, setSpace] = useState('')
-  const [createSpace, setCreateSpace] = useState('')
-  const [perms, setPerms] = useState<'public' | 'private'>('public')
-  const [members, setMembers] = useState('')
+  const [joinSpace, setJoinSpace] = useState('available spaces')
+  const [createSpace, setCreateSpace] = useState('your spaces')
 
-  const { createLex, joinLex } = useLexiconStore()
+  const { createLex, joinLex, getSpaces, getSpaceMembers } = useLexiconStore()
 
   const our: string = (window as any)?.api?.ship || ''
 
 
   const handleJoin = (e: any) => {
-    // verify space + @p 
+    const joinable = !joinSpace.includes('(joined)')
+
 
     // or determine create/join flow based on if it's your @p or not
-    joinLex(space)
-    setSpace('')
+    joinable && joinLex(joinSpace)
+    setJoinSpace('')
   }
 
   const handleCreate = (e: any) => {
     // verify group name sanity
-    var mems = members.split(',')
-    
-    if (mems[0] === '') { mems = ['~' + our ]}
-
-    createLex(createSpace, perms, mems)
+    console.log('createspace, ', createSpace)
+    createLex(createSpace)
     setCreateSpace('')
   }
 
   return modalOpen && (
     <>
-      <div>
+      <div className='w-1/4'>
         <button onClick={() => setModalOpen(false)}>X</button>
         <div className='my-3'>
-          <input placeholder='~zod/our' onChange={(e) => setSpace(e.target.value)} value={space} />
+
+          <SpaceDropdown space={joinSpace} setSpace={setJoinSpace} onlyOur={false} />
           <button onClick={handleJoin} className='bg-blue-100 rounded'>join lex</button>
         </div>
 
-        <div className='inline-flex grid-cols-2'>
-          <input placeholder='name of your space' onChange={(e) => setCreateSpace(e.target.value)} value={createSpace} />
-          <Radio setSelected={setPerms} />
-        </div>
         <div className='my-3'>
-          <input placeholder='~zod,~rus,~nec' onChange={(e) => setMembers(e.target.value)} value={members} />
+          <SpaceDropdown space={createSpace} setSpace={setCreateSpace} onlyOur={true} />
           <button onClick={handleCreate} className='bg-blue-100 rounded'>create lex</button>
         </div>
       </div>

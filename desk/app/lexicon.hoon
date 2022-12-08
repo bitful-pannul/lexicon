@@ -1,5 +1,5 @@
 ::  
-/-  *lexicon
+/-  *lexicon, membership
 /+  default-agent, dbug, lexlib, verb
 ::
 ::
@@ -8,7 +8,7 @@
 +$  state-0
   $:  %0
       lex=lexicon
-      =whitelist
+      :: =whitelist
   ==
 ::
 +$  card     card:agent:gall
@@ -42,7 +42,7 @@
   :_
     %=    this
       lex        (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]]))
-      whitelist  (~(put by whitelist) [our.bowl 'our'] [%public (silt ~[our.bowl])])
+      ::whitelist  (~(put by whitelist) [our.bowl 'our'] [%public (silt ~[our.bowl])])
     ==
   ~
 ::
@@ -90,6 +90,10 @@
       ?:  =(-.space.act our.bowl)
         ::  (distribute-local def space)
         ::  
+        ::
+        =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
+        ?>  =(%.y +.ismem)
+        ::
         :: 
         ?~  defs=(~(get by lex) space.act)
           ?>  =(src.bowl our.bowl)
@@ -156,6 +160,10 @@
       =/  def  (snag index def-list)
       ?>  =(src.bowl poster.def)
       ?:  =(-.space.act our.bowl)
+        ::
+        =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
+        ?>  =(%.y +.ismem)
+        ::
         =/  new-list  (oust [index 1] def-list)
         :_  
           %=    state
@@ -177,7 +185,7 @@
             !>(`reaction`[%def-deleted space.act word.act id.act])
           ==
         ==
-      ::
+      :: pass remote
       :_  state
       :~
         :*
@@ -199,6 +207,10 @@
       =/  def  (snag index def-list)
         :: switch on action up/down and remote/local
       ?:  =(-.space.act our.bowl)
+          ::
+          =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
+          ?>  =(%.y +.ismem)
+          ::
           =/  new-def
           ?:  =(vote-type.act %upvotes)
               def(upvotes (~(put in upvotes.def) src.bowl))
@@ -238,46 +250,17 @@
       ::
         %create-space
       ?>  =(-.space.act our.bowl)
-      ?:  =(%public perms.act)
-        :_
-          %=    state
-            lex        (~(put by lex) space.act *definitions)
-            whitelist  (~(put by whitelist) space.act [perms.act members.act])
-          ==
-        :~
-          [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%whitelist-added (malt ~[[space.act [perms.act members.act]]])])]
-        ==
-      :: %private
-      :_ 
+      ::
+      :_
         %=    state
           lex        (~(put by lex) space.act *definitions)
-          whitelist  (~(put by whitelist) space.act [perms.act members.act])
         ==
       :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%whitelist-added (malt ~[[space.act [perms.act members.act]]])])]
+        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%space-created space.act])]
       ==
       ::
       ::
-        %add-whitelist
-      ?>  =(-.space.act our.bowl)
-      =/  info  (~(got by whitelist) space.act)
-      =/  new-mems  (~(put in members.info) member.act)
-      ::
-      ::
-      :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
-      :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "added {<member.act>} to: {<space.act>}"])]
-      ==
-      ::
-        %remove-whitelist
-      ?>  =(-.space.act our.bowl)
-      =/  info  (~(got by whitelist) space.act)
-      =/  new-mems  (~(del in members.info) member.act)
-      :_  state(whitelist (~(put by whitelist) space.act [perms.info new-mems]))
-      :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success "removed {<member.act>} from: {<space.act>}"])]
-      ==
-        :: this needs to be called before interacting with a spaces' lexicon. 
+      :: this needs to be called before interacting with a spaces' lexicon. 
         %join-space
       :_  state  
       :~  [%pass /[(scot %p -.space.act)]/[+.space.act] %agent [-.space.act %lexicon] %watch /[(scot %p -.space.act)]/[+.space.act]]        
@@ -297,11 +280,17 @@
     [@t @t ~]
       ?>  |(=(our.bowl src.bowl) =(our.bowl (slav %p i.path)))
       ::  
-      =/  sp  [(slav %p i.path) i.t.path]
-      =/  info  (~(got by whitelist) sp)
+
       ::
+      :: TODO, can't find scry for if space is public or not
+      ::
+      ::
+      =/  sp  [(slav %p i.path) i.t.path]
+        ::
       :: check flow for non-existing space, should crash with (need .) calls 
-      ?:  =(perms.info %public)
+      =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/(scot %p our.bowl)/[i.t.path]/is-member/(scot %p src.bowl)/membership-view)
+      ?:  =(%.y +.ismem)
+      ::?:  =(perms.info %public)
         =/  defs  (need (~(get by lex) sp))
         :_  this
         :~  
@@ -311,27 +300,18 @@
           [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
         ==
       :: %private
-      :: todo, permission error from joining instead of crash
-      ?.  (~(has in members.info) src.bowl)
-        :_  this
-        :~
-          [%give %fact ~ %lexicon-reaction !>(`reaction`[%error "you do not have the permissions to join: {<sp>}"])]
-        ==
-      ::
-      =/  defs  (need (~(get by lex) sp))
+      :: 
       :_  this
-      :~  
-        [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
-        [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
+      :~
+        [%give %fact ~ %lexicon-reaction !>(`reaction`[%error "you do not have the permissions to join: {<sp>}"])]
       ==
     ::
     [%updates ~]
       :_  this
       :~  
         [%give %fact ~ %lexicon-reaction !>(`reaction`[%lex lex])]
-        [%give %fact ~ %lexicon-reaction !>(`reaction`[%whiteliste whitelist])]
+        ::  [%give %fact ~ %lexicon-reaction !>(`reaction`[%whiteliste whitelist])]
       ==
-    :: todo: include whitelist map in initial updates subscription.?
   ==
  ::
 ++  on-agent  
@@ -444,10 +424,10 @@
             [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%error message.incoming])]
           ==
           ::
-            %whitelist-added
+            %space-created
           :_  this
           :~
-            [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%whitelist-added whitelist.incoming])]
+            [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%space-created space.incoming])]
           ==
         ==
       ==

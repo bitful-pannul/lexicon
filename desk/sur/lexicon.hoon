@@ -8,21 +8,13 @@
 ::
 ::  
 ::
-::
-+$  perms     ?(%public %private)
-+$  members    (set @p)
-+$  whitelist  (map space [=perms =members])
-::
-::
 ::  <- combine action itself with a space
 +$  action
   $%  [%add =space =word def=@t sentence=(list @t) related=(list word)]
       [%delete space=space =word id=@uv]
       [%vote =space =word id=@uv vote-type=?(%upvotes %downvotes)]
       ::
-      [%create-space =space =perms members=(set @p)]
-      [%add-whitelist =space member=@p]
-      [%remove-whitelist =space member=@p]
+      [%create-space =space]
       [%join-space =space]
       [%leave-space =space]
   ==
@@ -31,13 +23,11 @@
 ::
   $%  [%def-added =space =word def=definition]
       [%def-deleted =space =word id=@uv]
-      [%whitelist-added =whitelist]
-      :: [%member-removed =@p] 
+      [%space-created =space]
       [%voted =space =word id=@uv vote-type=?(%upvotes %downvotes) voter=@p]
       [%test =space =word]    :: without this, lexlib won't compile?
       [%defs =space =definitions]
       [%lex =lexicon]
-      [%whiteliste =whitelist]
       :: these are only sent out to frontend
       [%error message=tape]
       [%success message=tape]
