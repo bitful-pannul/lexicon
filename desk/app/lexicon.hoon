@@ -79,7 +79,8 @@
         ::  (distribute-local def space)
         ::  
         ::
-        =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
+        =/  ismem  [%& ~]
+          :: .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
         ?>  =(%.y +.ismem)
         ::
         :: 
@@ -149,7 +150,8 @@
       ?>  =(src.bowl poster.def)
       ?:  =(-.space.act our.bowl)
         ::
-        =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
+        =/  ismem  [%& ~]
+          :: .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
         ?>  =(%.y +.ismem)
         ::
         =/  new-list  (oust [index 1] def-list)
@@ -196,7 +198,8 @@
         :: switch on action up/down and remote/local
       ?:  =(-.space.act our.bowl)
           ::
-          =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
+          =/  ismem  [%& ~]
+            :: .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
           ?>  =(%.y +.ismem)
           ::
           =/  new-def
@@ -276,7 +279,8 @@
       =/  sp  [(slav %p i.path) i.t.path]
         ::
       :: check flow for non-existing space, should crash with (need .) calls 
-      =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/(scot %p our.bowl)/[i.t.path]/is-member/(scot %p src.bowl)/membership-view)
+      =/  ismem  [%& ~]
+        :: .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/(scot %p our.bowl)/[i.t.path]/is-member/(scot %p src.bowl)/membership-view)
       ?:  =(%.y +.ismem)
       ::?:  =(perms.info %public)
         =/  defs  (need (~(get by lex) sp))
