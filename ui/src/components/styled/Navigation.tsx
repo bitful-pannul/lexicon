@@ -27,7 +27,7 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 const Navigation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { ship, group, word } = useParams();
-  
+
   const navigate = useNavigate();
   const popup = useLexiconStore((state) => state.popup);
   const { setModalOpen, modalOpen } = useLexiconStore();
@@ -35,7 +35,7 @@ const Navigation = () => {
   useEffect(() => {
     const spaceId = searchParams.get("spaceId");
     if (spaceId) {
-      navigate("/apps/lexicon/" + spaceId);
+      navigate("/apps/lexicon" + spaceId);
     }
   }, [searchParams.get("spaceId")]);
   return (
