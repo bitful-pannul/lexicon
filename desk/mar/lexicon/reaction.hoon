@@ -1,9 +1,10 @@
-/+  *lexicon
-|_  rxn=reaction
+/-  *lexicon
+/+  lexlib
+|_  react=reaction
 ++  grow
   |%
-  ++  noun  rxn
-  ++  json  (reaction:enjs rxn)
+  ++  noun  react
+  ++  json  (reaction:enjs:lexlib react)
   --
 ++  grab
   |%
