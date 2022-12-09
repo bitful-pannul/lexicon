@@ -35,7 +35,7 @@ const Navigation = () => {
   useEffect(() => {
     const spaceId = searchParams.get("spaceId");
     if (spaceId) {
-      //navigate("/apps/lexicon/" + spaceId);
+      navigate("/apps/lexicon/" + spaceId);
     }
   }, [searchParams.get("spaceId")]);
   return (
