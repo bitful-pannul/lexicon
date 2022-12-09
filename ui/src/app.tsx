@@ -15,14 +15,13 @@ import Container from "@mui/material/Container";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
-
   palette: {
     primary: { main: "#4E9EFD" },
+    error: { main: "#FF6240" },
   },
   typography: {
     fontFamily: ["Rubik"].join(","),
   },
-
 });
 export function App() {
   const { init, loading } = useLexiconStore();
@@ -31,31 +30,37 @@ export function App() {
     init();
   }, []);
   //TODO: reinstate loader
+  //style={{ backgroundColor: "#FBFBFB" }}
   return (
-    <ThemeProvider theme={theme}>
-      <Container
-        sx={{
-          backgroundColor: "#FBFBFB",
-          width: "432px",
-          padding: "0px!important",
-        }}
-      >
-        <JoinSpaceModal />
-        <CreateSpaceModal />
-        <Router>
-          <Routes>
-            <Route element={<Navigation />}>
-              <Route
-                path="/apps/lexicon/:ship/:group/:word"
-                element={<Word />}
-              />
-              <Route path="/apps/lexicon/:ship/:group" element={<Space />} />
-              <Route path="/apps/lexicon/dict/:word" element={<Dictionary />} />
-              <Route path="/apps/lexicon/" element={<Home />} />
-            </Route>
-          </Routes>
-        </Router>
-      </Container>
-    </ThemeProvider>
+    <main>
+      <ThemeProvider theme={theme}>
+        <Container
+          sx={{
+            backgroundColor: "#FBFBFB",
+            width: "432px",
+            padding: "0px!important",
+          }}
+        >
+          <JoinSpaceModal />
+          <CreateSpaceModal />
+          <Router>
+            <Routes>
+              <Route element={<Navigation />}>
+                <Route
+                  path="/apps/lexicon/:ship/:group/:word"
+                  element={<Word />}
+                />
+                <Route path="/apps/lexicon/:ship/:group" element={<Space />} />
+                <Route
+                  path="/apps/lexicon/dict/:word"
+                  element={<Dictionary />}
+                />
+                <Route path="/apps/lexicon/" element={<Home />} />
+              </Route>
+            </Routes>
+          </Router>
+        </Container>
+      </ThemeProvider>
+    </main>
   );
 }

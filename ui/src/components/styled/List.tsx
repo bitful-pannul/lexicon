@@ -34,7 +34,7 @@ const List = ({ items }: ListProps) => {
                 cursor: "pointer",
                 width: "100%",
                 "&:hover": {
-                  backgroundColor: "rgba(51, 51, 51, 0.3)",
+                  backgroundColor: "#F9F9F9",
                 },
               }}
               onClick={() => navigate("/apps/lexicon/" + item.navlink)}

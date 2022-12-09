@@ -2,7 +2,7 @@ import React from "react";
 
 import Paper from "@mui/material/Paper";
 
-function WrapperBackground({ children }: any) {
+function WrapperBackground({ styles, children }: any) {
   return (
     <Paper
       component="form"
@@ -14,6 +14,7 @@ function WrapperBackground({ children }: any) {
         borderRadius: "6px",
         boxSizing: "border-box",
         padding: "16px",
+        ...styles,
       }}
     >
       {children}
