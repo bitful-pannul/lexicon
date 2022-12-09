@@ -1,16 +1,15 @@
-/-  *lexicon
-/+  lexlib
+/+  *lexicon
 ::
 |_  lex=lexicon
 ++  grow
   |%
   ++  noun  lex
-  ++  json  (lex:enjs:lexlib lex)
+  ++  json  (lex:enjs lex)
   --
 ++  grab
   |%
   ++  noun  lexicon
-  ++  json  lex:dejs:lexlib
+  ++  json  lex:dejs
   --
 ++  grad  %noun
 --

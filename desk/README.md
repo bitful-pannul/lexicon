@@ -4,9 +4,9 @@
 ├── app
 │   └── lexicon.hoon
 ├── lib
-│   └── lexlib.hoon
+│   └── lexicon.hoon
 ├── mar
-│   ├── definitions.hoon
+│   ├── dictionary.hoon
 │   ├── lexicon
 │   │   ├── action.hoon
 │   │   └── reaction.hoon
