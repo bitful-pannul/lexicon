@@ -1,5 +1,5 @@
 ::  
-/-  *lexicon, membership
+/-  *lexicon, membership, spaces-store
 /+  default-agent, dbug, lexlib, verb
 ::
 ::
@@ -282,28 +282,38 @@
       ::  
 
       ::
-      :: TODO, can't find scry for if space is public or not
       ::
       ::
       =/  sp  [(slav %p i.path) i.t.path]
+                  :: space:view:spaces-store doesn't mold scry response corrrectly
+      =/  info  .^(view:spaces-store %gx /(scot %p our.bowl)/spaces/[-.sp]/[+.sp]/spaces-view)
+      =/  ispub  +62:info
+
+      ?.  =(ispub %public)
+
+        =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/(scot %p our.bowl)/[i.t.path]/is-member/(scot %p src.bowl)/membership-view)
+        ?:  =(%.y +.ismem)
         ::
-      :: check flow for non-existing space, should crash with (need .) calls 
-      =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/(scot %p our.bowl)/[i.t.path]/is-member/(scot %p src.bowl)/membership-view)
-      ?:  =(%.y +.ismem)
-      ::?:  =(perms.info %public)
-        =/  defs  (need (~(get by lex) sp))
+          =/  defs  (need (~(get by lex) sp))
+          :_  this
+          :~  
+            [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
+            :: if not handled in on-agent, and passed on to /updates manually... causes infinite loop
+            :: not sure if 3 separate %facts, host -> joiner -> frontend are optimal...
+            [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
+          ==
+        :: not a member
+        :: 
         :_  this
-        :~  
-          [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
-          :: if not handled in on-agent, and passed on to /updates manually... causes infinite loop
-          :: not sure if 3 separate %facts, host -> joiner -> frontend are optimal...
-          [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
+        :~
+          [%give %fact ~ %lexicon-reaction !>(`reaction`[%error "you do not have the permissions to join: {<sp>}"])]
         ==
-      :: %private
-      :: 
+      ::  space is public
+      =/  defs  (need (~(get by lex) sp))
       :_  this
-      :~
-        [%give %fact ~ %lexicon-reaction !>(`reaction`[%error "you do not have the permissions to join: {<sp>}"])]
+      :~  
+        [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
+        [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
       ==
     ::
     [%updates ~]
