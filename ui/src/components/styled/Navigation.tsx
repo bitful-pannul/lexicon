@@ -26,8 +26,8 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 const Navigation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [ok, setOk] = useState("");
   const { ship, group, word } = useParams();
+  
   const navigate = useNavigate();
   const popup = useLexiconStore((state) => state.popup);
   const { setModalOpen, modalOpen } = useLexiconStore();
@@ -35,11 +35,9 @@ const Navigation = () => {
   useEffect(() => {
     const spaceId = searchParams.get("spaceId");
     if (spaceId) {
-      navigate("/apps/lexicon/" + spaceId);
-      setOk(spaceId);
+      //navigate("/apps/lexicon/" + spaceId);
     }
   }, [searchParams.get("spaceId")]);
-  console.log("ok", ok);
   return (
     <>
       {/*popup && (
@@ -47,7 +45,7 @@ const Navigation = () => {
           <Popup type={popup.type} message={popup.message} />
         </div>
       )*/}
-      <IconBreadcrumbs group={group} ship={ship} word={word} />
+
       <Stack
         direction="row"
         spacing={1}
@@ -70,9 +68,11 @@ const Navigation = () => {
           </IconButton>
         )}
         <Search />
-        <CustomButton onClick={() => setModalOpen(true)} disabled={modalOpen}>
-          add word
-        </CustomButton>
+        {ship && group && !word && (
+          <CustomButton onClick={() => setModalOpen(true)} disabled={modalOpen}>
+            add word
+          </CustomButton>
+        )}
       </Stack>
       <AddModal />
 

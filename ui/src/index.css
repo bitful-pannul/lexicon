@@ -3,4 +3,5 @@
 @tailwind utilities;
 html {
     font-family: 'Rubik', sans-serif;
+    overflow: hidden;
 }

@@ -41,12 +41,12 @@ const Space = () => {
     return our === ship;
   };
 
-  const items =
-    spaceLex() &&
-    Object.keys(lex[`${ship}/${group}`])?.map((word, i) => ({
-      label: word,
-      navlink: `${ship}/${group}/${word}`,
-    }));
+  const items = spaceLex()
+    ? Object.keys(lex[`${ship}/${group}`])?.map((word, i) => ({
+        label: word,
+        navlink: `${ship}/${group}/${word}`,
+      }))
+    : [];
 
   //@ts-ignore if modalOpen then AddModal will render
   return (
@@ -58,9 +58,8 @@ const Space = () => {
 
       {/*@ts-ignore nullcheck in place*/}
       <WrappedBackground styles={{ padding: "6px 8px" }}>
-        {spaceLex() && (
           <WordItem items={items} clearSearch={() => null} largeText />
-        )}
+        
       </WrappedBackground>
     </>
   );

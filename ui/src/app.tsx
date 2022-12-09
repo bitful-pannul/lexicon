@@ -32,14 +32,19 @@ export function App() {
   //TODO: reinstate loader
   //style={{ backgroundColor: "#FBFBFB" }}
   return (
-    <main>
+    <main
+      style={{
+        overflowY: "scroll",
+        height: "100vh",
+        backgroundColor: "#FBFBFB",
+      }}
+    >
       <ThemeProvider theme={theme}>
         <Container
           sx={{
-            backgroundColor: "#FBFBFB",
-            width: "432px",
             padding: "0px!important",
           }}
+          maxWidth="sm"
         >
           <JoinSpaceModal />
           <CreateSpaceModal />

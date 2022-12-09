@@ -329,7 +329,7 @@ function DefinitionElement({
             sx={{
               p: "4px 3.5px",
               borderRadius: "4px",
-              backgroundColor: ourUpVoted
+              backgroundColor: ourDownVoted
                 ? "rgba(255, 98, 64, 0.08)"
                 : "default",
             }}
@@ -405,7 +405,7 @@ function SentencesElement({
                 //TODO: remove vote
               } else {
                 //we haven't up voted, up vote this!
-                vote(id, "upvotes");
+                vote('id', "upvotes");
               }
             }}
           >
@@ -443,7 +443,7 @@ function SentencesElement({
                 //TODO: remove vote
               } else {
                 //we haven't down voted, down vote this!
-                vote(id, "downvotes");
+                vote('id', "downvotes");
               }
             }}
           >

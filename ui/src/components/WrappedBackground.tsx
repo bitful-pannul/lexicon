@@ -5,7 +5,6 @@ import Paper from "@mui/material/Paper";
 function WrapperBackground({ styles, children }: any) {
   return (
     <Paper
-      component="form"
       variant="outlined"
       sx={{
         margin: "12px 20px",
