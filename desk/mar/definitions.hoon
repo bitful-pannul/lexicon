@@ -1,15 +1,17 @@
-/+  *lexicon
+/-  *lexicon
+/+  lexlib
 :: 
-|_  ents=entries
+|_  defs=definitions
 ++  grow
   |%
-  ++  noun  ents
-  ++  json  (ents:enjs ents)
+  ++  noun  defs
+  ++  json  (defs:enjs:lexlib defs)
   --
 ++  grab
   |%
-  ++  noun  entries
-  ++  json  ents:dejs
+  ++  noun  definitions
+  ++  json  defs:dejs:lexlib
   --
 ++  grad  %noun
 --
+

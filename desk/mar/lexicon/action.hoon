@@ -1,4 +1,5 @@
-/+  *lexicon
+/-  *lexicon
+/+  lexlib
 |_  act=action
 ++  grow
   |%
@@ -7,7 +8,7 @@
 ++  grab
   |%
   ++  noun  action
-  ++  json  action:dejs
+  ++  json  action:dejs:lexlib
   --
 ++  grad  %noun
 --
