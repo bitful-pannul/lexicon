@@ -208,7 +208,7 @@ function SingleWord({
         >
           {word}
         </Typography>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="subtitle2" color="text.secondary">
           {"~" + stamp.poster}
         </Typography>
       </Stack>
@@ -308,7 +308,7 @@ function SingleWord({
             </Stack>
           </Stack>
         </Stack>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="subtitle2" color="text.secondary">
           {displayDate(stamp.posted, { long: false, dayOnly: false })}
         </Typography>
       </Stack>
