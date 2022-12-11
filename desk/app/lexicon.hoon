@@ -114,7 +114,7 @@
         (~(put by votes.entry) src.bowl u.vote.act)
       =.  dict   (~(put by dict) word.act entry)
       :_  state(lexicon (~(put by lexicon) space.act dict))
-      =/  rxn  `reaction`[%word-voted [space word src.bowl vote]:[act .]]
+      =/  rxn  `reaction`[%word-voted [space word votes.entry]:[act .]]
       :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
           [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
@@ -132,7 +132,7 @@
       =.  definitions.entry   (~(put by definitions.entry) id.act def)
       =.  dict    (~(put by dict) word.act entry)
       :_  state(lexicon (~(put by lexicon) space.act dict))
-      =/  rxn  `reaction`[%def-voted [space word id src.bowl vote]:[act .]]
+      =/  rxn  `reaction`[%def-voted [space word id votes.def]:[act .]]
       :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
           [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
@@ -150,7 +150,7 @@
       =.  related.entry   (~(put by related.entry) id.act rel)
       =.  dict    (~(put by dict) word.act entry)
       :_  state(lexicon (~(put by lexicon) space.act dict))
-      =/  rxn  `reaction`[%rel-voted [space word id src.bowl vote]:[act .]]
+      =/  rxn  `reaction`[%rel-voted [space word id votes.rel]:[act .]]
       :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
           [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
@@ -168,7 +168,7 @@
       =.  sentences.entry   (~(put by sentences.entry) id.act sen)
       =.  dict    (~(put by dict) word.act entry)
       :_  state(lexicon (~(put by lexicon) space.act dict))
-      =/  rxn  `reaction`[%sen-voted [space word id src.bowl vote]:[act .]]
+      =/  rxn  `reaction`[%sen-voted [space word id votes.sen]:[act .]]
       :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
           [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
@@ -292,10 +292,7 @@
             %word-voted
           =/  dict   (~(got by lexicon) space)
           =/  entry  (~(got by dict) word.rxn)
-          =.  votes.entry
-            ?~  vote.rxn
-              (~(del by votes.entry) ship.rxn)
-            (~(put by votes.entry) ship.rxn u.vote.rxn)
+          =.  votes.entry  votes.rxn
           =.  dict   (~(put by dict) word.rxn entry)
           `this(lexicon (~(put by lexicon) space dict))
           ::
@@ -303,10 +300,7 @@
           =/  dict   (~(got by lexicon) space)
           =/  entry  (~(got by dict) word.rxn)
           =/  def  (~(got by definitions.entry) id.rxn)
-          =.  votes.def
-            ?~  vote.rxn
-              (~(del by votes.def) ship.rxn)
-            (~(put by votes.def) ship.rxn u.vote.rxn)
+          =.  votes.def  votes.rxn
           =.  definitions.entry   (~(put by definitions.entry) id.rxn def)
           =.  dict  (~(put by dict) word.rxn entry)
           `this(lexicon (~(put by lexicon) space dict))
@@ -315,10 +309,7 @@
           =/  dict   (~(got by lexicon) space)
           =/  entry  (~(got by dict) word.rxn)
           =/  sen  (~(got by sentences.entry) id.rxn)
-          =.  votes.sen
-            ?~  vote.rxn
-              (~(del by votes.sen) ship.rxn)
-            (~(put by votes.sen) ship.rxn u.vote.rxn)
+          =.  votes.sen  votes.rxn
           =.  sentences.entry   (~(put by sentences.entry) id.rxn sen)
           =.  dict  (~(put by dict) word.rxn entry)
           `this(lexicon (~(put by lexicon) space dict))
@@ -327,10 +318,7 @@
           =/  dict   (~(got by lexicon) space)
           =/  entry  (~(got by dict) word.rxn)
           =/  rel  (~(got by related.entry) id.rxn)
-          =.  votes.rel
-            ?~  vote.rxn
-              (~(del by votes.rel) ship.rxn)
-            (~(put by votes.rel) ship.rxn u.vote.rxn)
+          =.  votes.rel  votes.rxn
           =.  related.entry   (~(put by related.entry) id.rxn rel)
           =.  dict  (~(put by dict) word.rxn entry)
           `this(lexicon (~(put by lexicon) space dict))

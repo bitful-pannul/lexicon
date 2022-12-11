@@ -183,32 +183,28 @@
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
-          [%ship (ship:enjs:format ship.rec)]
-          [%vote ?~(vote.rec ~ b+u.vote.rec)]
+          [%votes (enjs-votes votes.rec)]
       ==
         %def-voted
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
           [%id %s (scot %uv id.rec)]
-          [%ship (ship:enjs:format ship.rec)]
-          [%vote ?~(vote.rec ~ b+u.vote.rec)]
+          [%votes (enjs-votes votes.rec)]
       ==
         %sen-voted
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
           [%id %s (scot %uv id.rec)]
-          [%ship (ship:enjs:format ship.rec)]
-          [%vote ?~(vote.rec ~ b+u.vote.rec)]
+          [%votes (enjs-votes votes.rec)]
       ==
         %rel-voted
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
           [%id %s (scot %uv id.rec)]
-          [%ship (ship:enjs:format ship.rec)]
-          [%vote ?~(vote.rec ~ b+u.vote.rec)]
+          [%votes (enjs-votes votes.rec)]
       ==
         %add-dict
       %-  pairs
