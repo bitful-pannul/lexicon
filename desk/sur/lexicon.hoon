@@ -1,40 +1,57 @@
-::  urban dictionary
+/-  spaces-store
 |%
-+$  lexicon  (map space definitions)
-+$  space  [@p @t] 
-+$  definitions  (map word (list definition))
-+$  word  @t  
-+$  definition  [id=@uv def=@t poster=@p posted=@da sentence=(list @t) related=(list word) upvotes=(set @p) downvotes=(set @p)]
++$  space  space-path:spaces-store
++$  id     @uv
++$  word   @t
++$  stamp  [poster=ship posted=@da]
++$  votes  (map ship ?)
 ::
-::  
++$  definitions  (map id [=@t =votes =stamp])
++$  sentences    (map id [=@t =votes =stamp])
++$  related      (map id [=@t =votes =stamp])
 ::
-::  <- combine action itself with a space
++$  entry
+  $:  =definitions
+      =sentences
+      =related
+      =votes
+      =stamp
+  == 
+::
++$  dictionary  (map word entry)
++$  lexicon     (map space dictionary)
+::
 +$  action
-  $%  [%add =space =word def=@t sentence=(list @t) related=(list word)]
-      [%delete space=space =word id=@uv]
-      [%vote =space =word id=@uv vote-type=?(%upvotes %downvotes)]
-      ::
-      [%create-space =space]
-      [%join-space =space]
-      [%leave-space =space]
+  $%  $:  %add-word
+          =space
+          =word
+          definitions=(list @t)
+          sentences=(list @t)
+          related=(list word)
+      ==
+      [%add-def =space =word def=@t]
+      [%add-sen =space =word sen=@t]
+      [%add-rel =space =word rel=@t]
+      [%vote-word =space =word vote=(unit ?)]
+      [%vote-def =space =word =id vote=(unit ?)]
+      [%vote-sen =space =word =id vote=(unit ?)]
+      [%vote-rel =space =word =id vote=(unit ?)]
   ==
 ::
-+$  reaction   :: for a single on-watch to /updates to return all reactions, they need their space context within the reaction
-::
-  $%  [%def-added =space =word def=definition]
-      [%def-deleted =space =word id=@uv]
-      [%space-created =space]
-      [%voted =space =word id=@uv vote-type=?(%upvotes %downvotes) voter=@p]
-      [%test =space =word]    :: without this, lexlib won't compile?
-      [%defs =space =definitions]
-      [%lex =lexicon]
-      :: these are only sent out to frontend
-      [%error message=tape]
-      [%success message=tape]
++$  reaction
+  $%  [%word-added =space =word =entry]
+      [%def-added =space =word =id def=@t =votes =stamp]
+      [%sen-added =space =word =id sen=@t =votes =stamp]
+      [%rel-added =space =word =id rel=@t =votes =stamp]
+      $>(%vote-word action)
+      $>(%vote-def action)
+      $>(%vote-sen action)
+      $>(%vote-rel action)
+      [%dictionary =dictionary]
+      [%lexicon =lexicon]
   ==
 ::
 +$  view
-  $%  [%definitions-by-group group=space]
-      [%definitions-by-word word]
+  $%  [%dictionary =dictionary]
   ==
 --
