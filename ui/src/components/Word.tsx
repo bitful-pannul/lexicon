@@ -54,7 +54,7 @@ const Word = () => {
     //unit => true / false (up/down) | null is remove vote
     voteDef({ space, word, id, vote, voteType });
   };
-  const handleAddNewDefinition = (e: any) => {
+  const handleAddNewDefinition = () => {
     if (!newDefinition) return;
     //@ts-ignore, word is defined in params if we're in this component
     addDefinitionToWord({
@@ -64,7 +64,7 @@ const Word = () => {
     });
     setNewDefinition("");
   };
-  const handleAddNewSentence = (e: any) => {
+  const handleAddNewSentence = () => {
     if (!newExampleSentence) return;
     //@ts-ignore, word is defined in params if we're in this component
     addSentenceToWord({
@@ -93,6 +93,23 @@ const Word = () => {
       };
     }
   };
+  const handleNewDefKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      handleAddNewDefinition();
+      event.preventDefault();
+    }
+  };
+  const handleNewSenKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      handleAddNewSentence();
+      event.preventDefault();
+    }
+  };
+
   return (
     <WrappedBackground>
       <Stack>
@@ -212,7 +229,7 @@ const Word = () => {
               <CustomTextField
                 id="add-definition-textfield"
                 variant="outlined"
-                multiline
+                onKeyDown={handleNewDefKeyDown}
                 placeholder="Add a new definition..."
                 fullWidth
                 value={newDefinition}
@@ -245,7 +262,7 @@ const Word = () => {
               <CustomTextField
                 id="add-definition-textfield"
                 variant="outlined"
-                multiline
+                onKeyDown={handleNewSenKeyDown}
                 placeholder="Add a new example sentence..."
                 fullWidth
                 value={newExampleSentence}

@@ -57,11 +57,7 @@ const Navigation = () => {
           <IconButton
             aria-label="navigate back"
             onClick={() => {
-              if (!ship || !group) {
-                navigate(-1);
-              } else {
-                navigate(`/apps/lexicon/${ship}/${group}`);
-              }
+              navigate(-1);
             }}
           >
             <ArrowBackOutlinedIcon fontSize="medium" htmlColor="#8B8B8B" />
@@ -74,7 +70,6 @@ const Navigation = () => {
           </CustomButton>
         )}
       </Stack>
-      <AddModal />
 
       <Outlet />
     </>

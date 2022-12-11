@@ -109,10 +109,7 @@ const Dictionary = () => {
                                   sx={{ cursor: "pointer" }}
                                   color={"primary"}
                                   onClick={() => {
-                                    navigate("../apps/lexicon/dict/" + item, {
-                                      replace: true,
-                                    });
-                                    navigate(0);
+                                    navigate("../apps/lexicon/dict/" + item);
                                   }}
                                 >
                                   {item}
@@ -142,10 +139,7 @@ const Dictionary = () => {
                                   sx={{ cursor: "pointer" }}
                                   color={"primary"}
                                   onClick={() => {
-                                    navigate("../apps/lexicon/dict/" + item, {
-                                      replace: true,
-                                    });
-                                    navigate(0);
+                                    navigate("../apps/lexicon/dict/" + item);
                                   }}
                                 >
                                   {item}

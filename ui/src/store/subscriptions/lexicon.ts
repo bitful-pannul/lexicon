@@ -1,147 +1,113 @@
 import { GetState, SetState } from "zustand";
 import { Definition, Definitions, Lexicon, Whitelist } from "../../types";
 import useLexiconStore, { LexiconStore } from "../lexiconStore";
-import produce from 'immer' // immer gets weird w/ objects
+import produce from "immer"; // immer gets weird w/ objects
 
-const our: string = (window as any)?.api?.ship || ''
+const our: string = (window as any)?.api?.ship || "";
 
-
-export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<LexiconStore>) => (reaction: any) => {
-    console.log('reaction: ', reaction)
+export const handleLexiconUpdate =
+  (get: GetState<LexiconStore>, set: SetState<LexiconStore>) =>
+  (reaction: any) => {
+    console.log("reaction: ", reaction);
     let mark = Object.keys(reaction)[0];
-    
+
     switch (mark) {
-        case 'lexicon':
-            const lex = reaction['lexicon']
-            console.log('lexicon', lex)
-            set({ lex })
+      case "lexicon": {
+        const lex = reaction["lexicon"];
+        console.log("lexicon", lex);
+        set({ lex });
+        break;
+      }
 
-        case 'whiteliste':
-            var wl = reaction['whiteliste']
-            set({  whitelist: wl })   
-        
-        case 'def-added':
-            const def = reaction['def-added']
-            const definition: Definition = def?.def
-            const word: string = def?.word
-            const space: string = def?.space
+      case "def-added": {
+        const updateDate = reaction["def-added"];
+        const word: string = updateDate?.word;
+        const space: string = updateDate?.space;
+        const newEntry = updateDate.entry;
+        var prevlex: Lexicon = get().lex;
 
+        prevlex[space][word] = newEntry;
 
-            var prevlex: Lexicon = get().lex
-            if (prevlex[space][word]) {
-                prevlex[space][word] = [...prevlex[space][word], definition]
-            } else {
-                prevlex[space][word] = [definition] 
+        set({ lex: prevlex });
+        break;
+      }
+      case "sen-added": {
+        const updateDate = reaction["sen-added"];
+        const word: string = updateDate?.word;
+        const space: string = updateDate?.space;
+        const newEntry = updateDate.entry;
+        var prevlex: Lexicon = get().lex;
+
+        prevlex[space][word] = newEntry;
+
+        set({ lex: prevlex });
+        break;
+      }
+      case "word-added": {
+        const updateDate = reaction["word-added"];
+        const word: string = updateDate?.word;
+        const space: string = updateDate?.space;
+        const newEntry = updateDate.entry;
+        var prevlex: Lexicon = get().lex;
+
+        prevlex[space][word] = newEntry;
+        set({ lex: prevlex });
+        break;
+      }
+      case "word-voted": {
+        const updateDate = reaction["word-voted"];
+        const word: string = updateDate?.word;
+        const space: string = updateDate?.space;
+        const newVoteList = updateDate.votes;
+        console.log("newVoteList", newVoteList);
+        var prevlex: Lexicon = get().lex;
+        prevlex[space][word] = { ...prevlex[space][word], votes: newVoteList };
+
+        set({ lex: prevlex });
+        break;
+      }
+      case "def-voted": {
+        const updateDate = reaction["def-voted"];
+        const word: string = updateDate?.word;
+        const space: string = updateDate?.space;
+        const id: string = updateDate?.id;
+        const newVoteList = updateDate.votes;
+        console.log("newVoteList", newVoteList);
+        var prevlex: Lexicon = get().lex;
+        prevlex[space][word].definitions = prevlex[space][word].definitions.map(
+          (def: any, index: number) => {
+            if (id === def.id) {
+              return { ...def, votes: newVoteList };
             }
-            
-             set({ lex: prevlex })           
-            //const modstate = produce(prevlex, draft => {
-            //    draft[space][word] = [...draft[space][word], definition]
-            //}) 
-            //set({ lex: modstate })
+            return def;
+          }
+        );
 
-        case 'voted': 
-            const voteobj = reaction['voted']
-            var prevlex: Lexicon = get().lex
+        set({ lex: prevlex });
+        break;
+      }
+      case "sen-voted": {
+        const updateDate = reaction["sen-voted"];
+        const word: string = updateDate?.word;
+        const space: string = updateDate?.space;
+        const id: string = updateDate?.id;
+        const newVoteList = updateDate.votes;
 
-            // @ts-ignore: vote-id that's incoming is most likely in our lex.
-            var voting: Definition = prevlex[voteobj.space][voteobj.word].find(d => d.id === voteobj.id)
-            
-            if (voteobj['vote-type'] === "upvotes") {
-                voting.upvotes = voting.upvotes.concat(voteobj.voter)
-            } else {
-                voting.downvotes = voting.downvotes.concat(voteobj.voter)
+        var prevlex: Lexicon = get().lex;
+        prevlex[space][word].sentences = prevlex[space][word].sentences.map(
+          (def: any, index: number) => {
+            if (id === def.id) {
+              return { ...def, votes: newVoteList };
             }
-            // voteobj['vote-type'] === "upvotes" ?  voting?.upvotes.concat(voteobj.voter) : voting?.downvotes.concat(voteobj.voter)
-            prevlex[voteobj.space][voteobj.word].map(def => def.id === voteobj.id || voting)
-            set({ lex: prevlex})
+            return def;
+          }
+        );
 
-        case 'def-deleted':
-            const delobj = reaction['def-deleted']
-            var prevlex: Lexicon = get().lex
+        set({ lex: prevlex });
+        break;
+      }
 
-            prevlex[delobj.space][delobj.word] = prevlex[delobj.space][delobj.word].filter(def => def.id !== delobj.id)
-            set({ lex: prevlex })
-
-        case 'defs':
-            const defs = reaction['defs']
-            var prevlex: Lexicon = get().lex
-
-            prevlex[defs.space] = defs.definitions
-            set({ lex: prevlex })
-
-        case 'whitelist-added':
-            const wla = reaction['whitelist-added']
-
-            var prevwl: Whitelist = get().whitelist
-            var prevlex: Lexicon = get().lex
-
-            var newl: Whitelist = Object.assign(prevwl, wla)
-            
-            var sp = Object.keys(wla)[0] // incoming wl space
-            prevlex[sp] = {}
-
-            set({ lex: prevlex })
-
-            set({ whitelist: newl })
-
-        case 'success':
-            var m: string = reaction['success']
-
-            // adding member adding + lex creation here instead of 2 new reactions in /sur
-            
-            console.log(m)
-
-            if (m.substring(0, 7) === 'created') {
-                var spname = m.substring(
-                    m.indexOf("'") + 1, 
-                    m.lastIndexOf("'")
-                );
-
-                var sp = our + '/' + spname
-
-                var prevlex: Lexicon = get().lex
-                prevlex[sp] = {}
-
-                // note, creating a space for an existing one would null it temporarily on frontend
-
-                set({ lex: prevlex })
-            }
-
-            if (m.substring(0, 5) === 'added') {
-
-                var spname = m.substring(
-                    m.indexOf("'") + 1, 
-                    m.lastIndexOf("'")
-                );
-
-                const re = /~\S+/
-                
-                const matc = m.match(re)
-                const added = matc![0] 
-                var sp = '~' + our + '/' + spname
-
-
-                var whitel: Whitelist = get().whitelist
-
-                whitel[sp].members = whitel[sp].members.concat(added)
-
-
-                set({ whitelist: whitel })
-            }   
-
-
-            set({ popup: { type: 'success', message: m }})
-            setTimeout(() => {
-                set({ popup: undefined })
-            }, 5000)    
-
-        case 'error':
-            var m: string = reaction['success']
-            set({ popup: { type: 'success', message: m }})
-            setTimeout(() => {
-                set({ popup: undefined })
-            }, 5000)    
-                 
-        }
-}
+      default:
+        break;
+    }
+  };

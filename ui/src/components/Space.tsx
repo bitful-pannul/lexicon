@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useLexiconStore from "../store/lexiconStore";
-import { WrappedBackground } from "./index";
+import { WrappedBackground, AddModal } from "./index";
 
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
@@ -70,6 +70,8 @@ const Space = () => {
       )*/}
 
       {/*@ts-ignore nullcheck in place*/}
+      <AddModal />
+
       <WrappedBackground styles={{ padding: "6px 8px" }}>
         <WordItem
           items={items}

@@ -82,7 +82,7 @@ const AddModal = () => {
             </FormLabel>
             <CustomTextField
               variant="outlined"
-              multiline
+              
               placeholder="Type your definition..."
               fullWidth
               id="definition"
@@ -106,7 +106,7 @@ const AddModal = () => {
             </FormLabel>
             <CustomTextField
               variant="outlined"
-              multiline
+              
               placeholder="An example of how it's used..."
               fullWidth
               id="example-sentence"
@@ -130,7 +130,7 @@ const AddModal = () => {
             </FormLabel>
             <CustomTextField
               variant="outlined"
-              multiline
+              
               placeholder="Set related Words [apple,lemon,orange]..."
               fullWidth
               id="related-words"

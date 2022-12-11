@@ -1,6 +1,6 @@
 export interface Lexicon {
   // specific formatting for space?
-  [space: string]: Definitions; // create space has no template entry for now, ++  on-init does.
+  [space: string]: any; // create space has no template entry for now, ++  on-init does.
 }
 
 export interface Definitions {
@@ -14,8 +14,7 @@ export interface Definition {
   poster: string; // @p  format
   related: string[];
   sentence: string[];
-  upvotes: string[]; // (set @p) format
-  downvotes: string[]; // (set @p) format
+  votes: any;
 }
 
 export interface Whitelist {
