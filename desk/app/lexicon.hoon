@@ -372,6 +372,7 @@
   |=  =space
   ^-  _core
   ?:  =(-.space our.bowl)
+    ?:  (~(has by lexicon) space)  core
     =.  lexicon  (~(put by lexicon) space *dictionary)
     =/  rxn  [%add-dict space *dictionary]
     (emit %give %fact ~[/updates] lexicon-reaction+!>(rxn))
@@ -382,6 +383,7 @@
   |=  =space
   ^-  _core
   ?:  =(-.space our.bowl)
+    ?.  (~(has by lexicon) space)  core
     =.  lexicon  (~(del by lexicon) space)
     =/  rxn  [%del-dict space]
     (emit %give %fact ~[/updates] lexicon-reaction+!>(rxn))
