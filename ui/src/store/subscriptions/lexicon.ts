@@ -11,8 +11,8 @@ export const handleLexiconUpdate = (get: GetState<LexiconStore>, set: SetState<L
     let mark = Object.keys(reaction)[0];
     
     switch (mark) {
-        case 'lex':
-            const lex = reaction['lex']
+        case 'lexicon':
+            const lex = reaction['lexicon']
             console.log('lexicon', lex)
             set({ lex })
 

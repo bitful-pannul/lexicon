@@ -27,6 +27,7 @@ export interface LexiconStore {
   setModalOpen: (val: boolean) => void;
   setJoinSpaceModalOpen: (val: boolean) => void;
   setCreateSpaceModalOpen: (val: boolean) => void;
+  addDefinitionToWord: (add: any) => void;
   addMember: (space: string, member: string) => Promise<void>;
   createLex: (space: string, perms: string, members: string[]) => Promise<void>;
 }
@@ -105,12 +106,12 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
   addDefinition: async (add: AddDef) => {
     const { space, word, def, sentence, related } = add;
     const addJson = {
-      add: {
+      "add-word": {
         space,
         word,
-        def,
-        sentence,
-        related,
+        definitions: [def],
+        sentences: sentence,
+        related: [],
       },
     };
     console.log("here", addJson);
@@ -120,6 +121,45 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
         app: "lexicon",
         mark: "lexicon-action",
         json: addJson,
+        onSuccess: () =>
+          set({
+            popup: {
+              type: "success",
+              message: "added definition: " + def + "to word: " + word,
+            },
+          }),
+        onError: () =>
+          set({
+            popup: {
+              type: "error",
+              message: "when adding definition: " + def + "to word: " + word,
+            },
+          }),
+      });
+      console.log("addDefinition result => ", result);
+    } catch (e) {
+      console.log("addDefinition error => ", e);
+    }
+  },
+  addDefinitionToWord: async (add: {
+    space: string;
+    word: string;
+    def: string;
+  }) => {
+    const { space, word, def } = add;
+    const addDefToWord = {
+      "add-def": {
+        space,
+        word,
+        def,
+      },
+    };
+
+    try {
+      const result = await api.poke({
+        app: "lexicon",
+        mark: "lexicon-action",
+        json: addDefToWord,
         onSuccess: () =>
           set({
             popup: {
@@ -201,7 +241,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
         members,
       },
     };
-    console.log('createJson',createJson)
+    console.log("createJson", createJson);
     await api.poke({
       app: "lexicon",
       mark: "lexicon-action",

@@ -25,6 +25,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
+import { displayDate } from "../time";
 
 const Word = () => {
   const { ship, group, word } = useParams();
@@ -38,9 +39,9 @@ const Word = () => {
   };
 
   const lex = useLexiconStore((state) => state.lex);
-  const { voteDef, addDefinition } = useLexiconStore();
+  const { voteDef, addDefinition, addDefinitionToWord } = useLexiconStore();
 
-  const spaceLex = (): Definition[] | undefined => {
+  const spaceLex = (): any => {
     //TODO: migrate this to be a one time call in state
     try {
       //@ts-ignore handled if undefined
@@ -60,29 +61,41 @@ const Word = () => {
   const handleAddNewDefinition = (e: any) => {
     if (!newDefinition) return;
     //@ts-ignore, word is defined in params if we're in this component
-    addDefinition({
+    addDefinitionToWord({
       space,
       word,
       def: newDefinition,
-      related: [],
-      sentence: [],
     });
     setNewDefinition("");
   };
   const getTotalInteractions = () => {
     let total = 0;
-    spaceLex()?.forEach((d, i: number) => {
+    /* spaceLex()?.forEach((d, i: number) => {
       const { downvotes, upvotes } = d;
       total = total + downvotes.length + upvotes.length;
-    });
+    });*/
     return total;
+  };
+  const getWordData = () => {
+    const spaceLexData = spaceLex();
+
+    if (spaceLexData) {
+      return {
+        word: word,
+        posted: displayDate(spaceLexData.stamp.posted, {
+          long: false,
+          dayOnly: false,
+        }),
+        poster: "~" + spaceLexData.stamp.poster,
+      };
+    }
   };
   return (
     <WrappedBackground>
       <Stack>
         <Stack flex={1} direction="row" justifyContent="space-between">
           <Typography fontWeight={"bold"} variant="h5">
-            {word}
+            {getWordData()?.word}
           </Typography>
           <Stack
             direction={"row"}
@@ -125,10 +138,10 @@ const Word = () => {
           marginTop={"8px"}
         >
           <Typography variant="subtitle2" color={"text.secondary"}>
-            ~lodlev-migdev
+            {getWordData()?.poster}
           </Typography>
           <Typography variant="subtitle2" color={"text.secondary"}>
-            07/21/2022 10:30 AM
+            {getWordData()?.posted}
           </Typography>
         </Stack>
         <Box sx={{ width: "100%", marginTop: "16px" }}>
@@ -176,28 +189,18 @@ const Word = () => {
             </Tabs>
           </Box>
           <TabPanel value={tabValue} index={0}>
-            {spaceLex()?.map((d, i: number) => {
-              const {
-                def,
-                upvotes,
-                downvotes,
-                poster,
-                id,
-                posted,
-                related,
-                sentence,
-              } = d;
+            {spaceLex()?.definitions.map((definition: any, i: number) => {
+              const { stamp, txt, votes, id } = definition;
               return (
                 <DefinitionElement
                   key={"definition-" + i}
                   id={id}
-                  def={def}
-                  upVotes={upvotes}
-                  downVotes={downvotes}
-                  poster={poster}
-                  posted={posted}
-                  related={related}
-                  sentence={sentence}
+                  def={txt}
+                  upVotes={[]}
+                  downVotes={[]}
+                  poster={stamp.poster}
+                  posted={stamp.posted}
+                  related={[]}
                   vote={vote}
                   our={our}
                 />
@@ -221,16 +224,15 @@ const Word = () => {
             </Stack>
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
-            {spaceLex()?.map((d, i) => {
-              return d.sentence?.map((sen, i) => {
-                return (
-                  <SentencesElement
-                    sentence={sen}
-                    poster={d.poster}
-                    key={"sentence-" + i}
-                  />
-                );
-              });
+            {spaceLex()?.sentences.map((sentence: any, i: number) => {
+              return (
+                <SentencesElement
+                  sentence={sentence.txt}
+                  poster={sentence.stamp.poster}
+                  posted={sentence.stamp.posted}
+                  key={"sentence-" + i}
+                />
+              );
             })}
             <Stack alignItems={"flex-end"} spacing={"17px"} marginTop={"30px"}>
               <CustomTextField
@@ -360,7 +362,7 @@ function DefinitionElement({
           </Stack>
         </Stack>
         <Typography variant="subtitle2" color="text.secondary">
-          {poster}
+          {"~" + poster}
         </Typography>
       </Stack>
     </Stack>
@@ -405,7 +407,7 @@ function SentencesElement({
                 //TODO: remove vote
               } else {
                 //we haven't up voted, up vote this!
-                vote('id', "upvotes");
+                vote("id", "upvotes");
               }
             }}
           >
@@ -443,7 +445,7 @@ function SentencesElement({
                 //TODO: remove vote
               } else {
                 //we haven't down voted, down vote this!
-                vote('id', "downvotes");
+                vote("id", "downvotes");
               }
             }}
           >
