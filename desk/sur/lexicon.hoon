@@ -43,10 +43,12 @@
       [%def-added =space =word =id def=@t =votes =stamp]
       [%sen-added =space =word =id sen=@t =votes =stamp]
       [%rel-added =space =word =id rel=@t =votes =stamp]
-      $>(%vote-word action)
-      $>(%vote-def action)
-      $>(%vote-sen action)
-      $>(%vote-rel action)
+      [%word-voted =space =word =ship vote=(unit ?)]
+      [%def-voted =space =word =id =ship vote=(unit ?)]
+      [%sen-voted =space =word =id =ship vote=(unit ?)]
+      [%rel-voted =space =word =id =ship vote=(unit ?)]
+      [%add-dict =space =dictionary]
+      [%del-dict =space]
       [%dictionary =dictionary]
       [%lexicon =lexicon]
   ==

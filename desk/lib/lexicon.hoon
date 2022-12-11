@@ -179,33 +179,43 @@
           [%votes (enjs-votes votes.rec)]
           [%stamp (enjs-stamp stamp.rec)]
       ==
-        %vote-word
+        %word-voted
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
+          [%ship (ship:enjs:format ship.rec)]
           [%vote ?~(vote.rec ~ b+u.vote.rec)]
       ==
-        %vote-def
-      %-  pairs
-      :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
-          [%word %s word.rec]
-          [%id %s (scot %uv id.rec)]
-          [%vote ?~(vote.rec ~ b+u.vote.rec)]
-      ==
-        %vote-sen
+        %def-voted
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
           [%id %s (scot %uv id.rec)]
+          [%ship (ship:enjs:format ship.rec)]
           [%vote ?~(vote.rec ~ b+u.vote.rec)]
       ==
-        %vote-rel
+        %sen-voted
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
           [%id %s (scot %uv id.rec)]
+          [%ship (ship:enjs:format ship.rec)]
           [%vote ?~(vote.rec ~ b+u.vote.rec)]
       ==
+        %rel-voted
+      %-  pairs
+      :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
+          [%word %s word.rec]
+          [%id %s (scot %uv id.rec)]
+          [%ship (ship:enjs:format ship.rec)]
+          [%vote ?~(vote.rec ~ b+u.vote.rec)]
+      ==
+        %add-dict
+      %-  pairs
+      :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
+          [%dict (enjs-dict dictionary.rec)]
+      ==
+      %del-dict  s+`@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)
       %dictionary  (enjs-dict dictionary.rec)
       %lexicon  (enjs-lexicon lexicon.rec)
     ==
