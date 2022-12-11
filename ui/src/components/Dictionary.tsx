@@ -67,7 +67,7 @@ const Dictionary = () => {
             return (
               <Box
                 sx={{ width: "100%", marginTop: "16px" }}
-                key={"meaning-" + 1}
+                key={"meaning-" + meaningIndex}
               >
                 <Typography
                   variant="subtitle1"

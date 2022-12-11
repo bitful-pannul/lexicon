@@ -15,16 +15,8 @@ const WordItem = ({ items, clearSearch, largeText = false }: any) => {
     }
   };
   const Go = (link: string) => {
-    console.log("params.word", params.word);
-    if (params.word) {
-      //if I'm already in the search screen I don't push on to the stack (to navigate back before I searched something)
-      navigate("../apps/lexicon/" + link, {
-        replace: true,
-      });
-      navigate(0);
-    } else {
-      navigate("/apps/lexicon/" + link);
-    }
+    navigate("/apps/lexicon/" + link);
+
     clearSearch();
   };
   //          tabindex={0}
@@ -64,7 +56,7 @@ const WordItem = ({ items, clearSearch, largeText = false }: any) => {
           );
         })
       ) : (
-        <Typography variant={"subtitle2"} color='text.secondary'>
+        <Typography variant={"subtitle2"} color="text.secondary">
           no words in this space, add one to start
         </Typography>
       )}

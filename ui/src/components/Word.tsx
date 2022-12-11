@@ -1,20 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  MdThumbDownOffAlt,
-  MdThumbDownAlt,
-  MdThumbUpAlt,
-  MdOutlineThumbUpOffAlt,
-  MdKeyboardBackspace,
-} from "react-icons/md";
+
 import useLexiconStore from "../store/lexiconStore";
-import { Definition } from "../types";
 import {
-  Popup,
-  Search,
   WrappedBackground,
   CustomTextField,
-  AddModal,
   CustomButton,
 } from "../components";
 import Stack from "@mui/material/Stack";
@@ -39,7 +29,8 @@ const Word = () => {
   };
 
   const lex = useLexiconStore((state) => state.lex);
-  const { voteDef, addDefinition, addDefinitionToWord } = useLexiconStore();
+  const { voteDef, addDefinition, addDefinitionToWord, addSentenceToWord } =
+    useLexiconStore();
 
   const spaceLex = (): any => {
     //TODO: migrate this to be a one time call in state
@@ -54,9 +45,14 @@ const Word = () => {
   };
 
   const space: string = `${ship}/${group}`;
-  const vote = (id: string, type: "upvotes" | "downvotes") => {
+  const vote = (
+    id: string,
+    vote: true | false | null,
+    voteType: "def" | "sen" | "word"
+  ) => {
     //use a base mui button for these
-    voteDef({ space, word, id, "vote-type": type });
+    //unit => true / false (up/down) | null is remove vote
+    voteDef({ space, word, id, vote, voteType });
   };
   const handleAddNewDefinition = (e: any) => {
     if (!newDefinition) return;
@@ -68,13 +64,20 @@ const Word = () => {
     });
     setNewDefinition("");
   };
+  const handleAddNewSentence = (e: any) => {
+    if (!newExampleSentence) return;
+    //@ts-ignore, word is defined in params if we're in this component
+    addSentenceToWord({
+      space,
+      word,
+      sen: newExampleSentence,
+    });
+    setNewExampleSentence("");
+  };
   const getTotalInteractions = () => {
-    let total = 0;
-    /* spaceLex()?.forEach((d, i: number) => {
-      const { downvotes, upvotes } = d;
-      total = total + downvotes.length + upvotes.length;
-    });*/
-    return total;
+    const spaceLexData = spaceLex();
+
+    return spaceLexData?.votes.length;
   };
   const getWordData = () => {
     const spaceLexData = spaceLex();
@@ -196,8 +199,7 @@ const Word = () => {
                   key={"definition-" + i}
                   id={id}
                   def={txt}
-                  upVotes={[]}
-                  downVotes={[]}
+                  votes={votes}
                   poster={stamp.poster}
                   posted={stamp.posted}
                   related={[]}
@@ -225,12 +227,17 @@ const Word = () => {
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
             {spaceLex()?.sentences.map((sentence: any, i: number) => {
+              const { stamp, txt, votes, id } = sentence;
               return (
                 <SentencesElement
-                  sentence={sentence.txt}
-                  poster={sentence.stamp.poster}
-                  posted={sentence.stamp.posted}
+                  id={id}
+                  sentence={txt}
+                  poster={stamp.poster}
+                  posted={stamp.posted}
+                  votes={votes}
                   key={"sentence-" + i}
+                  our={our}
+                  vote={vote}
                 />
               );
             })}
@@ -246,9 +253,7 @@ const Word = () => {
                   setNewExampleSentence(e.target.value);
                 }}
               />
-              <CustomButton onClick={handleAddNewDefinition}>
-                Submit
-              </CustomButton>
+              <CustomButton onClick={handleAddNewSentence}>Submit</CustomButton>
             </Stack>
           </TabPanel>
         </Box>
@@ -262,20 +267,35 @@ interface TabPanelProps {
   value: number;
 }
 
-function DefinitionElement({
-  def,
-  upVotes,
-  downVotes,
-  poster,
-  posted,
-  related,
-  sentence,
-  id,
-  vote,
-  our,
-}: any) {
-  const ourUpVoted = upVotes?.includes("~" + our);
-  const ourDownVoted = downVotes?.includes("~" + our);
+function DefinitionElement({ def, votes, poster, id, vote, our }: any) {
+  const [ourDownVoted, setOurDownVoted] = useState<boolean>(false);
+  const [ourUpVoted, setOurUpVoted] = useState<boolean>(false);
+  const [upVoteCount, setUpVoteCount] = useState<number>(0);
+  const [downVoteCount, setDownVoteCount] = useState<number>(0);
+  useEffect(() => {
+    setOurDownVoted(false);
+    setOurUpVoted(false);
+    let uvCount = 0;
+    let dvCount = 0;
+    votes.forEach((vote: any, index: any) => {
+      if (vote.ship === our) {
+        if (vote.vote) {
+          //upvote
+          setOurUpVoted(true);
+        } else {
+          //downvote
+          setOurDownVoted(true);
+        }
+      }
+      if (vote.vote) {
+        uvCount = uvCount + 1;
+      } else {
+        dvCount = dvCount + 1;
+      }
+    });
+    setUpVoteCount(uvCount);
+    setDownVoteCount(dvCount);
+  }, [votes]);
 
   return (
     <Stack spacing={"6px"} marginTop={"10px"}>
@@ -296,16 +316,19 @@ function DefinitionElement({
               backgroundColor: ourUpVoted
                 ? "rgba(78, 158, 253, 0.08)"
                 : "default",
+              "&:hover": {
+                backgroundColor: "#EEEDED",
+              },
             }}
             spacing={"4.75px"}
             role="button"
             onClick={() => {
               if (ourUpVoted) {
                 //we up voted already, remove the vote
-                //TODO: remove vote
+                vote(id, null, "def");
               } else {
                 //we haven't up voted, up vote this!
-                vote(id, "upvotes");
+                vote(id, true, "def");
               }
             }}
           >
@@ -321,7 +344,7 @@ function DefinitionElement({
               variant="subtitle2"
               color={ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)"}
             >
-              {upVotes?.length}
+              {upVoteCount}
             </Typography>
           </Stack>
           <Stack
@@ -334,16 +357,19 @@ function DefinitionElement({
               backgroundColor: ourDownVoted
                 ? "rgba(255, 98, 64, 0.08)"
                 : "default",
+              "&:hover": {
+                backgroundColor: "#EEEDED",
+              },
             }}
             spacing={"4.75px"}
             role="button"
             onClick={() => {
               if (ourDownVoted) {
                 //we down voted already, remove the vote
-                //TODO: remove vote
+                vote(id, null, "def");
               } else {
                 //we haven't down voted, down vote this!
-                vote(id, "downvotes");
+                vote(id, false, "def");
               }
             }}
           >
@@ -357,7 +383,7 @@ function DefinitionElement({
               variant="subtitle2"
               color={ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)"}
             >
-              {downVotes?.length}
+              {downVoteCount}
             </Typography>
           </Stack>
         </Stack>
@@ -368,17 +394,36 @@ function DefinitionElement({
     </Stack>
   );
 }
-function SentencesElement({
-  sentence,
-  poster,
-  upVotes = [],
-  downVotes = [],
-}: any) {
-  const ourUpVoted = false;
-  const ourDownVoted = false;
-  const vote = (id: string, type: string) => {
-    return;
-  };
+function SentencesElement({ id, sentence, poster, votes, vote, our }: any) {
+  const [ourDownVoted, setOurDownVoted] = useState<boolean>(false);
+  const [ourUpVoted, setOurUpVoted] = useState<boolean>(false);
+  const [upVoteCount, setUpVoteCount] = useState<number>(0);
+  const [downVoteCount, setDownVoteCount] = useState<number>(0);
+  useEffect(() => {
+    setOurDownVoted(false);
+    setOurUpVoted(false);
+    let uvCount = 0;
+    let dvCount = 0;
+    votes.forEach((vote: any, index: any) => {
+      if (vote.ship === our) {
+        if (vote.vote) {
+          //upvote
+          setOurUpVoted(true);
+        } else {
+          //downvote
+          setOurDownVoted(true);
+        }
+      }
+      if (vote.vote) {
+        uvCount = uvCount + 1;
+      } else {
+        dvCount = dvCount + 1;
+      }
+    });
+    setUpVoteCount(uvCount);
+    setDownVoteCount(dvCount);
+  }, [votes]);
+
   return (
     <Stack spacing={"6px"} marginTop={"10px"}>
       <Typography variant="subtitle2">{sentence}</Typography>
@@ -398,6 +443,9 @@ function SentencesElement({
               backgroundColor: ourUpVoted
                 ? "rgba(78, 158, 253, 0.08)"
                 : "default",
+              "&:hover": {
+                backgroundColor: "#EEEDED",
+              },
             }}
             spacing={"4.75px"}
             role="button"
@@ -405,9 +453,10 @@ function SentencesElement({
               if (ourUpVoted) {
                 //we up voted already, remove the vote
                 //TODO: remove vote
+                vote(id, null, "sen");
               } else {
                 //we haven't up voted, up vote this!
-                vote("id", "upvotes");
+                vote(id, true, "sen");
               }
             }}
           >
@@ -423,7 +472,7 @@ function SentencesElement({
               variant="subtitle2"
               color={ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)"}
             >
-              {upVotes?.length}
+              {upVoteCount}
             </Typography>
           </Stack>
           <Stack
@@ -433,19 +482,22 @@ function SentencesElement({
             sx={{
               p: "4px 3.5px",
               borderRadius: "4px",
-              backgroundColor: ourUpVoted
+              backgroundColor: ourDownVoted
                 ? "rgba(255, 98, 64, 0.08)"
                 : "default",
+              "&:hover": {
+                backgroundColor: "#EEEDED",
+              },
             }}
             spacing={"4.75px"}
             role="button"
             onClick={() => {
               if (ourDownVoted) {
                 //we down voted already, remove the vote
-                //TODO: remove vote
+                vote(id, null, "sen");
               } else {
                 //we haven't down voted, down vote this!
-                vote("id", "downvotes");
+                vote(id, false, "sen");
               }
             }}
           >
@@ -459,7 +511,7 @@ function SentencesElement({
               variant="subtitle2"
               color={ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)"}
             >
-              {downVotes?.length}
+              {downVoteCount}
             </Typography>
           </Stack>
         </Stack>

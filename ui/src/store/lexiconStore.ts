@@ -1,6 +1,6 @@
 import create from "zustand";
 import api from "../api";
-import { Lexicon, AddDef, AddVote, DelDef, Whitelist } from "../types";
+import { Lexicon, AddDef, Vote, DelDef, Whitelist } from "../types";
 import { createSubscription } from "./subscriptions/createSubscription";
 import { handleLexiconUpdate } from "./subscriptions/lexicon";
 import produce from "immer";
@@ -22,12 +22,13 @@ export interface LexiconStore {
   getSpaces: () => Promise<void>;
   joinLex: (space: string) => Promise<void>;
   addDefinition: (add: AddDef) => Promise<void>;
-  voteDef: (add: AddVote) => Promise<void>;
+  voteDef: (add: Vote) => Promise<void>;
   delDef: (del: DelDef) => Promise<void>;
   setModalOpen: (val: boolean) => void;
   setJoinSpaceModalOpen: (val: boolean) => void;
   setCreateSpaceModalOpen: (val: boolean) => void;
   addDefinitionToWord: (add: any) => void;
+  addSentenceToWord: (add: any) => void;
   addMember: (space: string, member: string) => Promise<void>;
   createLex: (space: string, perms: string, members: string[]) => Promise<void>;
 }
@@ -175,30 +176,69 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
             },
           }),
       });
-      console.log("addDefinition result => ", result);
+      console.log("addDefinitionToWord result => ", result);
     } catch (e) {
-      console.log("addDefinition error => ", e);
+      console.log("addDefinitionToWord error => ", e);
+    }
+  },
+  addSentenceToWord: async (add: {
+    space: string;
+    word: string;
+    sen: string;
+  }) => {
+    const { space, word, sen } = add;
+    const addSenToWord = {
+      "add-sen": {
+        space,
+        word,
+        sen,
+      },
+    };
+
+    try {
+      const result = await api.poke({
+        app: "lexicon",
+        mark: "lexicon-action",
+        json: addSenToWord,
+        onSuccess: () =>
+          set({
+            popup: {
+              type: "success",
+              message: "added sentence: " + sen + "to word: " + word,
+            },
+          }),
+        onError: () =>
+          set({
+            popup: {
+              type: "error",
+              message: "when adding sentence: " + sen + "to word: " + word,
+            },
+          }),
+      });
+      console.log("addSentenceToWord result => ", result);
+    } catch (e) {
+      console.log("addSentenceToWord error => ", e);
     }
   },
 
-  voteDef: async (add: AddVote) => {
-    const { space, word, id } = add;
-
-    const voteJson = {
-      vote: {
+  voteDef: async (vote: Vote) => {
+    const { space, word, id, voteType } = vote;
+    console.log('vote',vote)
+    const voteDef = {
+      ["vote-" + voteType]: {
         space,
         word,
         id,
-        "vote-type": add["vote-type"],
+        vote: vote.vote,
       },
     };
 
     await api.poke({
       app: "lexicon",
       mark: "lexicon-action",
-      json: voteJson,
-      onSuccess: () => console.log("success! voted: ", voteJson),
-      onError: () => console.log("error! voted: ", voteJson),
+      json: voteDef,
+      onSuccess: () => console.log("success! voted: ", voteDef),
+      onError: () => console.log("error! voted: ", voteDef),
     });
   },
 

@@ -35,11 +35,12 @@ export interface AddDef {
   related: string[] | [];
 }
 
-export interface AddVote {
+export interface Vote {
   space: string;
   word: string | undefined;
   id: string;
-  "vote-type": string;
+  vote: true | false | null;
+  voteType: "def" | "sen" | "word";
 }
 
 export interface DelDef {
