@@ -70,7 +70,7 @@
       =.  definitions.entry  (~(put by definitions.entry) id def)
       =.  dict  (~(put by dict) word.act entry)
       :_  state(lexicon (~(put by lexicon) space.act dict))
-      =/  rxn  `reaction`[%def-added space.act word.act id def]
+      =/  rxn  `reaction`[%def-added space.act word.act entry]
       :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
           [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
@@ -84,7 +84,7 @@
       =.  sentences.entry  (~(put by sentences.entry) id sen)
       =.  dict  (~(put by dict) word.act entry)
       :_  state(lexicon (~(put by lexicon) space.act dict))
-      =/  rxn  `reaction`[%sen-added space.act word.act id sen]
+      =/  rxn  `reaction`[%sen-added space.act word.act entry]
       :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
           [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
@@ -98,7 +98,7 @@
       =.  related.entry  (~(put by related.entry) id rel)
       =.  dict  (~(put by dict) word.act entry)
       :_  state(lexicon (~(put by lexicon) space.act dict))
-      =/  rxn  `reaction`[%rel-added space.act word.act id rel]
+      =/  rxn  `reaction`[%rel-added space.act word.act entry]
       :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
           [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
@@ -267,26 +267,17 @@
           ::
             %def-added
           =/  dict   (~(got by lexicon) space)
-          =/  entry  (~(got by dict) word.rxn) 
-          =.  definitions.entry
-            (~(put by definitions.entry) [id def votes stamp]:rxn)
-          =.  dict  (~(put by dict) word.rxn entry)
+          =.  dict  (~(put by dict) word.rxn entry.rxn)
           `this(lexicon (~(put by lexicon) space dict))
           ::
             %sen-added
           =/  dict   (~(got by lexicon) space)
-          =/  entry  (~(got by dict) word.rxn) 
-          =.  sentences.entry
-            (~(put by sentences.entry) [id sen votes stamp]:rxn)
-          =.  dict  (~(put by dict) word.rxn entry)
+          =.  dict  (~(put by dict) word.rxn entry.rxn)
           `this(lexicon (~(put by lexicon) space dict))
           ::
             %rel-added
           =/  dict   (~(got by lexicon) space)
-          =/  entry  (~(got by dict) word.rxn) 
-          =.  related.entry
-            (~(put by related.entry) [id rel votes stamp]:rxn)
-          =.  dict  (~(put by dict) word.rxn entry)
+          =.  dict  (~(put by dict) word.rxn entry.rxn)
           `this(lexicon (~(put by lexicon) space dict))
           ::
             %word-voted
@@ -410,4 +401,8 @@
 ++  sour  (scot %p our.bowl)
 ++  snow  (scot %da now.bowl)
 ++  has-spaces  .^(? %gu /[sour]/spaces/[snow])
+:: ++  is-member
+::   |=  [=space =ship]
+:: .^(? %gx /[sour]/spaces/[snow]/
+::         [%x @ @ %is-member @ ~] ::  ~/scry/spaces/~zod/our/is-member/~fes.json
 --

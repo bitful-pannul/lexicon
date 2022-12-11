@@ -156,28 +156,19 @@
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
-          [%id %s (scot %uv id.rec)]
-          [%def %s def.rec]
-          [%votes (enjs-votes votes.rec)]
-          [%stamp (enjs-stamp stamp.rec)]
+          [%entry (enjs-entry entry.rec)]
       ==
         %sen-added
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
-          [%id %s (scot %uv id.rec)]
-          [%sen %s sen.rec]
-          [%votes (enjs-votes votes.rec)]
-          [%stamp (enjs-stamp stamp.rec)]
+          [%entry (enjs-entry entry.rec)]
       ==
         %rel-added
       %-  pairs
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
-          [%id %s (scot %uv id.rec)]
-          [%rel %s rel.rec]
-          [%votes (enjs-votes votes.rec)]
-          [%stamp (enjs-stamp stamp.rec)]
+          [%entry (enjs-entry entry.rec)]
       ==
         %word-voted
       %-  pairs

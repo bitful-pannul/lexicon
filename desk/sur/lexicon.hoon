@@ -40,9 +40,9 @@
 ::
 +$  reaction
   $%  [%word-added =space =word =entry]
-      [%def-added =space =word =id def=@t =votes =stamp]
-      [%sen-added =space =word =id sen=@t =votes =stamp]
-      [%rel-added =space =word =id rel=@t =votes =stamp]
+      [%def-added =space =word =entry]
+      [%sen-added =space =word =entry]
+      [%rel-added =space =word =entry]
       [%word-voted =space =word =votes]
       [%def-voted =space =word =id =votes]
       [%sen-voted =space =word =id =votes]
