@@ -70,6 +70,15 @@
     ==
   --
 ::
+++  sort-posted
+  |=  =(list [word entry])
+  ^-  (^list [word entry])
+  %+  sort
+    list
+  |=  [a=[=word =entry] b=[=word =entry]]
+  ^-  ?
+  (gth posted.stamp.entry.a posted.stamp.entry.b)
+::
 ++  enjs
   =,  enjs:format
   |%
@@ -77,7 +86,7 @@
     |=  dict=dictionary
     ^-  json
     %-  pairs
-    %+  turn  ~(tap by dict)
+    %+  turn  (sort-posted ~(tap by dict))
     |=  [=word =entry]
     ^-  [@t json]
     :-  word
