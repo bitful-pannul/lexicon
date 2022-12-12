@@ -3,8 +3,8 @@
   info+'urbit dictionary'
   color+0xee.dfc9
   version+[1 0 0]
-  website+'https://github.com/bitful-pannul/lexicon'
+  website+'https://www.holium.com'
   license+'MIT'
   base+'lexicon'
-  glob-ames+[~zod 0v0]
+  glob-ames+[~dister-dozzod-niblyx-malnus 0v0]
 ==
