@@ -217,7 +217,7 @@
       [%pass wire %agent [src.bowl %spaces] %watch /updates]~
       ::
         %fact
-      ?+    p.cage.sign  (on-agent:def wire sign)
+      ?+    p.cage.sign  `this
           %spaces-reaction
         =/  rxn  !<(reaction:spaces-store q.cage.sign)
         ?-    -.rxn
