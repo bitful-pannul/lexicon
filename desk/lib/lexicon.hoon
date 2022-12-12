@@ -6,9 +6,9 @@
   =,  dejs:format
   |%
   ++  space-rule
-    ;~  plug  
+    ;~  (glue fas)
       ;~(pfix sig fed:ag)
-        ;~(pfix (jest '/') sym)
+      (cook crip (star prn))
     ==
   ++  dejs-vote  |=(jon=json ?~(jon ~ (some (bo jon))))               
   ++  action
