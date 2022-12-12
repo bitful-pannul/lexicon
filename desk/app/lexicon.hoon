@@ -50,6 +50,7 @@
         %add-word
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
       =/  entry  (new-entry:hc definitions sentences related):[act .]
       =/  dict   (~(gut by lexicon) space.act *dictionary)
       ?:  (~(has by dict) word.act)
@@ -64,6 +65,7 @@
         %add-def
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act) 
       =/  [=id def=[@t votes stamp]]  (wrap-text:hc def.act)
@@ -78,6 +80,7 @@
         %add-sen
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act) 
       =/  [=id sen=[@t votes stamp]]  (wrap-text:hc sen.act)
@@ -92,6 +95,7 @@
         %add-rel
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act) 
       =/  [=id rel=[@t votes stamp]]  (wrap-text:hc rel.act)
@@ -106,6 +110,7 @@
         %vote-word
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act)
       =.  votes.entry
@@ -122,6 +127,7 @@
         %vote-def
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act)
       =/  def  (~(got by definitions.entry) id.act)
@@ -140,6 +146,7 @@
         %vote-rel
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act)
       =/  rel  (~(got by related.entry) id.act)
@@ -158,6 +165,7 @@
         %vote-sen
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act)
       =/  sen  (~(got by sentences.entry) id.act)
@@ -415,7 +423,7 @@
   =/  ship  (scot %p ship)
   =/  host  (scot %p -.space)
   =/  view 
-    .^(view:mem %gx /[sour]/spaces/[snow]/[host]/[+.space]/is-member/ship/noun)
+    .^(view:mem %gx /[sour]/spaces/[snow]/[host]/[+.space]/is-member/[ship]/membership-view)
   ?+  -.view  !!
     %is-member  is-member.view
   ==
