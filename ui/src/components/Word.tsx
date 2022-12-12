@@ -114,7 +114,11 @@ const Word = () => {
     <WrappedBackground>
       <Stack>
         <Stack flex={1} direction="row" justifyContent="space-between">
-          <Typography fontWeight={"bold"} variant="h5">
+          <Typography
+            fontWeight={"bold"}
+            variant="h5"
+            color="var(--rlm-text-color, #000)"
+          >
             {getWordData()?.word}
           </Typography>
           <Stack
@@ -123,7 +127,7 @@ const Word = () => {
             justifyContent={"center"}
             sx={{
               padding: "3px 4px",
-              backgroundColor: " rgba(253, 193, 78, 0.12)",
+              backgroundColor: "rgba(253, 193, 78, 0.12)",
               borderRadius: "4px",
             }}
           >
@@ -157,10 +161,18 @@ const Word = () => {
           justifyContent="space-between"
           marginTop={"8px"}
         >
-          <Typography variant="subtitle2" color={"text.secondary"}>
+          <Typography
+            variant="subtitle2"
+            color="var(--rlm-text-color, #000)"
+            style={{ opacity: 0.5 }}
+          >
             {getWordData()?.poster}
           </Typography>
-          <Typography variant="subtitle2" color={"text.secondary"}>
+          <Typography
+            variant="subtitle2"
+            color="var(--rlm-text-color, #000)"
+            style={{ opacity: 0.5 }}
+          >
             {getWordData()?.posted}
           </Typography>
         </Stack>
@@ -186,6 +198,7 @@ const Word = () => {
                   lineHeight: "15px",
                   minWidth: "67px",
                   width: "67px",
+                  color: "var(--rlm-text-color, rgba(0, 0, 0, 0.6))",
                 }}
                 label="Definitions"
                 {...a11yProps(0)}
@@ -202,6 +215,7 @@ const Word = () => {
                   minWidth: "67px",
                   width: "67px",
                   marginLeft: "10px",
+                  color: "var(--rlm-text-color, rgba(0, 0, 0, 0.6))",
                 }}
                 label="Sentences"
                 {...a11yProps(1)}
@@ -316,7 +330,9 @@ function DefinitionElement({ def, votes, poster, id, vote, our }: any) {
 
   return (
     <Stack spacing={"6px"} marginTop={"10px"}>
-      <Typography variant="subtitle2">{def}</Typography>
+      <Typography variant="subtitle2" color="var(--rlm-text-color, #000)">
+        {def}
+      </Typography>
       <Stack
         direction="row"
         alignItems="center"
@@ -334,7 +350,7 @@ function DefinitionElement({ def, votes, poster, id, vote, our }: any) {
                 ? "rgba(78, 158, 253, 0.08)"
                 : "default",
               "&:hover": {
-                backgroundColor: "#EEEDED",
+                backgroundColor: "rgba(78, 158, 253, 0.08)",
               },
             }}
             spacing={"4.75px"}
@@ -354,12 +370,16 @@ function DefinitionElement({ def, votes, poster, id, vote, our }: any) {
                 fontSize: "18px",
               }}
               sx={{
-                color: ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)",
+                color: ourUpVoted
+                  ? "primary.main"
+                  : "var(--rlm-icon-color, #85898E)",
               }}
             />
             <Typography
               variant="subtitle2"
-              color={ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)"}
+              color={
+                ourUpVoted ? "primary.main" : "var(--rlm-icon-color, #85898E)"
+              }
             >
               {upVoteCount}
             </Typography>
@@ -375,7 +395,7 @@ function DefinitionElement({ def, votes, poster, id, vote, our }: any) {
                 ? "rgba(255, 98, 64, 0.08)"
                 : "default",
               "&:hover": {
-                backgroundColor: "#EEEDED",
+                backgroundColor: "rgba(255, 98, 64, 0.08)",
               },
             }}
             spacing={"4.75px"}
@@ -393,18 +413,26 @@ function DefinitionElement({ def, votes, poster, id, vote, our }: any) {
             <ThumbDownOutlinedIcon
               style={{ fontSize: "18px" }}
               sx={{
-                color: ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)",
+                color: ourDownVoted
+                  ? "error.main"
+                  : "var(--rlm-icon-color, #85898E)",
               }}
             />
             <Typography
               variant="subtitle2"
-              color={ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)"}
+              color={
+                ourDownVoted ? "error.main" : "var(--rlm-icon-color, #85898E)"
+              }
             >
               {downVoteCount}
             </Typography>
           </Stack>
         </Stack>
-        <Typography variant="subtitle2" color="text.secondary">
+        <Typography
+          variant="subtitle2"
+          color="var(--rlm-text-color, #000)"
+          style={{ opacity: 0.5 }}
+        >
           {"~" + poster}
         </Typography>
       </Stack>
@@ -443,7 +471,9 @@ function SentencesElement({ id, sentence, poster, votes, vote, our }: any) {
 
   return (
     <Stack spacing={"6px"} marginTop={"10px"}>
-      <Typography variant="subtitle2">{sentence}</Typography>
+      <Typography variant="subtitle2" color="var(--rlm-text-color, #000)">
+        {sentence}
+      </Typography>
       <Stack
         direction="row"
         alignItems="center"
@@ -461,7 +491,7 @@ function SentencesElement({ id, sentence, poster, votes, vote, our }: any) {
                 ? "rgba(78, 158, 253, 0.08)"
                 : "default",
               "&:hover": {
-                backgroundColor: "#EEEDED",
+                backgroundColor: "rgba(78, 158, 253, 0.08)",
               },
             }}
             spacing={"4.75px"}
@@ -482,12 +512,16 @@ function SentencesElement({ id, sentence, poster, votes, vote, our }: any) {
                 fontSize: "18px",
               }}
               sx={{
-                color: ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)",
+                color: ourUpVoted
+                  ? "primary.main"
+                  : "var(--rlm-icon-color, #85898E)",
               }}
             />
             <Typography
               variant="subtitle2"
-              color={ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)"}
+              color={
+                ourUpVoted ? "primary.main" : "var(--rlm-icon-color, #85898E)"
+              }
             >
               {upVoteCount}
             </Typography>
@@ -503,7 +537,7 @@ function SentencesElement({ id, sentence, poster, votes, vote, our }: any) {
                 ? "rgba(255, 98, 64, 0.08)"
                 : "default",
               "&:hover": {
-                backgroundColor: "#EEEDED",
+                backgroundColor: "rgba(255, 98, 64, 0.08)",
               },
             }}
             spacing={"4.75px"}
@@ -521,19 +555,27 @@ function SentencesElement({ id, sentence, poster, votes, vote, our }: any) {
             <ThumbDownOutlinedIcon
               style={{ fontSize: "18px" }}
               sx={{
-                color: ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)",
+                color: ourDownVoted
+                  ? "error.main"
+                  : "var(--rlm-icon-color, #85898E)",
               }}
             />
             <Typography
               variant="subtitle2"
-              color={ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)"}
+              color={
+                ourDownVoted ? "error.main" : "var(--rlm-icon-color, #85898E)"
+              }
             >
               {downVoteCount}
             </Typography>
           </Stack>
         </Stack>
-        <Typography variant="subtitle2" color="text.secondary">
-          {poster}
+        <Typography
+          variant="subtitle2"
+          color="var(--rlm-text-color, #000)"
+          style={{ opacity: 0.5 }}
+        >
+          {"~" + poster}
         </Typography>
       </Stack>
     </Stack>

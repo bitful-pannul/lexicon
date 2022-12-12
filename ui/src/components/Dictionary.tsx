@@ -53,12 +53,16 @@ const Dictionary = () => {
     <WrappedBackground>
       <Stack>
         <Stack flex={1} direction="row" justifyContent="space-between">
-          <Typography fontWeight={"bold"} variant="h5">
+          <Typography
+            fontWeight={"bold"}
+            variant="h5"
+            color="var(--rlm-text-color, #000)"
+          >
             {word}
           </Typography>
         </Stack>
         {noResults ? (
-          <Typography variant="subtitle1">
+          <Typography variant="subtitle1" color="var(--rlm-text-color, #000)">
             We couldn't find you a result
           </Typography>
         ) : (
@@ -73,6 +77,7 @@ const Dictionary = () => {
                   variant="subtitle1"
                   fontWeight={"bold"}
                   fontStyle="italic"
+                  color="var(--rlm-text-color, #000)"
                 >
                   {meaning.partOfSpeech}
                 </Typography>
@@ -98,6 +103,7 @@ const Dictionary = () => {
                           variant="subtitle1"
                           fontWeight={"bold"}
                           marginBottom="12px"
+                          color="var(--rlm-text-color, #000)"
                         >
                           Synonyms
                           <Stack direction="column" marginLeft="2px">
@@ -128,6 +134,7 @@ const Dictionary = () => {
                           variant="subtitle1"
                           fontWeight={"bold"}
                           marginBottom="12px"
+                          color="var(--rlm-text-color, #000)"
                         >
                           Antonyms
                           <Stack direction="column" marginLeft="2px">
@@ -165,11 +172,17 @@ function DefinitionElement({ def, example, count }: any) {
   return (
     <Stack marginTop={"10px"}>
       <Stack direction={"row"} spacing={"5px"}>
-        <Typography variant="subtitle2" sx={{ textDecoration: "underline" }}>
+        <Typography
+          variant="subtitle2"
+          sx={{ textDecoration: "underline" }}
+          color="var(--rlm-text-color, #000)"
+        >
           {count}.
         </Typography>
 
-        <Typography variant="subtitle2">{def}</Typography>
+        <Typography variant="subtitle2" color="var(--rlm-text-color, #000)">
+          {def}
+        </Typography>
       </Stack>
 
       {example && (
@@ -178,7 +191,8 @@ function DefinitionElement({ def, example, count }: any) {
             variant="subtitle2"
             marginLeft={"18px"}
             marginTop={"2px"}
-            color="text.secondary"
+            color="var(--rlm-text-color, #000)"
+            style={{ opacity: 0.5 }}
           >
             "{example}"
           </Typography>

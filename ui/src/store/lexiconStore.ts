@@ -21,7 +21,7 @@ export interface LexiconStore {
   getLexicon: () => Promise<void>;
   getSpaces: () => Promise<void>;
   joinLex: (space: string) => Promise<void>;
-  addDefinition: (add: AddDef) => Promise<void>;
+  addDefinition: (add: any) => Promise<void>;
   voteDef: (add: Vote) => Promise<void>;
   delDef: (del: DelDef) => Promise<void>;
   setModalOpen: (val: boolean) => void;
@@ -104,15 +104,15 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
     });
   },
 
-  addDefinition: async (add: AddDef) => {
+  addDefinition: async (add: any) => {
     const { space, word, def, sentence, related } = add;
     const addJson = {
       "add-word": {
         space,
         word,
-        definitions: [def],
+        definitions: def,
         sentences: sentence,
-        related: [],
+        related: related,
       },
     };
     console.log("here", addJson);
@@ -223,7 +223,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
 
   voteDef: async (vote: Vote) => {
     const { space, word, id, voteType } = vote;
-    console.log('vote',vote)
+    console.log("vote", vote);
     const voteDef = {
       ["vote-" + voteType]: {
         space,

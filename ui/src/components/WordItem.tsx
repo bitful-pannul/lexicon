@@ -20,6 +20,7 @@ const WordItem = ({ items, clearSearch, largeText = false }: any) => {
     clearSearch();
   };
   //          tabindex={0}
+
   return (
     <Stack direction="column" padding={"5px"}>
       {items?.length > 0 ? (
@@ -30,10 +31,10 @@ const WordItem = ({ items, clearSearch, largeText = false }: any) => {
               sx={{
                 p: "6px 8px",
                 "&:hover": {
-                  backgroundColor: "#F9F9F9",
+                  backgroundColor: "var(--rlm-input-color, #F9F9F9)",
                 },
                 "&:focus": {
-                  backgroundColor: "#F9F9F9",
+                  backgroundColor: "var(--rlm-input-color, #F9F9F9)",
                   outline: "none",
                 },
               }}
@@ -49,6 +50,7 @@ const WordItem = ({ items, clearSearch, largeText = false }: any) => {
                 variant={largeText ? "subtitle1" : "subtitle2"}
                 fontWeight={"bold"}
                 sx={{ wordBreak: "break-word" }}
+                color="var(--rlm-text-color, #000)"
               >
                 {item.label}
               </Typography>
@@ -56,7 +58,7 @@ const WordItem = ({ items, clearSearch, largeText = false }: any) => {
           );
         })
       ) : (
-        <Typography variant={"subtitle2"} color="text.secondary">
+        <Typography variant={"subtitle2"} color="var(--rlm-text-color, #000)">
           no words in this space, add one to start
         </Typography>
       )}

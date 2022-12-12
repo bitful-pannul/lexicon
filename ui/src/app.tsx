@@ -19,6 +19,7 @@ const theme = createTheme({
     primary: { main: "#4E9EFD" },
     error: { main: "#FF6240" },
   },
+
   typography: {
     fontFamily: ["Rubik"].join(","),
   },
@@ -30,13 +31,12 @@ export function App() {
     init();
   }, []);
   //TODO: reinstate loader
-  //style={{ backgroundColor: "#FBFBFB" }}
   return (
     <main
       style={{
-        overflowY: "scroll",
+        overflowY: "auto",
         height: "100vh",
-        backgroundColor: "#FBFBFB",
+        backgroundColor: "var(--rlm-window-color, #FBFBFB)",
       }}
     >
       <ThemeProvider theme={theme}>

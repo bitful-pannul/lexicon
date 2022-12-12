@@ -38,15 +38,23 @@ const Perms = ({ perms, members }: PermsProps) => {
       marginTop={4}
       marginBottom={2}
     >
-      <Typography variant="h6" fontWeight="bold">
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        color="var(--rlm-text-color, #000)"
+      >
         %{perms}
       </Typography>
-      <Stack sx={{ flex: 1 }} direction="row" spacing={1} justifyContent={"flex-end"}>
+      <Stack
+        sx={{ flex: 1 }}
+        direction="row"
+        spacing={1}
+        justifyContent={"flex-end"}
+      >
         <Button
           variant="contained"
           size="small"
           onClick={() => setShowMembers(true)}
-          
         >
           handle members
         </Button>

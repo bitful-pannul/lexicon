@@ -34,7 +34,7 @@ const List = ({ items }: ListProps) => {
                 cursor: "pointer",
                 width: "100%",
                 "&:hover": {
-                  backgroundColor: "#F9F9F9",
+                  backgroundColor: "var(--rlm-input-color, #F9F9F9)",
                 },
               }}
               onClick={() => navigate("/apps/lexicon/" + item.navlink)}
@@ -42,7 +42,8 @@ const List = ({ items }: ListProps) => {
               <Typography
                 variant="subtitle1"
                 fontWeight={"bold"}
-                color="text.secondary"
+                color="var(--rlm-text-color, #000)"
+                style={{ opacity: 0.5 }}
                 sx={{ wordBreak: "break-word" }}
               >
                 {item.label}

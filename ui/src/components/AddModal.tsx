@@ -8,6 +8,7 @@ import {
   CustomButton,
 } from "../components";
 import InputBase from "@mui/material/InputBase";
+import Typography from "@mui/material/Typography";
 
 import Stack from "@mui/material/Stack";
 
@@ -27,13 +28,13 @@ const AddModal = () => {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const rel = related.split(",");
-    console.log({ space, word, def, sentence: [sentence], related: rel });
+
     addDefinition({
       space,
       word,
-      def,
-      sentence: [sentence],
-      related: rel,
+      def: def ? [def] : [],
+      sentence: sentence ? [sentence] : [],
+      related: rel ? rel : [],
     });
     setWord("");
     setDef("");
@@ -53,9 +54,13 @@ const AddModal = () => {
             fontWeight: "bold",
             fontSize: "24px",
             marginBottom: "18px",
-          }}
-          inputProps={{
-            color: "rgba(51, 51, 51, 0.3)",
+            input: {
+              color: "var(--rlm-text-color)",
+              "&::placeholder": {
+                color: "var(--rlm-text-color)",
+                opacity: 0.5,
+              },
+            },
           }}
           placeholder="Type word"
           type="text"
@@ -73,16 +78,15 @@ const AddModal = () => {
               sx={{
                 fontSize: "14px",
                 fontWeight: "bold",
-                color: "text.primary",
+                color: "var(--rlm-text-color)",
                 marginBottom: "6px",
               }}
               htmlFor="type-definition-textfield"
             >
-              Definition <span style={{ color: "#F08735" }}>*</span>
+              Definition <span style={{ color: "#FF6240" }}>*</span>
             </FormLabel>
             <CustomTextField
               variant="outlined"
-              
               placeholder="Type your definition..."
               fullWidth
               id="definition"
@@ -97,7 +101,7 @@ const AddModal = () => {
               sx={{
                 fontSize: "14px",
                 fontWeight: "bold",
-                color: "text.primary",
+                color: "var(--rlm-text-color)",
                 marginBottom: "6px",
               }}
               htmlFor="type-definition-textfield"
@@ -106,7 +110,6 @@ const AddModal = () => {
             </FormLabel>
             <CustomTextField
               variant="outlined"
-              
               placeholder="An example of how it's used..."
               fullWidth
               id="example-sentence"
@@ -121,7 +124,7 @@ const AddModal = () => {
               sx={{
                 fontSize: "14px",
                 fontWeight: "bold",
-                color: "text.primary",
+                color: "var(--rlm-text-color)",
                 marginBottom: "6px",
               }}
               htmlFor="type-definition-textfield"
@@ -130,7 +133,6 @@ const AddModal = () => {
             </FormLabel>
             <CustomTextField
               variant="outlined"
-              
               placeholder="Set related Words [apple,lemon,orange]..."
               fullWidth
               id="related-words"
@@ -154,7 +156,14 @@ const AddModal = () => {
             }}
             onClick={handleClose}
           >
-            Cancel
+            <Typography
+              variant="subtitle2"
+              color="var(--rlm-text-color, rgba(51, 51, 51, 0.4))"
+              sx={{ opacity: 0.7 }}
+              fontWeight={"bold"}
+            >
+              Cancel
+            </Typography>
           </CustomButton>
           <CustomButton onClick={(e) => handleSubmit(e)}>Submit</CustomButton>
         </Stack>

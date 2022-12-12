@@ -126,7 +126,11 @@ const WordItem = ({ items, clearSearch, largeText = false, vote }: any) => {
           );
         })
       ) : (
-        <Typography variant={"subtitle2"} color="text.secondary">
+        <Typography
+          variant={"subtitle2"}
+          color="var(--rlm-text-color, #000)"
+          style={{ opacity: 0.5 }}
+        >
           no words in this space, add one to start
         </Typography>
       )}
@@ -181,10 +185,10 @@ function SingleWord({
       sx={{
         p: "6px 8px",
         "&:hover": {
-          backgroundColor: "#F9F9F9",
+          backgroundColor: "var(--rlm-input-color, #F9F9F9)",
         },
         "&:focus": {
-          backgroundColor: "#F9F9F9",
+          backgroundColor: "var(--rlm-input-color, #F9F9F9)",
           outline: "none",
         },
       }}
@@ -205,10 +209,15 @@ function SingleWord({
           variant={largeText ? "subtitle1" : "subtitle2"}
           fontWeight={"bold"}
           sx={{ wordBreak: "break-word", marginLeft: "2px" }}
+          color="var(--rlm-text-color, #000)"
         >
           {word}
         </Typography>
-        <Typography variant="subtitle2" color="text.secondary">
+        <Typography
+          variant="subtitle2"
+          color="var(--rlm-text-color, #000)"
+          style={{ opacity: 0.5 }}
+        >
           {"~" + stamp.poster}
         </Typography>
       </Stack>
@@ -235,7 +244,7 @@ function SingleWord({
                   ? "rgba(78, 158, 253, 0.08)"
                   : "default",
                 "&:hover": {
-                  backgroundColor: "#EEEDED",
+                  backgroundColor: "rgba(78, 158, 253, 0.08)",
                 },
               }}
               spacing={"4.75px"}
@@ -256,12 +265,16 @@ function SingleWord({
                   fontSize: "18px",
                 }}
                 sx={{
-                  color: ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)",
+                  color: ourUpVoted
+                    ? "primary.main"
+                    : "var(--rlm-icon-color, #85898E)",
                 }}
               />
               <Typography
                 variant="subtitle2"
-                color={ourUpVoted ? "primary.main" : "rgba(51, 51, 51, 0.5)"}
+                color={
+                  ourUpVoted ? "primary.main" : "var(--rlm-icon-color, #85898E)"
+                }
               >
                 {upVoteCount}
               </Typography>
@@ -277,7 +290,7 @@ function SingleWord({
                   ? "rgba(255, 98, 64, 0.08)"
                   : "default",
                 "&:hover": {
-                  backgroundColor: "#EEEDED",
+                  backgroundColor: "rgba(255, 98, 64, 0.08)",
                 },
               }}
               spacing={"4.75px"}
@@ -296,19 +309,27 @@ function SingleWord({
               <ThumbDownOutlinedIcon
                 style={{ fontSize: "18px" }}
                 sx={{
-                  color: ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)",
+                  color: ourDownVoted
+                    ? "error.main"
+                    : "var(--rlm-icon-color, #85898E)",
                 }}
               />
               <Typography
                 variant="subtitle2"
-                color={ourDownVoted ? "error.main" : "rgba(51, 51, 51, 0.5)"}
+                color={
+                  ourDownVoted ? "error.main" : "var(--rlm-icon-color, #85898E)"
+                }
               >
                 {downVoteCount}
               </Typography>
             </Stack>
           </Stack>
         </Stack>
-        <Typography variant="subtitle2" color="text.secondary">
+        <Typography
+          variant="subtitle2"
+          color="var(--rlm-text-color, #000)"
+          style={{ opacity: 0.5 }}
+        >
           {displayDate(stamp.posted, { long: false, dayOnly: false })}
         </Typography>
       </Stack>
