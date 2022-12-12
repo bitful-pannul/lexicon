@@ -34,8 +34,9 @@ const List = ({ items }: ListProps) => {
                 cursor: "pointer",
                 width: "100%",
                 "&:hover": {
-                  backgroundColor: "var(--rlm-input-color, #F9F9F9)",
+                  backgroundColor: "var(--rlm-border-color, #F9F9F9)",
                 },
+                borderRadius: "6px",
               }}
               onClick={() => navigate("/apps/lexicon/" + item.navlink)}
             >

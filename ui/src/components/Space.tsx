@@ -184,11 +184,12 @@ function SingleWord({
     <Stack
       sx={{
         p: "6px 8px",
+        borderRadius: "6px",
         "&:hover": {
-          backgroundColor: "var(--rlm-input-color, #F9F9F9)",
+          backgroundColor: "var(--rlm-border-color, #F9F9F9)",
         },
         "&:focus": {
-          backgroundColor: "var(--rlm-input-color, #F9F9F9)",
+          backgroundColor: "var(--rlm-border-color, #F9F9F9)",
           outline: "none",
         },
       }}
