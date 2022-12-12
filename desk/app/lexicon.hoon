@@ -217,29 +217,31 @@
       [%pass wire %agent [src.bowl %spaces] %watch /updates]~
       ::
         %fact
-      ?.  =(p.cage.sign %spaces-reaction)  (on-agent:def wire sign)
-      =/  rxn  !<(reaction:spaces-store q.cage.sign)
-      ?-    -.rxn
-          %initial
-        =^  cards  state
-          abet:(cof-many:hc ~(tap in ~(key by spaces.rxn)))
-        [cards this]
-          %add
-        =^  cards  state
-          abet:(create-or-follow:hc path.space.rxn)
-        [cards this]
-          %replace
-        =^  cards  state
-          abet:(create-or-follow:hc path.space.rxn)
-        [cards this]
-          %remote-space
-        =^  cards  state
-          abet:(create-or-follow:hc path.space.rxn)
-        [cards this]
-          %remove
-        =^  cards  state
-          abet:(delete-or-leave:hc path.rxn)
-        [cards this]
+      ?+    p.cage.sign  (on-agent:def wire sign)
+          %spaces-reaction
+        =/  rxn  !<(reaction:spaces-store q.cage.sign)
+        ?-    -.rxn
+            %initial
+          =^  cards  state
+            abet:(cof-many:hc ~(tap in ~(key by spaces.rxn)))
+          [cards this]
+            %add
+          =^  cards  state
+            abet:(create-or-follow:hc path.space.rxn)
+          [cards this]
+            %replace
+          =^  cards  state
+            abet:(create-or-follow:hc path.space.rxn)
+          [cards this]
+            %remote-space
+          =^  cards  state
+            abet:(create-or-follow:hc path.space.rxn)
+          [cards this]
+            %remove
+          =^  cards  state
+            abet:(delete-or-leave:hc path.rxn)
+          [cards this]
+        ==
       ==
     ==
       [@t @t ~]
