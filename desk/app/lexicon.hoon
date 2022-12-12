@@ -1,4 +1,4 @@
-/-  *lexicon, membership, spaces-store
+/-  *lexicon, mem=membership, spaces-store
 /+  default-agent, dbug, verb
 |%
 +$  state-0  [%0 =lexicon]
@@ -263,29 +263,34 @@
             %word-added
           =/  dict  (~(got by lexicon) space)
           =.  dict  (~(put by dict) word.rxn entry.rxn)
-          `this(lexicon (~(put by lexicon) space dict))
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
             %def-added
           =/  dict   (~(got by lexicon) space)
           =.  dict  (~(put by dict) word.rxn entry.rxn)
-          `this(lexicon (~(put by lexicon) space dict))
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
             %sen-added
           =/  dict   (~(got by lexicon) space)
           =.  dict  (~(put by dict) word.rxn entry.rxn)
-          `this(lexicon (~(put by lexicon) space dict))
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
             %rel-added
           =/  dict   (~(got by lexicon) space)
           =.  dict  (~(put by dict) word.rxn entry.rxn)
-          `this(lexicon (~(put by lexicon) space dict))
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
             %word-voted
           =/  dict   (~(got by lexicon) space)
           =/  entry  (~(got by dict) word.rxn)
           =.  votes.entry  votes.rxn
           =.  dict   (~(put by dict) word.rxn entry)
-          `this(lexicon (~(put by lexicon) space dict))
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
             %def-voted
           =/  dict   (~(got by lexicon) space)
@@ -294,7 +299,8 @@
           =.  votes.def  votes.rxn
           =.  definitions.entry   (~(put by definitions.entry) id.rxn def)
           =.  dict  (~(put by dict) word.rxn entry)
-          `this(lexicon (~(put by lexicon) space dict))
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
             %sen-voted
           =/  dict   (~(got by lexicon) space)
@@ -303,7 +309,8 @@
           =.  votes.sen  votes.rxn
           =.  sentences.entry   (~(put by sentences.entry) id.rxn sen)
           =.  dict  (~(put by dict) word.rxn entry)
-          `this(lexicon (~(put by lexicon) space dict))
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
             %rel-voted
           =/  dict   (~(got by lexicon) space)
@@ -312,7 +319,8 @@
           =.  votes.rel  votes.rxn
           =.  related.entry   (~(put by related.entry) id.rxn rel)
           =.  dict  (~(put by dict) word.rxn entry)
-          `this(lexicon (~(put by lexicon) space dict))
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
         == 
       ==
     ==
@@ -401,8 +409,14 @@
 ++  sour  (scot %p our.bowl)
 ++  snow  (scot %da now.bowl)
 ++  has-spaces  .^(? %gu /[sour]/spaces/[snow])
-:: ++  is-member
-::   |=  [=space =ship]
-:: .^(? %gx /[sour]/spaces/[snow]/
-::         [%x @ @ %is-member @ ~] ::  ~/scry/spaces/~zod/our/is-member/~fes.json
+++  is-member
+  |=  [=space =ship]
+  ^-  ?
+  =/  ship  (scot %p ship)
+  =/  host  (scot %p -.space)
+  =/  view 
+    .^(view:mem %gx /[sour]/spaces/[snow]/[host]/[+.space]/is-member/ship/noun)
+  ?+  -.view  !!
+    %is-member  is-member.view
+  ==
 --
