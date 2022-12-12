@@ -7,6 +7,7 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import { displayDate } from "../time";
 //TODO: add upvote and downvote elements the word element
 const Space = () => {
@@ -183,13 +184,20 @@ function SingleWord({
   return (
     <Stack
       sx={{
+        position: "relative",
         p: "6px 8px",
+
         borderRadius: "6px",
-        "&:hover": {
-          backgroundColor: "var(--rlm-border-color, #F9F9F9)",
+        "&:hover > #background": {
+          backgroundColor: "var(--rlm-border-color, #e6e6e6)",
+          transition: ".25s ease",
         },
-        "&:focus": {
-          backgroundColor: "var(--rlm-border-color, #F9F9F9)",
+        "&:focus > #background": {
+          backgroundColor: "var(--rlm-border-color, #e6e6e6)",
+          transition: ".25s ease",
+          outline: "none",
+        },
+        "&:focus ": {
           outline: "none",
         },
       }}
@@ -201,10 +209,26 @@ function SingleWord({
         Go(navLink);
       }}
     >
+      <Box
+        id="background"
+        sx={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          opacity: ".5",
+          zIndex: 0,
+        }}
+      ></Box>
       <Stack
         direction={"row"}
         alignItems="center"
         justifyContent={"space-between"}
+        sx={{
+          zIndex: 1,
+        }}
       >
         <Typography
           variant={largeText ? "subtitle1" : "subtitle2"}
@@ -223,6 +247,9 @@ function SingleWord({
         </Typography>
       </Stack>
       <Stack
+        sx={{
+          zIndex: 1,
+        }}
         direction={"row"}
         alignItems="center"
         justifyContent={"space-between"}

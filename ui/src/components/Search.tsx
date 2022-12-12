@@ -115,7 +115,7 @@ const Search = () => {
               margin: 0,
               width: "120%",
               padding: 0,
-              zIndex: 1,
+              zIndex: 10,
             }}
           >
             <WordItem items={filteredSug} clearSearch={clearSearch} />

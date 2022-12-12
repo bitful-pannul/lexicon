@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 const WordItem = ({ items, clearSearch, largeText = false }: any) => {
@@ -29,14 +30,19 @@ const WordItem = ({ items, clearSearch, largeText = false }: any) => {
             <Stack
               key={"search-result-" + index}
               sx={{
+                position: "relative",
                 p: "6px 8px",
                 borderRadius: "6px",
-                
-                "&:hover": {
-                  backgroundColor: "var(--rlm-border-color, #F9F9F9)",
+                "&:hover > #background": {
+                  backgroundColor: "var(--rlm-border-color, #e6e6e6)",
+                  transition: ".25s ease",
                 },
-                "&:focus": {
-                  backgroundColor: "var(--rlm-border-color, #F9F9F9)",
+                "&:focus > #background": {
+                  backgroundColor: "var(--rlm-border-color, #e6e6e6)",
+                  transition: ".25s ease",
+                  outline: "none",
+                },
+                "&:focus ": {
                   outline: "none",
                 },
               }}
@@ -48,10 +54,22 @@ const WordItem = ({ items, clearSearch, largeText = false }: any) => {
                 Go(item.navlink);
               }}
             >
+              <Box
+                id="background"
+                sx={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: "100%",
+                  height: "100%",
+                  opacity: ".5",
+                  zIndex: 10,
+                }}
+              ></Box>
               <Typography
                 variant={largeText ? "subtitle1" : "subtitle2"}
                 fontWeight={"bold"}
-                sx={{ wordBreak: "break-word" }}
+                sx={{ wordBreak: "break-word", zIndex: 11 }}
                 color="var(--rlm-text-color, #000)"
               >
                 {item.label}
