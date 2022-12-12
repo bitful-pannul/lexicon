@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useLexiconStore from "../store/lexiconStore";
 import { WrappedBackground, AddModal } from "./index";
@@ -154,6 +154,7 @@ function SingleWord({
   const [upVoteCount, setUpVoteCount] = useState<number>(0);
   const [downVoteCount, setDownVoteCount] = useState<number>(0);
   const our: string = (window as any)?.api?.ship || "";
+  const wrapper: any = useRef(null);
 
   useEffect(() => {
     console.log("our", our);
@@ -183,6 +184,7 @@ function SingleWord({
 
   return (
     <Stack
+      ref={wrapper}
       sx={{
         position: "relative",
         p: "6px 8px",
@@ -279,6 +281,7 @@ function SingleWord({
               role="button"
               onClick={(e) => {
                 e.stopPropagation();
+                wrapper.current?.blur();
                 if (ourUpVoted) {
                   //we up voted already, remove the vote
                   vote(id, word, null, "word");
@@ -325,6 +328,7 @@ function SingleWord({
               role="button"
               onClick={(e) => {
                 e.stopPropagation();
+                wrapper.current?.blur();
                 if (ourDownVoted) {
                   //we down voted already, remove the vote
                   vote(id, word, null, "word");

@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useLexiconStore from "../store/lexiconStore";
-import List from "./styled/List";
-import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import CustomTextField from "./CustomTextField";
 import WordItem from "./WordItem";
 import WrapperBackground from "./WrappedBackground";
 
 //TODO: update the search function UI...
-const Search = () => {
+const Search = ({ space }: { space: string }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredSug, setFilteredSug] = useState<
@@ -22,19 +19,29 @@ const Search = () => {
   // ... so you thought map operations in hoon were bad?
   // const wordArray = Object?.values(lex)?.map((w, i) => [Object?.keys(w), Object?.keys(lex)[i]]) // ?.reduce((arr, words, i) => arr.concat(words))
 
-  const wordsArray = () =>
-    Object.values(lex)
-      .map((w, i) => {
-        // map through array of words and attach their corresponding spaces
-        return Object.keys(w).map((word, index) => {
-          return {
-            label: word,
-            navlink: Object.keys(lex)[i] + "/" + word,
-          };
-        });
-      })
-      .flat();
-
+  const wordsArray = () => {
+    const lexValues = space ? Object.keys(lex[space]) : Object.values(lex);
+    if (space) {
+      return lexValues.map((word: string, index: number) => {
+        return {
+          label: word,
+          navlink: space + "/" + word,
+        };
+      });
+    } else {
+      return lexValues
+        .map((w, i) => {
+          // map through array of words and attach their corresponding spaces
+          return Object.keys(w).map((word, index) => {
+            return {
+              label: word,
+              navlink: Object.keys(lex)[i] + "/" + word,
+            };
+          });
+        })
+        .flat();
+    }
+  };
   // TODO, reimplement arrow key + enter buttons navigation properly
   const clearSearch = () => {
     setSearchQuery("");
@@ -42,14 +49,10 @@ const Search = () => {
   };
   const onChange = (e: { target: { value: React.SetStateAction<string> } }) => {
     setSearchQuery(e.target.value);
-
-    const filtered = wordsArray()?.filter(
-      (w) =>
-        w.label
-          .toString()
-          .toLowerCase()
-          .indexOf(searchQuery.toString().toLowerCase()) > -1
-    );
+    console.log("wordsArray", wordsArray());
+    const filtered = wordsArray()?.filter((w) => {
+      return w.label.toLowerCase().includes(searchQuery.toLowerCase());
+    });
 
     console.log("unlnked: ", filtered);
 

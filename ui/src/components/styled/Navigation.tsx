@@ -13,17 +13,23 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 const Navigation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { ship, group, word } = useParams();
-
+  //presisted space data for filtering search correctly
+  const [space, setSpace] = useState<string>("");
   const navigate = useNavigate();
   const popup = useLexiconStore((state) => state.popup);
   const { setModalOpen, modalOpen } = useLexiconStore();
-
   useEffect(() => {
     const spaceId = searchParams.get("spaceId");
     if (spaceId) {
       navigate("/apps/lexicon" + spaceId);
     }
   }, [searchParams.get("spaceId")]);
+  useEffect(() => {
+    //We care about knowing the space id, either through params {ship}/{group} or space id which is the same thing
+    if (ship && group) {
+      setSpace(`${ship}/${group}`);
+    }
+  }, [ship, group]);
   return (
     <>
       {/*popup && (
@@ -52,7 +58,7 @@ const Navigation = () => {
             />
           </IconButton>
         )}
-        <Search />
+        <Search space={space} />
         {ship && group && !word && (
           <CustomButton onClick={() => setModalOpen(true)} disabled={modalOpen}>
             add word
