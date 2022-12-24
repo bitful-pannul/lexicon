@@ -28,8 +28,7 @@
   |=  ole=vase
   ^-  (quip card _this)
   =/  old=state-0  !<(state-0 ole)
-  :_  this(state old)
-  [%pass /spaces %agent [our.bowl %spaces] %watch /updates]~
+  `this(state old)
 :: 
 ++  on-poke
   |=  [=mark =vase]
