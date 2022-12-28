@@ -5,6 +5,7 @@
   version+[1 0 0]
   website+'https://www.holium.com'
   license+'MIT'
+  image+'https://lomder-librun.sfo3.digitaloceanspaces.com/tiles/lexicon.svg'
   base+'lexicon'
   glob-ames+[~dister-dozzod-niblyx-malnus 0v6.kktrq.4e35i.v4ulm.2mmem.vfk23]
 ==
