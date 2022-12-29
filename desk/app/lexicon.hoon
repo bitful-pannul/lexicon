@@ -28,7 +28,16 @@
   |=  ole=vase
   ^-  (quip card _this)
   =/  old=state-0  !<(state-0 ole)
-  `this(state old)
+  =.  state  old
+  =/  remote-spaces
+    %+  murn
+      ~(tap in ~(key by lexicon))
+    |=(=space ?:(=(-.space our.bowl) ~ (some space)))
+  =^  cards  state  abet:(leave-many:hc remote-spaces)
+  =/  axn  [%follow-many remote-spaces]
+  :_  this
+  %+  welp  cards
+  [%pass / %agent [our dap]:bowl %poke lexicon-action+!>(axn)]~
 :: 
 ++  on-poke
   |=  [=mark =vase]
@@ -46,10 +55,21 @@
     |=  act=action
     ^-  (quip card _state) 
     ?-    -.act
+        %follow-many
+      =^  cards  state  abet:(follow-many:hc spaces.act)
+      [cards state]
+      ::
         %add-word
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
       ?>  (is-member:hc space.act src.bowl)
+      ?:  ?|  =('' word.act)
+              %+  levy
+                definitions.act
+              |=  def=@t
+              =('' def)
+          ==
+        `state
       =/  entry  (new-entry:hc definitions sentences related):[act .]
       =/  dict   (~(gut by lexicon) space.act *dictionary)
       ?:  (~(has by dict) word.act)
@@ -61,10 +81,23 @@
           [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
       ::
+        %del-word
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-admin:hc space.act src.bowl)
+      =/  dict  (~(got by lexicon) space.act)
+      =.  dict  (~(del by dict) word.act)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%word-deleted space.act word.act]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
+      ==
+      ::
         %add-def
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
       ?>  (is-member:hc space.act src.bowl)
+      ?:  =('' def.act)  `state
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act) 
       =/  [=id def=[@t votes stamp]]  (wrap-text:hc def.act)
@@ -80,6 +113,7 @@
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
       ?>  (is-member:hc space.act src.bowl)
+      ?:  =('' sen.act)  `state
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act) 
       =/  [=id sen=[@t votes stamp]]  (wrap-text:hc sen.act)
@@ -95,6 +129,7 @@
       =/  away  (en-path:hc space.act)
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
       ?>  (is-member:hc space.act src.bowl)
+      ?:  =('' rel.act)  `state
       =/  dict   (~(got by lexicon) space.act)
       =/  entry  (~(got by dict) word.act) 
       =/  [=id rel=[@t votes stamp]]  (wrap-text:hc rel.act)
@@ -275,6 +310,12 @@
           :_  this(lexicon (~(put by lexicon) space dict))
           [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
+            %word-deleted
+          =/  dict  (~(got by lexicon) space)
+          =.  dict  (~(del by dict) word.rxn)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
+          ::
             %def-added
           =/  dict   (~(got by lexicon) space)
           =.  dict  (~(put by dict) word.rxn entry.rxn)
@@ -340,11 +381,15 @@
   ^-  (unit (unit cage))
   ?+    path  (on-peek:def path)
     [%x %dictionary %all ~]  ``lexicon+!>(lexicon)
-      ::
+    ::
+      [%x %am-admin @t @t ~]
+    =/  space  (de-path:hc t.t.path)
+    ``lexicon-view+!>([%am-admin (is-admin:hc space our.bowl)])
+    ::
       [%x %dictionary @t @t ~]
-      =/  path  (de-path:hc t.t.path)
-      =/  dict  (~(got by lexicon) path)
-      ``view+!>([%dictionary dict])
+    =/  space  (de-path:hc t.t.path)
+    =/  dict  (~(got by lexicon) space)
+    ``lexicon-view+!>([%dictionary dict])
   ==
 ::
 ++  on-arvo   on-arvo:def
@@ -364,27 +409,63 @@
   ^-  space
   [(slav %p i.path) i.t.path]
 ::
+++  create-space
+  |=  =space
+  ^-  _core
+  ?>  =(-.space our.bowl)
+  ?:  (~(has by lexicon) space)  core
+  =.  lexicon  (~(put by lexicon) space *dictionary)
+  =/  rxn  [%add-dict space *dictionary]
+  (emit %give %fact ~[/updates] lexicon-reaction+!>(rxn))
+::
+++  follow-space
+  |=  =space
+  ^-  _core
+  ?<  =(-.space our.bowl)
+  =/  pite  /[(scot %p -.space)]/[+.space]
+  (emit [%pass pite %agent [-.space %lexicon] %watch pite])
+::
 ++  create-or-follow
   |=  =space
   ^-  _core
   ?:  =(-.space our.bowl)
-    ?:  (~(has by lexicon) space)  core
-    =.  lexicon  (~(put by lexicon) space *dictionary)
-    =/  rxn  [%add-dict space *dictionary]
-    (emit %give %fact ~[/updates] lexicon-reaction+!>(rxn))
-  =/  pite  /[(scot %p -.space)]/[+.space]
-  (emit [%pass pite %agent [-.space %lexicon] %watch pite])
+    (create-space space)
+  (follow-space space)
+::
+++  delete-space
+  |=  =space
+  ^-  _core
+  ?>  =(-.space our.bowl)
+  ?.  (~(has by lexicon) space)  core
+  =.  lexicon  (~(del by lexicon) space)
+  =/  rxn  [%del-dict space]
+  (emit %give %fact ~[/updates] lexicon-reaction+!>(rxn))
+::
+++  leave-space
+  |=  =space
+  ^-  _core
+  ?<  =(-.space our.bowl)
+  =/  wire  /[(scot %p -.space)]/[+.space]
+  (emit [%pass wire %agent [-.space %lexicon] %leave ~])
 ::
 ++  delete-or-leave
   |=  =space
   ^-  _core
   ?:  =(-.space our.bowl)
-    ?.  (~(has by lexicon) space)  core
-    =.  lexicon  (~(del by lexicon) space)
-    =/  rxn  [%del-dict space]
-    (emit %give %fact ~[/updates] lexicon-reaction+!>(rxn))
-  =/  wire  /[(scot %p -.space)]/[+.space]
-  (emit [%pass wire %agent [-.space %lexicon] %leave ~])
+    (delete-space space)
+  (leave-space space)
+::
+++  follow-many
+  |=  spaces=(list space)
+  ^-  _core
+  ?~  spaces  core
+  $(spaces t.spaces, core (follow-space:core i.spaces))
+::
+++  leave-many
+  |=  spaces=(list space)
+  ^-  _core
+  ?~  spaces  core
+  $(spaces t.spaces, core (leave-space:core i.spaces))
 ::
 ++  cof-many
   |=  spaces=(list space)
@@ -428,4 +509,19 @@
   ?+  -.view  !!
     %is-member  is-member.view
   ==
+++  got-member
+  |=  [=space =ship]
+  ^-  member:mem
+  =/  ship  (scot %p ship)
+  =/  host  (scot %p -.space)
+  =/  view 
+    .^(view:mem %gx /[sour]/spaces/[snow]/[host]/[+.space]/members/[ship]/membership-view)
+  ?+  -.view  !!
+    %member  member.view
+  ==
+++  is-admin
+  |=  [=space =ship]
+  ^-  ?
+  =/  =member:mem  (got-member space ship)
+  (~(has in roles.member) %admin)
 --

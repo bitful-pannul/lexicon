@@ -22,6 +22,11 @@
             [%sentences (ar so)]
             [%related (ar so)]
         ==
+        :-  %del-word
+        %-  ot
+        :~  [%space (su space-rule)]
+            [%word so]
+        ==
         :-  %add-def
         %-  ot
         :~  [%space (su space-rule)]
@@ -148,6 +153,7 @@
     ^-  json
     ?-  -.vyu
       %dictionary  (enjs-dict dictionary.vyu)
+      %am-admin  b+am.vyu
     ==
     ::
   ++  reaction
@@ -160,6 +166,11 @@
       :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
           [%word %s word.rec]
           [%entry (enjs-entry entry.rec)]
+      ==
+        %word-deleted
+      %-  pairs
+      :~  [%space %s `@t`(rap 3 (scot %p -.space.rec) '/' +.space.rec ~)]
+          [%word %s word.rec]
       ==
         %def-added
       %-  pairs

@@ -22,13 +22,15 @@
 +$  lexicon     (map space dictionary)
 ::
 +$  action
-  $%  $:  %add-word
+  $%  [%follow-many spaces=(list space)]
+      $:  %add-word
           =space
           =word
           definitions=(list @t)
           sentences=(list @t)
           related=(list word)
       ==
+      [%del-word =space =word]
       [%add-def =space =word def=@t]
       [%add-sen =space =word sen=@t]
       [%add-rel =space =word rel=@t]
@@ -40,6 +42,7 @@
 ::
 +$  reaction
   $%  [%word-added =space =word =entry]
+      [%word-deleted =space =word]
       [%def-added =space =word =entry]
       [%sen-added =space =word =entry]
       [%rel-added =space =word =entry]
@@ -55,5 +58,6 @@
 ::
 +$  view
   $%  [%dictionary =dictionary]
+      [%am-admin am=?]
   ==
 --
