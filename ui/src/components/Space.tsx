@@ -61,7 +61,7 @@ const Space = () => {
         return word;
       })
     : [];
-
+  //TODO: change way we get items and make it order-able and fetch the highest rated element from them
   //@ts-ignore if modalOpen then AddModal will render
   return (
     <>

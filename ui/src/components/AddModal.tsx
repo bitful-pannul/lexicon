@@ -27,8 +27,10 @@ const AddModal = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    //don't submit if we don't have a word
+    if (!word) return;
+    
     const rel = related.split(",");
-
     addDefinition({
       space,
       word,

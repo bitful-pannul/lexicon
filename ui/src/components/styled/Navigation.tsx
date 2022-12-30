@@ -17,7 +17,8 @@ const Navigation = () => {
   const [space, setSpace] = useState<string>("");
   const navigate = useNavigate();
   const popup = useLexiconStore((state) => state.popup);
-  const { setModalOpen, modalOpen } = useLexiconStore();
+  const { setModalOpen, modalOpen, isAdminScry, isAdmin, deleteWord } =
+    useLexiconStore();
   useEffect(() => {
     const spaceId = searchParams.get("spaceId");
     if (spaceId) {
@@ -27,8 +28,11 @@ const Navigation = () => {
   useEffect(() => {
     //We care about knowing the space id, either through params {ship}/{group} or space id which is the same thing
     if (ship && group) {
-      setSpace(`${ship}/${group}`);
+      const space = `${ship}/${group}`;
+      setSpace(space);
+      isAdminScry(space);
     }
+    //everytime we get a new space (ship/group) we check if we are admins on that space, via a scry
   }, [ship, group]);
   return (
     <>
@@ -62,6 +66,25 @@ const Navigation = () => {
         {ship && group && !word && (
           <CustomButton onClick={() => setModalOpen(true)} disabled={modalOpen}>
             add word
+          </CustomButton>
+        )}
+        {ship && group && word && isAdmin && (
+          <CustomButton
+            sx={{
+              backgroundColor: "#FDEFF1",
+              "&:hover": {
+                backgroundColor: "#FDEFF1",
+              },
+            }}
+            color="error"
+            onClick={() => {
+              //navigate back to the current space page
+              navigate("apps/lexicon/" + space);
+              //delete the word (could fail)
+              deleteWord(space, word);
+            }}
+          >
+            delete word
           </CustomButton>
         )}
       </Stack>

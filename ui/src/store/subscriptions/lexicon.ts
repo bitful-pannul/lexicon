@@ -54,6 +54,17 @@ export const handleLexiconUpdate =
         set({ lex: prevlex });
         break;
       }
+      case "word-deleted": {
+        const updateDate = reaction["word-deleted"];
+        const word: string = updateDate?.word;
+        const space: string = updateDate?.space;
+
+        var prevlex: Lexicon = get().lex;
+
+        delete prevlex[space][word];
+        set({ lex: prevlex });
+        break;
+      }
       case "word-voted": {
         const updateDate = reaction["word-voted"];
         const word: string = updateDate?.word;

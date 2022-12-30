@@ -9,6 +9,8 @@ const our: string = (window as any)?.api?.ship || "";
 
 export interface LexiconStore {
   loading: string | null;
+  isAdmin: boolean; //wether we are admins in the current space
+
   lex: Lexicon;
   whitelist: Whitelist;
   modalOpen: boolean;
@@ -31,10 +33,13 @@ export interface LexiconStore {
   addSentenceToWord: (add: any) => void;
   addMember: (space: string, member: string) => Promise<void>;
   createLex: (space: string, perms: string, members: string[]) => Promise<void>;
+  isAdminScry: (space: string) => Promise<void>;
+  deleteWord: (space: string, word: string) => Promise<void>;
 }
 
 const useLexiconStore = create<LexiconStore>((set, get) => ({
   loading: "loading lexicon...",
+  isAdmin: false,
   popup: undefined,
   lex: [] as unknown as Lexicon, // initial empty array issues with never[] assingment
   modalOpen: false,
@@ -103,7 +108,21 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
         }), // no timeout here..
     });
   },
-
+  isAdminScry: async (space: string) => {
+    try {
+      const result = await api.scry({
+        app: "lexicon",
+        path: "/am-admin/" + space,
+      });
+      console.log("isAdmin result => ", result);
+      set({
+        isAdmin: result,
+      });
+      return result;
+    } catch (e) {
+      console.log("isAdmin error => ", e);
+    }
+  },
   addDefinition: async (add: any) => {
     const { space, word, def, sentence, related } = add;
     const addJson = {
@@ -134,6 +153,38 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
             popup: {
               type: "error",
               message: "when adding definition: " + def + "to word: " + word,
+            },
+          }),
+      });
+      console.log("addDefinition result => ", result);
+    } catch (e) {
+      console.log("addDefinition error => ", e);
+    }
+  },
+  deleteWord: async (space: string, word: string) => {
+    const deleteWord = {
+      "del-word": {
+        space,
+        word,
+      },
+    };
+    try {
+      const result = await api.poke({
+        app: "lexicon",
+        mark: "lexicon-action",
+        json: deleteWord,
+        onSuccess: () =>
+          set({
+            popup: {
+              type: "success",
+              message: "deleted word: " + word,
+            },
+          }),
+        onError: () =>
+          set({
+            popup: {
+              type: "error",
+              message: "when trying to delete word: " + word,
             },
           }),
       });
