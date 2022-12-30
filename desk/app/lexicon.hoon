@@ -64,10 +64,11 @@
       ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
       ?>  (is-member:hc space.act src.bowl)
       ?<  ?|  =('' word.act)
-              %+  levy
-                definitions.act
-              |=  def=@t
-              =('' def)
+              %|
+      ::         %+  levy
+      ::           definitions.act
+      ::         |=  def=@t
+      ::         =('' def)
           ==
       =/  entry  (new-entry:hc definitions sentences related):[act .]
       =/  dict   (~(gut by lexicon) space.act *dictionary)
