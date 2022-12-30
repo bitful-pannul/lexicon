@@ -58,12 +58,19 @@ const Space = () => {
     if (lex[`${ship}/${group}`]) {
       let newItems: any = Object.entries(lex[`${ship}/${group}`])?.map(
         (word: any, i) => {
-          //we need the most popular definiton to be displayed at the top lvlhere
+          //we need the most popular definiton to be displayed at the top lvl here
           let mostPopularDef = word[1].definitions?.[0];
-
+          //keep track of this to compare to other defs
+          let currentMostPopularUpvotes = mostPopularDef?.votes.filter(
+            (item: any) => item.vote === true
+          ).length;
           word[1].definitions?.forEach((item: any, index: number) => {
-            if (item.votes > mostPopularDef?.votes) {
+            let itemUpVotes = item?.votes.filter(
+              (item: any) => item.vote === true
+            ).length;
+            if (itemUpVotes > currentMostPopularUpvotes) {
               mostPopularDef = item;
+              currentMostPopularUpvotes = itemUpVotes;
             }
           });
           //attatch the def
@@ -72,7 +79,7 @@ const Space = () => {
         }
       );
       newItems.sort((a: any, b: any) => {
-        console.log(' a.stamp.poster', a.stamp.poster)
+        console.log(" a.stamp.poster", a.stamp.poster);
         return a.stamp.posted > b.stamp.posted ? -1 : 1;
       });
       return newItems;
