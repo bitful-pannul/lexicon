@@ -14,9 +14,7 @@ const Space = () => {
   const lex = useLexiconStore((state) => state.lex);
   const wl = useLexiconStore((state) => state.whitelist);
   const voteDef = useLexiconStore((state) => state.voteDef);
-
   const { setModalOpen } = useLexiconStore();
-
   const { ship, group } = useParams();
 
   const setModal = (val: boolean) => {
@@ -56,11 +54,31 @@ const Space = () => {
     return our === ship;
   };
 
-  const items = spaceLex()
-    ? Object.entries(lex[`${ship}/${group}`])?.map((word, i) => {
-        return word;
-      })
-    : [];
+  const calculateItems = () => {
+    if (lex[`${ship}/${group}`]) {
+      let newItems: any = Object.entries(lex[`${ship}/${group}`])?.map(
+        (word: any, i) => {
+          //we need the most popular definiton to be displayed at the top lvlhere
+          let mostPopularDef = word[1].definitions?.[0];
+
+          word[1].definitions?.forEach((item: any, index: number) => {
+            if (item.votes > mostPopularDef?.votes) {
+              mostPopularDef = item;
+            }
+          });
+          //attatch the def
+          word[1].mostPopularDef = mostPopularDef.txt;
+          return { ...word[1], word: word[0] };
+        }
+      );
+      newItems.sort((a: any, b: any) => {
+        console.log(' a.stamp.poster', a.stamp.poster)
+        return a.stamp.posted > b.stamp.posted ? -1 : 1;
+      });
+      return newItems;
+    }
+  };
+  const items = calculateItems();
   //TODO: change way we get items and make it order-able and fetch the highest rated element from them
   //@ts-ignore if modalOpen then AddModal will render
   return (
@@ -106,11 +124,9 @@ const WordItem = ({ items, clearSearch, largeText = false, vote }: any) => {
     <Stack direction="column" padding={"5px"}>
       {items?.length > 0 ? (
         items.map((item: any, index: number) => {
-          const word = item[0];
-          const stamp = item[1].stamp;
+          const { word, stamp, votes, id, mostPopularDef } = item;
           const navLink = `${ship}/${group}/${word}`;
-          const id = item[1].id;
-          const votes = item[1].votes;
+
           return (
             <SingleWord
               key={"search-result-" + index}
@@ -123,6 +139,7 @@ const WordItem = ({ items, clearSearch, largeText = false, vote }: any) => {
               onKeyDown={onKeyDown}
               Go={Go}
               largeText={largeText}
+              mostPopularDef={mostPopularDef}
             />
           );
         })
@@ -148,6 +165,7 @@ function SingleWord({
   onKeyDown,
   Go,
   largeText,
+  mostPopularDef,
 }: any) {
   const [ourDownVoted, setOurDownVoted] = useState<boolean>(false);
   const [ourUpVoted, setOurUpVoted] = useState<boolean>(false);
@@ -236,7 +254,6 @@ function SingleWord({
           variant={largeText ? "subtitle1" : "subtitle2"}
           fontWeight={"bold"}
           sx={{ wordBreak: "break-word", marginLeft: "2px" }}
-          color="var(--rlm-text-color, #000)"
         >
           {word}
         </Typography>
@@ -246,6 +263,20 @@ function SingleWord({
           style={{ opacity: 0.5 }}
         >
           {"~" + stamp.poster}
+        </Typography>
+      </Stack>
+      <Stack
+        sx={{
+          zIndex: 1,
+        }}
+      >
+        <Typography
+          variant={"subtitle2"}
+          sx={{ wordBreak: "break-word", marginLeft: "2px" }}
+          color="var(--rlm-text-color, #000)"
+          style={{ opacity: 0.7 }}
+        >
+          {mostPopularDef}
         </Typography>
       </Stack>
       <Stack
