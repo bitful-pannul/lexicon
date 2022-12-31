@@ -225,6 +225,7 @@ function SingleWord({
         <Typography
           variant={largeText ? "subtitle1" : "subtitle2"}
           fontWeight={"bold"}
+          color="var(--rlm-text-color, #000)"
           sx={{ wordBreak: "break-word", marginLeft: "2px" }}
         >
           {word}

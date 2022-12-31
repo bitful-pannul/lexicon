@@ -5,10 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import { styled, alpha } from "@mui/material/styles";
-import {
-  useParams,
-  useNavigate,
-} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useLexiconStore from "../store/lexiconStore";
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -26,18 +23,23 @@ const StyledMenu = styled((props: MenuProps) => (
 ))(({ theme }) => ({
   "& .MuiPaper-root": {
     borderRadius: 6,
+    minWidth: 140,
     backgroundColor: "var(--rlm-card-color, #fff)",
     border: "1px solid var(--rlm-border-color,rgba(51, 51, 51, 0.12))",
     boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.12)",
+
     "& .MuiMenu-list": {
       padding: "4px 0",
+      color: "var(--rlm-text-color, #000)",
     },
     "& .MuiMenuItem-root": {
-      "& .MuiSvgIcon-root": {
-        fontSize: 14,
-        color: "var(--rlm-text-color, #000)",
-        marginRight: theme.spacing(1.5),
+      fontSize: 14,
+      minHeight: "auto",
+
+      "&:hover": {
+        backgroundColor: "var(--rlm-border-color, #F9F9F9)",
       },
+
       "&:active": {
         backgroundColor: "var(--rlm-border-color, #F9F9F9)",
       },
@@ -62,13 +64,13 @@ export default function BasicMenu() {
     const space = `${ship}/${group}`;
     navigate("/apps/lexicon/" + space, { replace: true });
     //delete the word (could fail)
-     deleteWord(space, word);
+    deleteWord(space, word);
   };
 
   return (
     <div>
       <IconButton
-        aria-label="more"
+        aria-label="word options"
         id="long-button"
         aria-controls={open ? "long-menu" : undefined}
         aria-expanded={open ? "true" : undefined}
@@ -81,7 +83,7 @@ export default function BasicMenu() {
         />
       </IconButton>
       <StyledMenu
-        id="basic-menu"
+        id="word-options-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}

@@ -161,7 +161,7 @@ const useLexiconStore = create<LexiconStore>((set, get) => ({
       console.log("addDefinition error => ", e);
     }
   },
-  deleteWord: async (space: string, word: string) => {
+  deleteWord: async (space: string, word: string | undefined) => {
     const deleteWord = {
       "del-word": {
         space,
