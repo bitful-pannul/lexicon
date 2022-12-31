@@ -5,20 +5,18 @@ import {
   Outlet,
   useSearchParams,
 } from "react-router-dom";
-import { Popup, Search, CustomButton } from "../";
+import { Search, CustomButton } from "../";
 import useLexiconStore from "../../store/lexiconStore";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 const Navigation = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { ship, group, word } = useParams();
   //presisted space data for filtering search correctly
   const [space, setSpace] = useState<string>("");
   const navigate = useNavigate();
-  const popup = useLexiconStore((state) => state.popup);
-  const { setModalOpen, modalOpen, isAdminScry, isAdmin, deleteWord } =
-    useLexiconStore();
+  const { setModalOpen, modalOpen, isAdminScry, isAdmin } = useLexiconStore();
   useEffect(() => {
     const spaceId = searchParams.get("spaceId");
     if (spaceId) {
@@ -66,25 +64,6 @@ const Navigation = () => {
         {ship && group && !word && (
           <CustomButton onClick={() => setModalOpen(true)} disabled={modalOpen}>
             add word
-          </CustomButton>
-        )}
-        {ship && group && word && isAdmin && (
-          <CustomButton
-            sx={{
-              backgroundColor: "#FDEFF1",
-              "&:hover": {
-                backgroundColor: "#FDEFF1",
-              },
-            }}
-            color="error"
-            onClick={() => {
-              //navigate back to the current space page
-              navigate("apps/lexicon/" + space);
-              //delete the word (could fail)
-              deleteWord(space, word);
-            }}
-          >
-            delete word
           </CustomButton>
         )}
       </Stack>

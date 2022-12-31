@@ -6,6 +6,7 @@ import {
   WrappedBackground,
   CustomTextField,
   CustomButton,
+  WordMenu,
 } from "../components";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -16,7 +17,6 @@ import Box from "@mui/material/Box";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import { displayDate } from "../time";
-
 const Word = () => {
   const { ship, group, word } = useParams();
   const navigate = useNavigate();
@@ -29,8 +29,13 @@ const Word = () => {
   };
 
   const lex = useLexiconStore((state) => state.lex);
-  const { voteDef, addDefinition, addDefinitionToWord, addSentenceToWord } =
-    useLexiconStore();
+  const {
+    voteDef,
+    addDefinition,
+    addDefinitionToWord,
+    addSentenceToWord,
+    isAdmin,
+  } = useLexiconStore();
 
   const spaceLex = (): any => {
     //TODO: migrate this to be a one time call in state
@@ -123,36 +128,43 @@ const Word = () => {
           </Typography>
           <Stack
             direction={"row"}
-            alignItems="center"
+            alignContent="center"
             justifyContent={"center"}
-            sx={{
-              padding: "3px 4px",
-              backgroundColor: "rgba(253, 193, 78, 0.12)",
-              borderRadius: "4px",
-            }}
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <Stack
+              direction={"row"}
+              alignItems="center"
+              justifyContent={"center"}
+              sx={{
+                padding: "3px 4px",
+                backgroundColor: "rgba(253, 193, 78, 0.12)",
+                borderRadius: "4px",
+              }}
             >
-              <path
-                d="M8.99994 13.695L3.71019 16.656L4.89144 10.71L0.440186 6.594L6.46044 5.88L8.99994 0.375L11.5394 5.88L17.5597 6.594L13.1084 10.71L14.2897 16.656L8.99994 13.695Z"
-                fill="#FDC24E"
-              />
-            </svg>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8.99994 13.695L3.71019 16.656L4.89144 10.71L0.440186 6.594L6.46044 5.88L8.99994 0.375L11.5394 5.88L17.5597 6.594L13.1084 10.71L14.2897 16.656L8.99994 13.695Z"
+                  fill="#FDC24E"
+                />
+              </svg>
 
-            <Typography
-              color={" #FDC24E "}
-              variant="subtitle1"
-              lineHeight={"19px"}
-              textAlign="center"
-              marginLeft={"4.4px"}
-            >
-              {getTotalInteractions()}
-            </Typography>
+              <Typography
+                color={" #FDC24E "}
+                variant="subtitle1"
+                lineHeight={"19px"}
+                textAlign="center"
+                marginLeft={"4.4px"}
+              >
+                {getTotalInteractions()}
+              </Typography>
+            </Stack>
+            {isAdmin && <WordMenu />}
           </Stack>
         </Stack>
         <Stack

@@ -9,17 +9,11 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { displayDate } from "../time";
-//TODO: add upvote and downvote elements the word element
 const Space = () => {
   const lex = useLexiconStore((state) => state.lex);
-  const wl = useLexiconStore((state) => state.whitelist);
   const voteDef = useLexiconStore((state) => state.voteDef);
-  const { setModalOpen } = useLexiconStore();
   const { ship, group } = useParams();
 
-  const setModal = (val: boolean) => {
-    setModalOpen(val);
-  };
   const vote = (
     id: string,
     word: string,
@@ -30,28 +24,6 @@ const Space = () => {
 
     //unit => true / false (up/down) | null is remove vote
     voteDef({ space, word, id, vote, voteType });
-  };
-  const spaceLex = () => {
-    try {
-      //@ts-ignore handled if undefined
-      return lex[`${ship}/${group}`];
-    } catch {
-      return undefined;
-    }
-  };
-
-  const spacePerms = () => {
-    try {
-      //@ts-ignore handled if undefined
-      return wl[`${ship}/${group}`];
-    } catch {
-      return undefined;
-    }
-  };
-
-  const isOur = () => {
-    const our: string = "~" + (window as any)?.api?.ship || "";
-    return our === ship;
   };
 
   const calculateItems = () => {
@@ -86,16 +58,9 @@ const Space = () => {
     }
   };
   const items = calculateItems();
-  //TODO: change way we get items and make it order-able and fetch the highest rated element from them
   //@ts-ignore if modalOpen then AddModal will render
   return (
     <>
-      {/* @ts-ignore is defined if goes through*/}
-      {/*isOur() && spacePerms() && (
-        <Perms members={spacePerms()?.members} perms={spacePerms()?.perms} />
-      )*/}
-
-      {/*@ts-ignore nullcheck in place*/}
       <AddModal />
 
       <WrappedBackground styles={{ padding: "6px 8px" }}>

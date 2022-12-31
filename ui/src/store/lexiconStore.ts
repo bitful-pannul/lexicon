@@ -34,7 +34,7 @@ export interface LexiconStore {
   addMember: (space: string, member: string) => Promise<void>;
   createLex: (space: string, perms: string, members: string[]) => Promise<void>;
   isAdminScry: (space: string) => Promise<void>;
-  deleteWord: (space: string, word: string) => Promise<void>;
+  deleteWord: (space: string, word: string | undefined) => Promise<void>;
 }
 
 const useLexiconStore = create<LexiconStore>((set, get) => ({
