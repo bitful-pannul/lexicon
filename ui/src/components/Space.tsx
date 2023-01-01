@@ -46,7 +46,9 @@ const Space = () => {
             }
           });
           //attatch the def
-          word[1].mostPopularDef = mostPopularDef.txt;
+          if (mostPopularDef) {
+            word[1].mostPopularDef = mostPopularDef.txt;
+          }
           return { ...word[1], word: word[0] };
         }
       );
