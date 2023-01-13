@@ -1,50 +1,26 @@
-::  
-/-  *lexicon, membership, spaces-store
-/+  default-agent, dbug, lexlib, verb
-::
-::
-::
+/-  *lexicon, mem=membership, spaces-store
+/+  default-agent, dbug, verb
 |%
-+$  state-0
-  $:  %0
-      lex=lexicon
-      :: =whitelist
-  ==
-::
++$  state-0  [%0 =lexicon]
 +$  card     card:agent:gall
 --
 %-  agent:dbug
 %+  verb  &
-::
 =|  state-0
 =*  state  -
-::
+=<
 ^-  agent:gall
-
 |_  =bowl:gall
 +*  this  .
     def   ~(. (default-agent this %|) bowl)
+    hc    ~(. +> [bowl ~])
+    cc    |=(cards=(list card) ~(. +> [bowl cards]))
 ::
 ++  on-init
   ^-  (quip card _this)
-  =/  intro-def
-    :*
-      id=(sham [our.bowl 'our'])
-      def='lexicon is a dictionary for your own space & others'
-      poster=src.bowl
-      posted=now.bowl
-      sentence=~['based? ..based on what? just look it up on %lexicon']
-      related=~['urban dictionary' 'gloss']
-      upvotes=*(set @p)
-      downvotes=*(set @p)
-    ==
-  ::
-  :_
-    %=    this
-      lex        (~(put by *lexicon) [our.bowl 'our'] (malt ~[['lexicon' ~[intro-def]]]))
-      ::whitelist  (~(put by whitelist) [our.bowl 'our'] [%public (silt ~[our.bowl])])
-    ==
-  ~
+  ?.  has-spaces:hc  ~|("ERROR: Must have %spaces installed." !!)
+  :_  this
+  [%pass /spaces %agent [our.bowl %spaces] %watch /updates]~
 ::
 ++  on-save  !>(state)
 ::
@@ -52,9 +28,16 @@
   |=  ole=vase
   ^-  (quip card _this)
   =/  old=state-0  !<(state-0 ole)
-  [~ this(state old)]
-::
-:: 
+  =.  state  old
+  =/  remote-spaces
+    %+  murn
+      ~(tap in ~(key by lexicon))
+    |=(=space ?:(=(-.space our.bowl) ~ (some space)))
+  =^  cards  state  abet:(leave-many:hc remote-spaces)
+  =/  axn  [%follow-many remote-spaces]
+  :_  this
+  %+  welp  cards
+  [%pass / %agent [our dap]:bowl %poke lexicon-action+!>(axn)]~
 :: 
 ++  on-poke
   |=  [=mark =vase]
@@ -72,203 +55,164 @@
     |=  act=action
     ^-  (quip card _state) 
     ?-    -.act
+        %follow-many
+      =^  cards  state  abet:(follow-many:hc spaces.act)
+      [cards state]
       ::
-        %add
-      =/  def
-        :*
-          id=(sham [def.act src.bowl sentence.act related.act])
-          def=def.act
-          poster=src.bowl
-          posted=now.bowl
-          sentence=sentence.act
-          related=related.act
-          upvotes=*(set @p)
-          downvotes=*(set @p)
-        ==
-      ::
-      :: check for if it's ours to distribute or not
-      ?:  =(-.space.act our.bowl)
-        ::  (distribute-local def space)
-        ::  
-        ::
-        =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
-        ?>  =(%.y +.ismem)
-        ::
-        :: 
-        ?~  defs=(~(get by lex) space.act)
-          ?>  =(src.bowl our.bowl)
-          =/  new-defs  (malt ~[[word.act ~[def]]])
-          :_  state(lex (~(put by lex) space.act new-defs))
-          :~
-            :*
-              %give
-              %fact
-              ~[/[(scot %p -.space.act)]/[+.space.act]]
-              %lexicon-reaction
-              !>(`reaction`[%def-added space.act word.act def])
-            ==
-            :*
-              %give
-              %fact
-              ~[/updates]
-              %lexicon-reaction
-              !>(`reaction`[%def-added space.act word.act def])
-            ==
+        %add-word
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
+      ?<  ?|  =('' word.act)
+              %|
+      ::         %+  levy
+      ::           definitions.act
+      ::         |=  def=@t
+      ::         =('' def)
           ==
-        ::
-        =/  updated-list
-        ?~  (~(get by u.defs) word.act)
-            ~[def]
-        (weld (~(got by u.defs) word.act) ~[def])
-        :_  state(lex (~(put by lex) space.act (~(put by u.defs) word.act updated-list)))
-        :~ 
-          :*
-            %give
-            %fact
-            ~[/[(scot %p -.space.act)]/[+.space.act]]
-            %lexicon-reaction
-            !>(`reaction`[%def-added space.act word.act def])
-          ==
-          :*
-            %give
-            %fact
-            ~[/updates]
-            %lexicon-reaction
-            !>(`reaction`[%def-added space.act word.act def])
-          ==
-        ==
-      ::
-      :: (distribute-remote def space)
-      :_  state
-      :~ 
-        :*
-          %pass
-          [/[(scot %p -.space.act)]/[+.space.act]]
-          %agent
-          [-.space.act %lexicon]
-          %poke
-          %lexicon-action
-          !>(`action`[%add space.act word.act def.act sentence.act related.act])
-        ==
-      ==
-    ::
-        %delete
-      ?~  defs=(~(get by lex) space.act)
-        !!
-      =/  def-list  (~(got by u.defs) word.act)
-      =/  index  (need (find ~[id.act] (turn def-list |=(a=definition id.a))))
-      =/  def  (snag index def-list)
-      ?>  =(src.bowl poster.def)
-      ?:  =(-.space.act our.bowl)
-        ::
-        =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
-        ?>  =(%.y +.ismem)
-        ::
-        =/  new-list  (oust [index 1] def-list)
-        :_  
-          %=    state
-            lex  (~(gas by lex) ~[[space.act (~(gas by (need defs)) ~[[word.act new-list]])]])
-          == 
-        :~
-          :*
-            %give
-            %fact
-            ~[/[(scot %p -.space.act)]/[+.space.act]]
-            %lexicon-reaction
-            !>(`reaction`[%def-deleted space.act word.act id.act])
-          ==
-          :*
-            %give
-            %fact
-            ~[/updates]
-            %lexicon-reaction
-            !>(`reaction`[%def-deleted space.act word.act id.act])
-          ==
-        ==
-      :: pass remote
-      :_  state
-      :~
-        :*
-          %pass
-          [/[(scot %p -.space.act)]/[+.space.act]]
-          %agent
-          [-.space.act %lexicon]
-          %poke
-          %lexicon-action
-          !>(`action`[%delete space.act word.act id.act])
-        ==
+      =/  entry  (new-entry:hc definitions sentences related):[act .]
+      =/  dict   (~(gut by lexicon) space.act *dictionary)
+      ?:  (~(has by dict) word.act)
+        ~|("'{(trip word.act)}' already exists in dict." !!)
+      =.  dict   (~(put by dict) word.act entry)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%word-added space.act word.act entry]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
       ::
-      ::  =/  def-list  (get-list:lexlib [lex path.act word.act])
-         %vote
-      =/  slex  (~(got by lex) space.act)
-      =/  def-list  (~(gut by slex) word.act ~)
-      =/  index  (need (find ~[id.act] (turn def-list |=(a=definition id.a))))
-      =/  def  (snag index def-list)
-        :: switch on action up/down and remote/local
-      ?:  =(-.space.act our.bowl)
-          ::
-          =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/[-.space.act]/[+.space.act]/is-member/(scot %p src.bowl)/membership-view)
-          ?>  =(%.y +.ismem)
-          ::
-          =/  new-def
-          ?:  =(vote-type.act %upvotes)
-              def(upvotes (~(put in upvotes.def) src.bowl))
-            def(downvotes (~(put in downvotes.def) src.bowl))
-          =/  new-defs  (snap def-list index new-def)
-            ::(malt ~[[word.act new-defs]])
-          :_  state(lex (~(put by lex) space.act (~(put by slex) word.act new-defs)))
-          :~
-            :*
-              %give
-              %fact
-              ~[/[(scot %p -.space.act)]/[+.space.act]]
-              %lexicon-reaction
-              !>(`reaction`[%voted space.act word.act id.act vote-type.act src.bowl])
-            ==
-            :*
-              %give
-              %fact
-              ~[/updates]
-              %lexicon-reaction
-              !>(`reaction`[%voted space.act word.act id.act vote-type.act src.bowl])
-            ==
-          ==
-      :: same thing but give poke
-      :_  state
-      :~
-        :*
-          %pass
-          [/[(scot %p -.space.act)]/[+.space.act]]
-          %agent
-          [-.space.act %lexicon]
-          %poke
-          %lexicon-action
-          !>(`action`[%vote space.act word.act id.act vote-type.act])
-        ==
+        %del-word
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-admin:hc space.act src.bowl)
+      =/  dict  (~(got by lexicon) space.act)
+      =.  dict  (~(del by dict) word.act)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%word-deleted space.act word.act]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
       ::
-        %create-space
-      ?>  =(-.space.act our.bowl)
-      ::
-      :_
-        %=    state
-          lex        (~(put by lex) space.act *definitions)
-        ==
-      :~
-        [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%space-created space.act])]
+        %add-def
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
+      ?<  =('' def.act)
+      =/  dict   (~(got by lexicon) space.act)
+      =/  entry  (~(got by dict) word.act) 
+      =/  [=id def=[@t votes stamp]]  (wrap-text:hc def.act)
+      =.  definitions.entry  (~(put by definitions.entry) id def)
+      =.  dict  (~(put by dict) word.act entry)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%def-added space.act word.act entry]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
       ::
-      ::
-      :: this needs to be called before interacting with a spaces' lexicon. 
-        %join-space
-      :_  state  
-      :~  [%pass /[(scot %p -.space.act)]/[+.space.act] %agent [-.space.act %lexicon] %watch /[(scot %p -.space.act)]/[+.space.act]]        
+        %add-sen
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
+      ?<  =('' sen.act)
+      =/  dict   (~(got by lexicon) space.act)
+      =/  entry  (~(got by dict) word.act) 
+      =/  [=id sen=[@t votes stamp]]  (wrap-text:hc sen.act)
+      =.  sentences.entry  (~(put by sentences.entry) id sen)
+      =.  dict  (~(put by dict) word.act entry)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%sen-added space.act word.act entry]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
-        %leave-space
-        :: might be useful calling on frontend to refresh state properly
-      :_  state
-      :~  [%pass /[(scot %p -.space.act)]/[+.space.act] %agent [-.space.act %lexicon] %leave ~]
+      ::
+        %add-rel
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
+      ?<  =('' rel.act)
+      =/  dict   (~(got by lexicon) space.act)
+      =/  entry  (~(got by dict) word.act) 
+      =/  [=id rel=[@t votes stamp]]  (wrap-text:hc rel.act)
+      =.  related.entry  (~(put by related.entry) id rel)
+      =.  dict  (~(put by dict) word.act entry)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%rel-added space.act word.act entry]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
+      ==
+      ::
+        %vote-word
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
+      =/  dict   (~(got by lexicon) space.act)
+      =/  entry  (~(got by dict) word.act)
+      =.  votes.entry
+        ?~  vote.act
+          (~(del by votes.entry) src.bowl)
+        (~(put by votes.entry) src.bowl u.vote.act)
+      =.  dict   (~(put by dict) word.act entry)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%word-voted [space word votes.entry]:[act .]]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
+      ==
+      ::
+        %vote-def
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
+      =/  dict   (~(got by lexicon) space.act)
+      =/  entry  (~(got by dict) word.act)
+      =/  def  (~(got by definitions.entry) id.act)
+      =.  votes.def
+        ?~  vote.act
+          (~(del by votes.def) src.bowl)
+        (~(put by votes.def) src.bowl u.vote.act)
+      =.  definitions.entry   (~(put by definitions.entry) id.act def)
+      =.  dict    (~(put by dict) word.act entry)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%def-voted [space word id votes.def]:[act .]]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
+      ==
+      ::
+        %vote-rel
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
+      =/  dict   (~(got by lexicon) space.act)
+      =/  entry  (~(got by dict) word.act)
+      =/  rel  (~(got by related.entry) id.act)
+      =.  votes.rel
+        ?~  vote.act
+          (~(del by votes.rel) src.bowl)
+        (~(put by votes.rel) src.bowl u.vote.act)
+      =.  related.entry   (~(put by related.entry) id.act rel)
+      =.  dict    (~(put by dict) word.act entry)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%rel-voted [space word id votes.rel]:[act .]]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
+      ==
+      ::
+        %vote-sen
+      =/  away  (en-path:hc space.act)
+      ?.  =(ship.space.act our.bowl)  (relay:hc ship.space.act act)
+      ?>  (is-member:hc space.act src.bowl)
+      =/  dict   (~(got by lexicon) space.act)
+      =/  entry  (~(got by dict) word.act)
+      =/  sen  (~(got by sentences.entry) id.act)
+      =.  votes.sen
+        ?~  vote.act
+          (~(del by votes.sen) src.bowl)
+        (~(put by votes.sen) src.bowl u.vote.act)
+      =.  sentences.entry   (~(put by sentences.entry) id.act sen)
+      =.  dict    (~(put by dict) word.act entry)
+      :_  state(lexicon (~(put by lexicon) space.act dict))
+      =/  rxn  `reaction`[%sen-voted [space word id votes.sen]:[act .]]
+      :~  [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]
+          [%give %fact ~[away] lexicon-reaction+!>(rxn)]
       ==
     ==
   --
@@ -276,170 +220,158 @@
 ++  on-watch    
   |=  =path
   ^-  (quip card _this)
-  ?+  path  (on-watch:def path)
-    [@t @t ~]
-      ?>  |(=(our.bowl src.bowl) =(our.bowl (slav %p i.path)))
-      ::  
-
-      ::
-      ::
-      ::
-      =/  sp  [(slav %p i.path) i.t.path]
-                  :: space:view:spaces-store doesn't mold scry response corrrectly
-      =/  info  .^(view:spaces-store %gx /(scot %p our.bowl)/spaces/[-.sp]/[+.sp]/spaces-view)
-      =/  ispub  +62:info
-
-      ?.  =(ispub %public)
-
-        =/  ismem  .^(view:membership %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/(scot %p our.bowl)/[i.t.path]/is-member/(scot %p src.bowl)/membership-view)
-        ?:  =(%.y +.ismem)
-        ::
-          =/  defs  (need (~(get by lex) sp))
-          :_  this
-          :~  
-            [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
-            :: if not handled in on-agent, and passed on to /updates manually... causes infinite loop
-            :: not sure if 3 separate %facts, host -> joiner -> frontend are optimal...
-            [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
-          ==
-        :: not a member
-        :: 
-        :_  this
-        :~
-          [%give %fact ~ %lexicon-reaction !>(`reaction`[%error "you do not have the permissions to join: {<sp>}"])]
-        ==
-      ::  space is public
-      =/  defs  (need (~(get by lex) sp))
-      :_  this
-      :~  
-        [%give %fact ~ %lexicon-reaction !>(`reaction`[%defs sp defs])]
-        [%give %fact ~ %lexicon-reaction !>(`reaction`[%success "successfully joined: {<sp>} "])]
-      ==
+  ?+    path  (on-watch:def path)
+      [@t @t ~]
+    =/  space  (de-path path)
+    =/  dict  (~(got by lexicon) space)
+    =/  rxn  `reaction`[%dictionary dict]
+    :_(this [%give %fact ~ lexicon-reaction+!>(rxn)]~)
     ::
-    [%updates ~]
-      :_  this
-      :~  
-        [%give %fact ~ %lexicon-reaction !>(`reaction`[%lex lex])]
-        ::  [%give %fact ~ %lexicon-reaction !>(`reaction`[%whiteliste whitelist])]
-      ==
+      [%updates ~]
+    :_(this [%give %fact ~ lexicon-reaction+!>(`reaction`[%lexicon lexicon])]~)
   ==
  ::
-++  on-agent  
+++  on-agent
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
   ?+    wire  (on-agent:def wire sign)
+      [%spaces ~]
+    ?+    -.sign  (on-agent:def wire sign)
+        %watch-ack
+      ?~  p.sign
+        =/  tang  [leaf+"%lexicon: subscribed to /updates from %spaces."]~
+        ((slog tang) `this)
+      =/  tang
+        :_  u.p.sign
+        leaf+"%lexicon: failed to subscribe to /updates from %spaces."
+      ((slog tang) `this)
+      ::
+        %kick
+      :_  this
+      [%pass wire %agent [src.bowl %spaces] %watch /updates]~
+      ::
+        %fact
+      ?+    p.cage.sign  `this
+          %spaces-reaction
+        =/  rxn  !<(reaction:spaces-store q.cage.sign)
+        ?-    -.rxn
+            %initial
+          =^  cards  state
+            abet:(cof-many:hc ~(tap in ~(key by spaces.rxn)))
+          [cards this]
+            %add
+          =^  cards  state
+            abet:(create-or-follow:hc path.space.rxn)
+          [cards this]
+            %replace
+          =^  cards  state
+            abet:(create-or-follow:hc path.space.rxn)
+          [cards this]
+            %remote-space
+          =^  cards  state
+            abet:(create-or-follow:hc path.space.rxn)
+          [cards this]
+            %remove
+          =^  cards  state
+            abet:(delete-or-leave:hc path.rxn)
+          [cards this]
+        ==
+      ==
+    ==
       [@t @t ~]
     ?+    -.sign  (on-agent:def wire sign)
         %watch-ack
       ?~  p.sign
-        ((slog leaf+"%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} succeeded!" ~) `this)
-      ((slog leaf+"%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} failed!" u.p.sign) `this)
+        %.  `this
+        %-  slog
+        :_  ~  
+        leaf+"%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} succeeded!"
+      %.  `this
+      %-  slog
+      :_  u.p.sign
+      leaf+"%lexicon-client: joining /{<i.wire>}/{<i.t.wire>} failed!"
     ::
         %kick
-      :_  this
-      :~  [%pass /[i.wire]/[i.t.wire] %agent [src.bowl dap.bowl] %watch /[i.wire]/[i.t.wire]]
-      ==
+      ~&  "{<dap.bowl>}: got kick, resubscribing..."
+      :_(this [%pass wire %agent [src.bowl dap.bowl] %watch wire]~)
     ::
         %fact
-        :: update local lex.
+      =/  away  wire
+      =/  space  (de-path wire) :: space-path from wire
       ?+    p.cage.sign  (on-agent:def wire sign)
           %lexicon-reaction
-        =/  incoming  !<(reaction q.cage.sign)
-        ?+  -.incoming  (on-agent:def wire sign)
+        =/  rxn  !<(reaction q.cage.sign)
+        ?+    -.rxn  (on-agent:def wire sign)
+            %dictionary
+          `this(lexicon (~(put by lexicon) space dictionary.rxn))
+            %word-added
+          =/  dict  (~(got by lexicon) space)
+          =.  dict  (~(put by dict) word.rxn entry.rxn)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
+          ::
+            %word-deleted
+          =/  dict  (~(got by lexicon) space)
+          =.  dict  (~(del by dict) word.rxn)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
+          ::
             %def-added
-          =/  sp  [(slav %p i.wire) i.t.wire]
-          ::  
-          ::  make sure a space is created before you got by it
+          =/  dict   (~(got by lexicon) space)
+          =.  dict  (~(put by dict) word.rxn entry.rxn)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
-          ?~  sdefs=(~(get by lex) sp)   :: creating new word here. permissioned?
-            =/  new-defs  (malt ~[[word.incoming ~[def.incoming]]])
-            `this(lex (~(put by lex) sp new-defs))
+            %sen-added
+          =/  dict   (~(got by lexicon) space)
+          =.  dict  (~(put by dict) word.rxn entry.rxn)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
-          ::  here we know there's a space with some words & defs defined.
-          =/  def-list  (~(gut by u.sdefs) word.incoming ~)
-          =/  updated-list 
-            ?~  def-list  
-              ~[def.incoming]
-            (weld def-list ~[def.incoming])
-          :_  this(lex (~(put by lex) sp (~(put by u.sdefs) word.incoming updated-list)))
-          :~
-            :* 
-              %give
-              %fact
-              ~[/updates]
-              %lexicon-reaction
-              !>(`reaction`[%def-added sp word.incoming def.incoming])
-            == 
-          ==
+            %rel-added
+          =/  dict   (~(got by lexicon) space)
+          =.  dict  (~(put by dict) word.rxn entry.rxn)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
-            %def-deleted
-          ::  todo: deletion permissions/effects
-          =/  sp  [(slav %p i.wire) i.t.wire]
-          ?~  sdefs=(~(get by lex) sp)
-            !!
-          =/  def-list  (~(got by u.sdefs) word.incoming)
-          =/  index  (need (find ~[id.incoming] (turn def-list |=(a=definition id.a))))
-          =/  new-list  (oust [index 1] def-list) 
-          :_  this(lex (~(gas by lex) ~[[sp (~(gas by u.sdefs) ~[[word.incoming new-list]])]]))
-          :~
-            :*
-              %give
-              %fact
-              ~[/updates]
-              %lexicon-reaction
-              !>(`reaction`[%def-deleted space.incoming word.incoming id.incoming])
-            ==
-          ==
+            %word-voted
+          =/  dict   (~(got by lexicon) space)
+          =/  entry  (~(got by dict) word.rxn)
+          =.  votes.entry  votes.rxn
+          =.  dict   (~(put by dict) word.rxn entry)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
-            %voted
-            :: note space.incoming and space in wire both available
-          =/  slex  (~(got by lex) space.incoming)
-          =/  def-list  (fall (~(get by slex) word.incoming) ~)
-          =/  index  (need (find ~[id.incoming] (turn def-list |=(a=definition id.a))))
-          =/  def  (snag index def-list)
+            %def-voted
+          =/  dict   (~(got by lexicon) space)
+          =/  entry  (~(got by dict) word.rxn)
+          =/  def  (~(got by definitions.entry) id.rxn)
+          =.  votes.def  votes.rxn
+          =.  definitions.entry   (~(put by definitions.entry) id.rxn def)
+          =.  dict  (~(put by dict) word.rxn entry)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
-          =/  new-def
-            ?:  =(vote-type.incoming %upvotes)
-                def(upvotes (~(put in upvotes.def) voter.incoming))
-                def(downvotes (~(put in downvotes.def) voter.incoming))
-                ::
-          =/  new-defs  (snap def-list index new-def)
-          :_  this(lex (~(put by lex) space.incoming (~(put by slex) word.incoming new-defs)))
-          :~
-            :*
-              %give
-              %fact
-              ~[/updates]
-              %lexicon-reaction
-              !>(`reaction`[%voted space.incoming word.incoming id.incoming vote-type.incoming voter.incoming])
-            ==
-          ==
+            %sen-voted
+          =/  dict   (~(got by lexicon) space)
+          =/  entry  (~(got by dict) word.rxn)
+          =/  sen  (~(got by sentences.entry) id.rxn)
+          =.  votes.sen  votes.rxn
+          =.  sentences.entry   (~(put by sentences.entry) id.rxn sen)
+          =.  dict  (~(put by dict) word.rxn entry)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
           ::
-            %defs
-          =/  sp  [(slav %p i.wire) i.t.wire]
-          ?~  (~(get by lex) sp)
-            `this(lex (~(put by lex) sp definitions.incoming))
-          `this(lex (~(put by lex) sp definitions.incoming))
-             :: probably should concanate the map, if some kind of subscription weirdness arises.
-          ::
-            %success
-          :_  this
-          :~
-            [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%success message.incoming])]
-          ==
-          ::
-            %error
-          :_  this
-          :~
-            [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%error message.incoming])]
-          ==
-          ::
-            %space-created
-          :_  this
-          :~
-            [%give %fact ~[/updates] %lexicon-reaction !>(`reaction`[%space-created space.incoming])]
-          ==
-        ==
+            %rel-voted
+          =/  dict   (~(got by lexicon) space)
+          =/  entry  (~(got by dict) word.rxn)
+          =/  rel  (~(got by related.entry) id.rxn)
+          =.  votes.rel  votes.rxn
+          =.  related.entry   (~(put by related.entry) id.rxn rel)
+          =.  dict  (~(put by dict) word.rxn entry)
+          :_  this(lexicon (~(put by lexicon) space dict))
+          [%give %fact ~[/updates] lexicon-reaction+!>(rxn)]~
+        == 
       ==
     ==
   ==
@@ -447,39 +379,149 @@
 ++  on-peek
   |=  =path
   ^-  (unit (unit cage))
-  ?+  path  (on-peek:def path)
-    [%x %definitions %all ~]
-      ``lexicon+!>(lex)
+  ?+    path  (on-peek:def path)
+    [%x %dictionary %all ~]  ``lexicon+!>(lexicon)
     ::
-    [%x %definitions @t @t ~]
-      =/  sp  [[(slav %p i.t.t.path) i.t.t.t.path]]
-      =/  sdefs  (~(got by lex) sp)
-      ``definitions+!>(sdefs)
+      [%x %am-admin @t @t ~]
+    =/  space  (de-path:hc t.t.path)
+    ``lexicon-view+!>([%am-admin (is-admin:hc space our.bowl)])
     ::
-    :: [%x %spaces %all ~]
-    ::  =/  sps  .^(view:spaces-store %gx /(scot %p our.bowl)/spaces/(scot %da now.bowl)/all/spaces-view)
-    ::  ``spaces-view+!>(sps)
-    ::
-    :: [%x %search @t ~]
-    ::   =/  defs  ~(val by lex)
-    ::   =/  match  (find `@t`i.t.t.path ~(key by defs))  
-    ::   ``noun+!>(match)
-      :: |-
-      ::   %+  turn  defs
-      ::   |=  [=word d=(list definition)]
-      ::   ?:  
+      [%x %dictionary @t @t ~]
+    =/  space  (de-path:hc t.t.path)
+    =/  dict  (~(got by lexicon) space)
+    ``lexicon-view+!>([%dictionary dict])
   ==
 ::
-++  on-arvo
-  |=  [=wire =sign-arvo]
-  ^-  (quip card _this)
-  ?+  sign-arvo  (on-arvo:def wire sign-arvo)
-      [%eyre %bound *]
-    ~?  !accepted.sign-arvo
-      [dap.bowl 'eyre bind rejected!' binding.sign-arvo]
-    [~ this]
-  ==
-::
+++  on-arvo   on-arvo:def
 ++  on-leave  on-leave:def
 ++  on-fail   on-fail:def
+--
+|_  [=bowl:gall cards=(list card)]
++*  core  .
+    io    ~(. agentio bowl)
+++  abet  [(flop cards) state]
+++  emit  |=(=card core(cards [card cards]))
+++  emil  |=(cadz=(list card) core(cards (weld cadz cards)))
+::
+++  en-path  |=(=space /[(scot %p -.space)]/[+.space])
+++  de-path
+  |=  path=[i=@ta t=[i=@ta t=~]]
+  ^-  space
+  [(slav %p i.path) i.t.path]
+::
+++  create-space
+  |=  =space
+  ^-  _core
+  ?>  =(-.space our.bowl)
+  ?:  (~(has by lexicon) space)  core
+  =.  lexicon  (~(put by lexicon) space *dictionary)
+  =/  rxn  [%add-dict space *dictionary]
+  (emit %give %fact ~[/updates] lexicon-reaction+!>(rxn))
+::
+++  follow-space
+  |=  =space
+  ^-  _core
+  ?<  =(-.space our.bowl)
+  =/  pite  /[(scot %p -.space)]/[+.space]
+  (emit [%pass pite %agent [-.space %lexicon] %watch pite])
+::
+++  create-or-follow
+  |=  =space
+  ^-  _core
+  ?:  =(-.space our.bowl)
+    (create-space space)
+  (follow-space space)
+::
+++  delete-space
+  |=  =space
+  ^-  _core
+  ?>  =(-.space our.bowl)
+  ?.  (~(has by lexicon) space)  core
+  =.  lexicon  (~(del by lexicon) space)
+  =/  rxn  [%del-dict space]
+  (emit %give %fact ~[/updates] lexicon-reaction+!>(rxn))
+::
+++  leave-space
+  |=  =space
+  ^-  _core
+  ?<  =(-.space our.bowl)
+  =/  wire  /[(scot %p -.space)]/[+.space]
+  (emit [%pass wire %agent [-.space %lexicon] %leave ~])
+::
+++  delete-or-leave
+  |=  =space
+  ^-  _core
+  ?:  =(-.space our.bowl)
+    (delete-space space)
+  (leave-space space)
+::
+++  follow-many
+  |=  spaces=(list space)
+  ^-  _core
+  ?~  spaces  core
+  $(spaces t.spaces, core (follow-space:core i.spaces))
+::
+++  leave-many
+  |=  spaces=(list space)
+  ^-  _core
+  ?~  spaces  core
+  $(spaces t.spaces, core (leave-space:core i.spaces))
+::
+++  cof-many
+  |=  spaces=(list space)
+  ^-  _core
+  ?~  spaces  core
+  $(spaces t.spaces, core (create-or-follow:core i.spaces))
+::
+++  wrap-text
+  |=  =@t
+  ^-  [id @t votes stamp]
+  =/  stamp  [src now]:bowl
+  =/  =id  (sham [t stamp])
+  [id t *votes stamp]
+::
+++  new-entry
+  |=  [def=(list @t) sen=(list @t) rel=(list @t)]
+  ^-  entry
+  =|  =entry
+  %=  entry
+    definitions  (~(gas by *definitions) (turn def wrap-text))
+    sentences    (~(gas by *sentences) (turn sen wrap-text))
+    related      (~(gas by *related) (turn rel wrap-text))
+    stamp        [src now]:bowl
+  ==
+::
+++  relay
+  |=  [=ship =action]
+  :_  state
+  [%pass / %agent [ship dap.bowl] %poke lexicon-action+!>(action)]~
+::
+++  sour  (scot %p our.bowl)
+++  snow  (scot %da now.bowl)
+++  has-spaces  .^(? %gu /[sour]/spaces/[snow])
+++  is-member
+  |=  [=space =ship]
+  ^-  ?
+  =/  ship  (scot %p ship)
+  =/  host  (scot %p -.space)
+  =/  view 
+    .^(view:mem %gx /[sour]/spaces/[snow]/[host]/[+.space]/is-member/[ship]/membership-view)
+  ?+  -.view  !!
+    %is-member  is-member.view
+  ==
+++  got-member
+  |=  [=space =ship]
+  ^-  member:mem
+  =/  ship  (scot %p ship)
+  =/  host  (scot %p -.space)
+  =/  view 
+    .^(view:mem %gx /[sour]/spaces/[snow]/[host]/[+.space]/members/[ship]/membership-view)
+  ?+  -.view  !!
+    %member  member.view
+  ==
+++  is-admin
+  |=  [=space =ship]
+  ^-  ?
+  =/  =member:mem  (got-member space ship)
+  (~(has in roles.member) %admin)
 --
