@@ -10,6 +10,10 @@
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.16",
+    "@mui/material": "^5.10.16",
     "@urbit/api": "^2.0.0",
     "@urbit/http-api": "^2.0.0",
     "axios": "^1.1.3",

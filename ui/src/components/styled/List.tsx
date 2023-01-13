@@ -1,33 +1,61 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 
 interface ListProps {
   items: {
-    label: string
-    navlink: string | undefined
-  }[]
+    label: string;
+    navlink: string | undefined;
+  }[];
 }
 
 const List = ({ items }: ListProps) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <>
-      <nav aria-label="Main Nav" className="flex flex-col space-y-1">
-
-        {items.map((item, i) => {
-          return <a
-            onClick={() => navigate('/apps/lexicon/' + item.navlink)}
-            className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-          >
-            {item.label}
-          </a>
+      <Stack
+        direction="column"
+        spacing={1}
+        paddingTop={"12px"}
+        marginLeft={"20px"}
+        marginRight={"20px"}
+        marginBottom={"20px"}
+      >
+        {items.map((item, index) => {
+          return (
+            <Paper
+              key={index}
+              variant="outlined"
+              sx={{
+                padding: "4px 10px",
+                cursor: "pointer",
+                width: "100%",
+                "&:hover": {
+                  backgroundColor: "var(--rlm-border-color, #F9F9F9)",
+                },
+                borderRadius: "6px",
+              }}
+              onClick={() => navigate("/apps/lexicon/" + item.navlink)}
+            >
+              <Typography
+                variant="subtitle1"
+                fontWeight={"bold"}
+                color="var(--rlm-text-color, #000)"
+                style={{ opacity: 0.5 }}
+                sx={{ wordBreak: "break-word" }}
+              >
+                {item.label}
+              </Typography>
+            </Paper>
+          );
         })}
-
-      </nav>
+      </Stack>
     </>
-  )
-
-}
-
-export default List
+  );
+};
+/*
+ */
+export default List;
